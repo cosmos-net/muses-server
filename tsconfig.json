@@ -16,6 +16,26 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@management-commons": [
+        "libs/commons/src"
+      ],
+      "@management-commons/*": [
+        "libs/commons/src/*"
+      ],
+      "@management-main": [
+        "apps/muses-server/src"
+      ],
+      "@management-main/*": [
+        "apps/muses-server/src/*"
+      ],
+      "@management-ecosystem": [
+        "apps/ecosystem/src"
+      ],
+      "@management-ecosystem/*": [
+        "apps/ecosystem/src/*"
+      ]
+    }
   }
 }
