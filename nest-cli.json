@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/muses-server/src",
+  "sourceRoot": "apps/main/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/muses-server/tsconfig.app.json"
+    "tsConfigPath": "apps/main/tsconfig.app.json"
   },
   "projects": {
     "commons": {
@@ -19,23 +19,23 @@
     },
     "muses-server": {
       "type": "application",
-      "root": "apps/muses-server",
-      "entryFile": "main",
-      "sourceRoot": "apps/muses-server/src",
+      "root": "apps/main",
+      "entryFile": "modules/main/infrastructure/framework/main",
+      "sourceRoot": "apps/main/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/muses-server/tsconfig.app.json"
+        "tsConfigPath": "apps/main/tsconfig.app.json"
       }
     },
-    "ecosystem": {
+    "auth": {
       "type": "application",
-      "root": "apps/ecosystem",
+      "root": "apps/auth",
       "entryFile": "main",
-      "sourceRoot": "apps/ecosystem/src",
+      "sourceRoot": "apps/auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/ecosystem/tsconfig.app.json"
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     }
   },
   "monorepo": true,
-  "root": "apps/muses-server"
+  "root": "apps/main"
 }

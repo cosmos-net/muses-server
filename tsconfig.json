@@ -25,16 +25,16 @@
         "libs/commons/src/*"
       ],
       "@management-main": [
-        "apps/muses-server/src"
+        "apps/main/src"
       ],
       "@management-main/*": [
-        "apps/muses-server/src/*"
+        "apps/main/src/*"
       ],
-      "@management-ecosystem": [
-        "apps/ecosystem/src"
+      "@management-auth": [
+        "apps/auth/src"
       ],
-      "@management-ecosystem/*": [
-        "apps/ecosystem/src/*"
+      "@management-auth/*": [
+        "apps/auth/src/*"
       ]
     }
   }
