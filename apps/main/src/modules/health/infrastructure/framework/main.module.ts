@@ -18,9 +18,9 @@ import { EXTERNAL_SYSTEM } from '@management-main/modules/health/application/con
   providers: [
     GetHealthService,
     ExternalSystemService,
-    { 
+    {
       provide: EXTERNAL_SYSTEM,
-      useClass: ExternalSystemService
+      useClass: ExternalSystemService,
     },
   ],
 })

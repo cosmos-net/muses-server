@@ -1,12 +1,14 @@
-import { Health, HealthSchema } from '@management-main/modules/health/domain/health';
-import { HealthCheckResult, HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
+import {
+  Health,
+  HealthSchema,
+} from '@management-main/modules/health/domain/health';
+import { HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
 
 export class GetHealthOutput implements HealthSchema {
-
   readonly status: HealthCheckStatus;
   readonly details: HealthIndicatorResult;
-  readonly error: HealthIndicatorResult;
-  readonly info: HealthIndicatorResult;
+  readonly error: HealthIndicatorResult | undefined;
+  readonly info: HealthIndicatorResult | undefined;
   readonly version: string;
   readonly uptime: number;
   readonly timestamp: string;

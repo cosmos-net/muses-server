@@ -17,7 +17,7 @@
         "tsConfigPath": "libs/commons/tsconfig.lib.json"
       }
     },
-    "muses-server": {
+    "main": {
       "type": "application",
       "root": "apps/main",
       "entryFile": "modules/main/infrastructure/framework/main",

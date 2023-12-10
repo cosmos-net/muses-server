@@ -1,7 +1,7 @@
-import { IExternalSystem } from "@management-main/modules/health/domain/contracts/external-system";
-import { Health } from "@management-main/modules/health/domain/health";
-import { Injectable } from "@nestjs/common";
-import { HealthCheckService, HttpHealthIndicator } from "@nestjs/terminus";
+import { IExternalSystem } from '@management-main/modules/health/domain/contracts/external-system';
+import { Health } from '@management-main/modules/health/domain/health';
+import { Injectable } from '@nestjs/common';
+import { HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
 @Injectable()
 export class ExternalSystemService implements IExternalSystem {

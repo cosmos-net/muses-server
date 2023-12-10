@@ -1,4 +1,3 @@
-
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
 import { ConfigSchema } from '@management-main/modules/main/infrastructure/config/schemas/config.schema';
 import { ServerLoader } from '@management-commons/infrastructure/config/loaders/server.loader';
@@ -8,7 +7,12 @@ import { ClientLoader } from '@management-commons/infrastructure/config/loaders/
 export const MainConfigOptions: ConfigModuleOptions = {
   cache: true,
   isGlobal: true,
-  load: [ClientLoader, ServerLoader, DatabasesLoader.mongo, DatabasesLoader.postgres],
+  load: [
+    ClientLoader,
+    ServerLoader,
+    DatabasesLoader.mongo,
+    DatabasesLoader.postgres,
+  ],
   validationSchema: ConfigSchema,
   validationOptions: {
     allowUnknown: true,

@@ -1,10 +1,14 @@
-import { HealthCheckResult, HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
+import {
+  HealthCheckResult,
+  HealthCheckStatus,
+  HealthIndicatorResult,
+} from '@nestjs/terminus';
 
 export interface HealthSchema {
   status: HealthCheckStatus;
   details: HealthIndicatorResult;
-  error: HealthIndicatorResult;
-  info: HealthIndicatorResult;
+  error?: HealthIndicatorResult;
+  info?: HealthIndicatorResult;
   version: string;
   uptime: number;
   timestamp: string;
@@ -13,25 +17,29 @@ export interface HealthSchema {
 }
 
 export class Health {
-  constructor(schema?: HealthSchema) {
-    this._entityRoot.version = schema.version || 'v1.0.0';
-    this._entityRoot.uptime = schema.uptime || 9999;
-    this._entityRoot.timestamp = schema.timestamp || '2021-01-01';
-    this._entityRoot.url = schema.url || '';
-    this._entityRoot.name = schema.name || '';
-  }
-  private _entityRoot: HealthSchema;
+  private _entityRoot = {} as HealthSchema;
 
+  constructor(schema?: HealthSchema) {
+    if (schema) {
+      this._entityRoot.version = schema.version || 'v1.0.0';
+      this._entityRoot.uptime = schema.uptime || 9999;
+      this._entityRoot.timestamp = schema.timestamp || '2021-01-01';
+    } else {
+      this._entityRoot.version = 'v1.0.0';
+      this._entityRoot.uptime = 9999;
+      this._entityRoot.timestamp = '2021-01-01';
+    }
+  }
 
   public get details(): HealthIndicatorResult {
     return this._entityRoot.details;
   }
 
-  public get error(): HealthIndicatorResult {
+  public get error(): HealthIndicatorResult | undefined {
     return this._entityRoot.error;
   }
 
-  public get info(): HealthIndicatorResult {
+  public get info(): HealthIndicatorResult | undefined {
     return this._entityRoot.info;
   }
 
@@ -64,11 +72,11 @@ export class Health {
   }
 
   public pingWith(url: string, name: string): void {
-    if (this._entityRoot.url.trim().length === 0) {
+    if (url.trim().length === 0) {
       throw new Error('Url is required');
     }
 
-    if (this._entityRoot.name.trim().length === 0) {
+    if (name.trim().length === 0) {
       throw new Error('Name is required');
     }
 
@@ -77,12 +85,11 @@ export class Health {
   }
 
   public reportPingCheck(result: HealthCheckResult): void {
-    const { details, status, error, info } = result
+    const { details, status, error, info } = result;
 
     this._entityRoot.status = status;
     this._entityRoot.details = details;
     this._entityRoot.error = error;
     this._entityRoot.info = info;
-    
   }
 }

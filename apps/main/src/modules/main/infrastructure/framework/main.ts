@@ -1,6 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
+import {
+  ValidationPipe,
+  HttpException,
+  BadRequestException,
+  Logger,
+  ValidationError,
+} from '@nestjs/common';
 import { ServerType } from '@management-commons/domain/contracts/types/server/server.type';
 import { MainModule } from '@management-main/modules/main/infrastructure/framework/main.module';
 import { HttpExceptionFilter } from '@management-main/modules/main/infrastructure/framework/http-exception.filter';
@@ -36,17 +42,24 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
 
+  // TODO: Server and client no undefined
   const server = configService.get<ServerType>('server');
   const client = configService.get<ClientType>('client');
 
+  // TODO: Validate origin of client
+  if (client) {
+    app.enableCors({
+      origin: `${client.protocol}://${client.host}:${client.port}`,
+      methods: 'GET,POST,PUT,DELETE,PATCH',
+      credentials: true,
+    });
+  }
 
-  app.enableCors({
-    origin: `${client.host}:${client.port}`,
-    methods: 'GET,POST,PUT,DELETE,PATCH',
-    credentials: true,
-  });
-  
-  await app.listen(server.port, () => Logger.log(`Running on port ${server.port}`, server.name));
+  if (server) {
+    await app.listen(server.port, () =>
+      Logger.log(`Running on port ${server.port}`, server.name),
+    );
+  }
 }
 
 bootstrap();
