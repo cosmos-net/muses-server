@@ -4,9 +4,6 @@ import { MainConfigOptions } from '@management-main/modules/main/infrastructure/
 import { MainServerModule } from '@management-main/modules/health/infrastructure/framework/main.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(MainConfigOptions),
-    MainServerModule
-  ],
+  imports: [ConfigModule.forRoot(MainConfigOptions), MainServerModule],
 })
 export class MainModule {}

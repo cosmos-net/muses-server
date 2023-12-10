@@ -15,14 +15,13 @@ import { HealthCheck } from '@nestjs/terminus';
 @Controller('management-health/')
 export class HealthController {
   private readonly logger = new Logger(HealthController.name);
-  
-  constructor(
-    private readonly getHeathService: GetHealthService,
-  ) {}
+  constructor(private readonly getHeathService: GetHealthService) {}
 
   @Get('status/')
   @HealthCheck()
-  async CheckHealth(@Query() queryParams: GetHealthInputDto): Promise<GetHealthOutput> {
+  async CheckHealth(
+    @Query() queryParams: GetHealthInputDto,
+  ): Promise<GetHealthOutput> {
     try {
       const query = new GetHealthQuery(queryParams);
 

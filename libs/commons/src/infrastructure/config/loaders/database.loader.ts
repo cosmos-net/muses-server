@@ -1,4 +1,3 @@
-
 import { registerAs } from '@nestjs/config';
 import { ConfigLoader } from '@management-commons/infrastructure/config/loaders/config.loader';
 import { DatabaseType } from '@management-commons/domain/contracts/types/db/database.type';
@@ -12,4 +11,4 @@ export const DatabasesLoader = {
     'postgres',
     (): DatabaseType['postgres'] => ConfigLoader().databases.postgres,
   ),
-}
+};
