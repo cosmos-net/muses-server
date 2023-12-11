@@ -12,10 +12,30 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@management-commons": [
+        "libs/commons/src"
+      ],
+      "@management-commons/*": [
+        "libs/commons/src/*"
+      ],
+      "@management-main": [
+        "apps/main/src"
+      ],
+      "@management-main/*": [
+        "apps/main/src/*"
+      ],
+      "@management-auth": [
+        "apps/auth/src"
+      ],
+      "@management-auth/*": [
+        "apps/auth/src/*"
+      ],
+    }
   }
 }

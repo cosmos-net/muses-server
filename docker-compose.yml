@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    container_name: mongodb_container
+    hostname: host-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    volumes:
+      - ./db/mongodb:/data/db
+      - ./db/mongodb/logs:/var/log/mongodb/
+    ports:
+      - 27018:27017
+  
+  postgresql:
+    image: postgres:latest
+    restart: always
+    container_name: postgresql_container
+    hostname: host-postgresql
+    environment:
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+      POSTGRES_DB: muses
+    volumes:
+      - ./db/postgresql:/var/lib/postgresql
+    ports:
+      - 5433:5432
