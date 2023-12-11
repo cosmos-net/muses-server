@@ -7,11 +7,11 @@ import {
   Logger,
   ValidationError,
 } from '@nestjs/common';
-import { ServerType } from '@management-commons/domain/contracts/types/server/server.type';
 import { MainModule } from '@management-main/modules/main/infrastructure/framework/main.module';
 import { HttpExceptionFilter } from '@management-main/modules/main/infrastructure/framework/http-exception.filter';
 import { TransformInterceptor } from '@management-main/modules/main/infrastructure/framework/transform.interceptor';
-import { ClientType } from '@management-commons/domain/contracts/types/client/client.type';
+import { ClientType } from '@management-commons/domain/contracts/types/var-environment-map/client/client.type';
+import { ServerMainType } from '@management-commons/domain/contracts/types/var-environment-map/servers/server-main.type';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
@@ -43,23 +43,28 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService);
 
   // TODO: Server and client no undefined
-  const server = configService.get<ServerType>('server');
+  const serverMain = configService.get<ServerMainType>(
+    'main',
+  ) as ServerMainType;
   const client = configService.get<ClientType>('client');
 
   // TODO: Validate origin of client
-  if (client) {
-    app.enableCors({
-      origin: `${client.protocol}://${client.host}:${client.port}`,
-      methods: 'GET,POST,PUT,DELETE,PATCH',
-      credentials: true,
-    });
+  if (!client) {
+    throw new Error('Client is not defined');
+  }
+  app.enableCors({
+    origin: `${client.protocol}://${client.host}:${client.port}`,
+    methods: 'GET,POST,PUT,DELETE,PATCH',
+    credentials: true,
+  });
+
+  if (!serverMain) {
+    throw new Error('Server main is not defined');
   }
 
-  if (server) {
-    await app.listen(server.port, () =>
-      Logger.log(`Running on port ${server.port}`, server.name),
-    );
-  }
+  await app.listen(serverMain.port, () =>
+    Logger.log(`Running on port ${serverMain.port}`, serverMain.name),
+  );
 }
 
 bootstrap();

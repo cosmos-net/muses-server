@@ -24,4 +24,4 @@ import { EXTERNAL_SYSTEM } from '@management-main/modules/health/application/con
     },
   ],
 })
-export class MainServerModule {}
+export class MainHealthServerModule {}
