@@ -13,13 +13,23 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/main/main",
     "start:dev:debug:main": "nest start main --debug --watch",
+    "start:dev:debug:auth": "nest start auth --debug --watch",
     "lint": "eslint  \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/main/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/main/test/jest-e2e.json",
+    "typeorm": "ts-node --project tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:create-entity": "npm run typeorm -- entity:create",
+    "typeorm:generate-migration": "npm run typeorm -- -d ./scripts/data-source.ts migration:generate",
+    "typeorm:create-migration": "npm run typeorm -- -d ./scripts/data-source.ts migration:create",
+    "typeorm:run-migration": "npm run typeorm -- -d ./scripts/data-source.ts migration:run --transaction each",
+    "typeorm-extension": "ts-node --project tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm-extension/dist/cli/index.js",
+    "run-seed": "npm run typeorm-extension seed -- -r scripts --seed",
+    "typeorm:drop-schema": "npm run typeorm -- -d ./scripts/data-source.ts schema:drop",
+    "typeorm:revert-migration": "npm run typeorm -- -d ./scripts/data-source.ts migration:revert"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.1",
@@ -28,12 +38,20 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/terminus": "^10.2.0",
+    "@nestjs/typeorm": "^10.0.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
     "axios": "^1.6.2",
+    "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "dotenv": "^16.3.1",
     "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
@@ -65,6 +83,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.2.0",
+    "typeorm-extension": "^3.2.0",
     "typescript": "^4.9.5"
   },
   "jest": {

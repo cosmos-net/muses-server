@@ -1,17 +1,26 @@
 import { EnvironmentEnum } from '@management-commons/domain/contracts/enums/environment.enum';
-import { ConfigLoaderType } from '@management-commons/domain/contracts/types/config-loader.type';
+import { VarEnvMapConfigType } from '@management-commons/domain/contracts/types/var-environment-map/var-env-map-config.type';
 
-export const ConfigLoader = (): ConfigLoaderType => ({
+export const ConfigLoader = (): VarEnvMapConfigType => ({
   client: {
     host: process.env.CLIENT_HOST as string,
     port: parseInt(process.env.CLIENT_PORT!, 10),
     protocol: process.env.CLIENT_PROTOCOL as string,
   },
-  server: {
-    host: process.env.SERVER_HOST as string,
-    port: parseInt(process.env.SERVER_PORT!, 10),
-    name: process.env.SERVER_NAME as string,
-    env: process.env.SERVER_ENV as EnvironmentEnum,
+  servers: {
+    main: {
+      host: process.env.SERVER_MAIN_HOST as string,
+      port: parseInt(process.env.SERVER_MAIN_PORT!, 10),
+      name: process.env.SERVER_MAIN_NAME as string,
+      env: process.env.SERVER_MAIN_ENV as EnvironmentEnum,
+    },
+    auth: {
+      host: process.env.SERVER_AUTH_HOST as string,
+      port: parseInt(process.env.SERVER_AUTH_PORT!, 10),
+      name: process.env.SERVER_AUTH_NAME as string,
+      env: process.env.SERVER_AUTH_ENV as EnvironmentEnum,
+      hashSalt: parseInt(process.env.CRYPT_SALT_ROUNDS!, 10),
+    },
   },
   databases: {
     postgres: {
@@ -40,5 +49,14 @@ export const ConfigLoader = (): ConfigLoaderType => ({
       type: process.env.DB_MONGO_TYPE as string,
       username: process.env.DB_MONGO_USER as string,
     },
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET as string,
+    expiresIn: process.env.JWT_EXPIRES_IN as string,
+  },
+  userRoot: {
+    username: process.env.USER_ROOT_USERNAME as string,
+    password: process.env.USER_ROOT_PASSWORD as string,
+    email: process.env.USER_ROOT_EMAIL as string,
   },
 });

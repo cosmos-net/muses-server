@@ -35,7 +35,7 @@
       ],
       "@management-auth/*": [
         "apps/auth/src/*"
-      ]
+      ],
     }
   }
 }
