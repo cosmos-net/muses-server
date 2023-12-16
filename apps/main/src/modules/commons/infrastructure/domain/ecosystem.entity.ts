@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, Index, ObjectId, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import IEcosystemSchema from '@management-main/modules/commons/domain/ecosystem.interface';
 
 @Entity({ name: 'Ecosystem' })

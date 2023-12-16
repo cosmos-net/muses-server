@@ -7,10 +7,7 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
-  Query,
 } from '@nestjs/common';
-import { GetHealthInputDto } from '@management-main/modules/health/infrastructure/controllers/get-health/presentation/get-health-input.dto';
-import { GetHealthQuery } from '@management-main/modules//health/application/use-cases/check-health/get-health.query';
 import { UpdateEcosystemService } from '@management-main/modules/ecosystem/application/use-cases/update-ecosystem.service';
 import { UpdateEcosystemInputDto } from '@management-main/modules/ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
 import { UpdateEcosystemOutputDto } from '@management-main/modules/ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';

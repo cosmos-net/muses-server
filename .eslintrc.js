@@ -20,6 +20,7 @@ module.exports = {
     rules: {
       "@typescript-eslint/strict-boolean-expressions": "off",
       "hexagonal-architecture/enforce": ["error"],
+      'prettier/prettier': ['off', { singleQuote: true }],
     },
   };
   
