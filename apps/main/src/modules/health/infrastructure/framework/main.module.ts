@@ -1,12 +1,10 @@
-import { ConfigModule } from '@management-commons/infrastructure/framework/common-main.module';
+import { ConfigModule } from '@lib-commons/infrastructure';
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
-import { MainConfigOptions } from '@management-main/modules/main/infrastructure/config/options/config.options';
-import { HealthController } from '@management-main/modules/health/infrastructure/controllers/get-health/get-health.controller';
-import { ExternalSystemService } from '@management-main/modules/health/infrastructure/domain/external-system.service';
-import { GetHealthService } from '@management-main/modules/health/application/use-cases/check-health/get-health.service';
-import { EXTERNAL_SYSTEM } from '@management-main/modules/health/application/constants/injection-tokens';
+import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
+import { HealthController, ExternalSystemService } from '@app-main/modules/health/infrastructure';
+import { GetHealthService, EXTERNAL_SYSTEM } from '@app-main/modules/health/application';
 
 @Module({
   imports: [

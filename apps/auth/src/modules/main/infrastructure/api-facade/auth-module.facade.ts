@@ -1,4 +1,4 @@
-import { UserModuleFacade } from '@management-auth/modules/user/infrastructure/api-facade/user-module.facade';
+import { UserModuleFacade } from '@app-auth/modules/user/infrastructure';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

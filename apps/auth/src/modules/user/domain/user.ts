@@ -1,4 +1,4 @@
-import { RolesEnum } from '@management-auth/modules/user/domain/roles.enum';
+import { RolesEnum } from '@app-auth/modules/user/domain';
 import * as bcrypt from 'bcrypt';
 
 export interface IUserSchema {

@@ -1,4 +1,4 @@
-export default interface IEcosystemSchema {
+export interface IEcosystemSchema {
   id: string;
   name: string;
   description: string;

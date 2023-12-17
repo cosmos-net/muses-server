@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IEcosystemRepository } from '@management-main/modules/commons/domain/contracts/ecosystem-repository';
-import { EcosystemEntity } from '@management-main/modules/commons/infrastructure/domain/ecosystem.entity';
-import { Ecosystem } from '@management-main/modules/ecosystem/domain/ecosystem';
+import { IEcosystemRepository } from '@app-main/modules/commons/domain';
+import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
+import { Ecosystem } from '@app-main/modules/ecosystem/domain';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {

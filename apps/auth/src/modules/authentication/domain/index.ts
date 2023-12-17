@@ -1,0 +1,1 @@
+export * from '@app-auth/modules/authentication/domain/role.enum';

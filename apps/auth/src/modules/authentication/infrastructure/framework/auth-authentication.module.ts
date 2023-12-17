@@ -1,9 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { LogInController } from '@management-auth/modules/authentication/infrastructure/controllers/login/login.controller';
-import { LogInService } from '@management-auth/modules/authentication/application/use-cases/login/login.service';
-import { AuthMainModule } from '@management-auth/modules/main/infrastructure/framework/auth-main.module';
+import { LogInController } from '@app-auth/modules/authentication/infrastructure';
+import { LogInService } from '@app-auth/modules/authentication/application';
+import { AuthMainModule, MainConfigOptions } from '@app-auth/modules/main/infrastructure';
 import { ConfigModule } from '@nestjs/config';
-import { MainConfigOptions } from '@management-auth/modules/main/infrastructure/config/options/config.options';
 
 @Module({
   imports: [

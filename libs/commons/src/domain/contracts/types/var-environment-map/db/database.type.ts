@@ -1,5 +1,4 @@
-import { MongoType } from '@management-commons/domain/contracts/types/var-environment-map/db/mongo.type';
-import { PostgresType } from '@management-commons/domain/contracts/types/var-environment-map/db/postgres.type';
+import { MongoType, PostgresType } from "@lib-commons/domain";
 
 export type DatabaseType = {
   mongo: MongoType;
