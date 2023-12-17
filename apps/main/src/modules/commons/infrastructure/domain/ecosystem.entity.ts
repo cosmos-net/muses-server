@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import IEcosystemSchema from '@management-main/modules/commons/domain/ecosystem.interface';
+import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 
 @Entity({ name: 'Ecosystem' })
 export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {

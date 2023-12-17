@@ -1,4 +1,4 @@
-import IEcosystemSchema from '@management-main/modules/commons/domain/ecosystem.interface';
+import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;

@@ -1,5 +1,4 @@
-import { ServerAuthType } from '@management-commons/domain/contracts/types/var-environment-map/servers/server-auth.type';
-import { ServerMainType } from '@management-commons/domain/contracts/types/var-environment-map/servers/server-main.type';
+import { ServerMainType, ServerAuthType } from "@lib-commons/domain";
 
 export type ServersType = {
   main: ServerMainType;

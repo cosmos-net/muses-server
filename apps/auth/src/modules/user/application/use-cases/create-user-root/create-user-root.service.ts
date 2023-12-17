@@ -4,13 +4,10 @@ import {
   Logger,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { IUserRepository } from '@management-auth/modules/user/domain/contracts/user-repository';
-import { USER_REPOSITORY } from '@management-auth/modules/user/application/use-cases/get-user/constants/injection-tokens';
-import { User } from '@management-auth/modules/user/domain/user';
-import { UserRootType } from '@management-commons/domain/contracts/types/var-environment-map/user-root/user-root.type';
+import { IUserRepository, User, RolesEnum } from '@app-auth/modules/user/domain';
+import { USER_REPOSITORY } from '@app-auth/modules/user/application';
+import { UserRootType, ServerAuthType } from '@lib-commons/domain';
 import { ConfigService } from '@nestjs/config';
-import { RolesEnum } from '@management-auth/modules/user/domain/roles.enum';
-import { ServerAuthType } from '@management-commons/domain/contracts/types/var-environment-map/servers/server-auth.type';
 
 @Injectable()
 export class CreateUserRootService implements OnApplicationBootstrap {

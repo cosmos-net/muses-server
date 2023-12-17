@@ -1,4 +1,4 @@
-import { GetHealthService } from '@management-main/modules/health/application/use-cases/check-health/get-health.service';
+import { GetHealthService } from '@app-main/modules/health/application';
 import {
   BadRequestException,
   Controller,
@@ -7,9 +7,9 @@ import {
   Logger,
   Query,
 } from '@nestjs/common';
-import { GetHealthInputDto } from '@management-main/modules/health/infrastructure/controllers/get-health/presentation/get-health-input.dto';
-import { GetHealthQuery } from '@management-main/modules//health/application/use-cases/check-health/get-health.query';
-import { GetHealthOutput } from '@management-main/modules//health/infrastructure/controllers/get-health/presentation/get-health-output.dto';
+import { GetHealthInputDto } from '@app-main/modules/health/infrastructure';
+import { GetHealthQuery } from '@app-main/modules//health/application';
+import { GetHealthOutput } from '@app-main/modules//health/infrastructure';
 import { HealthCheck } from '@nestjs/terminus';
 
 @Controller('management-health/')

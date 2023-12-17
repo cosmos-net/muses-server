@@ -1,4 +1,4 @@
-import { EnvironmentEnum } from '@management-commons/domain/contracts/enums/environment.enum';
+import { EnvironmentEnum } from "@lib-commons/domain";
 
 export type ServerAuthType = {
   name: string;

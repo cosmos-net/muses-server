@@ -1,7 +1,9 @@
 export class LoginOutputDto {
-  private token: string;
+  token: string;
 
-  constructor(token) {
-    this.token = token;
+  constructor(props: Partial<LoginOutputDto>) {
+    if (props) {
+      Object.assign(this, props);
+    }
   }
 }

@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@management-commons/infrastructure/framework/common-main.module';
-import { MainConfigOptions } from '@management-main/modules/main/infrastructure/config/options/config.options';
-import { EcosystemController } from '@management-main/modules/ecosystem/infrastructure/controllers/update-ecosystem/update-ecosystem.controller';
-import { UpdateEcosystemService } from '@management-main/modules/ecosystem/application/use-cases/update-ecosystem.service';
-import { ECOSYSTEM_REPOSITORY } from '@management-main/modules/ecosystem/application/constants/injection-token';
-import { TypeOrmMongoEcosystemRepository } from '@management-main/modules/commons/infrastructure/repositories/typeorm-mongo-ecosystem.repository';
+import { ConfigModule } from '@lib-commons/infrastructure';
+import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
+import { EcosystemController } from '@app-main/modules/ecosystem/infrastructure';
+import { UpdateEcosystemService, ECOSYSTEM_REPOSITORY } from '@app-main/modules/ecosystem/application';
+import { TypeOrmMongoEcosystemRepository } from '@app-main/modules/commons/infrastructure';
 
 @Module({
   imports: [

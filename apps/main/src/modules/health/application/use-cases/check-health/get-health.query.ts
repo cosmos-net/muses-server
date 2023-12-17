@@ -1,4 +1,4 @@
-import { IQuery } from '@management-commons/domain/contracts/presentation/query';
+import { IQuery } from '@lib-commons/domain';
 
 export class GetHealthQuery implements IQuery {
   url: string;

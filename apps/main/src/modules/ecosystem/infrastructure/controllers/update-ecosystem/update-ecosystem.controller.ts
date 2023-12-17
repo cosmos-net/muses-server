@@ -8,10 +8,8 @@ import {
   ParseUUIDPipe,
   Patch,
 } from '@nestjs/common';
-import { UpdateEcosystemService } from '@management-main/modules/ecosystem/application/use-cases/update-ecosystem.service';
-import { UpdateEcosystemInputDto } from '@management-main/modules/ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
-import { UpdateEcosystemOutputDto } from '@management-main/modules/ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';
-import { UpdateEcosystemCommand } from '@management-main/modules/ecosystem/application/use-cases/update-ecosystem.command';
+import { UpdateEcosystemService, UpdateEcosystemCommand } from '@app-main/modules/ecosystem/application';
+import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@app-main/modules/ecosystem/infrastructure';
 
 @Controller('management-ecosystem/')
 export class EcosystemController {

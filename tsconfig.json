@@ -18,22 +18,28 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@management-commons": [
+      "@lib-commons": [
         "libs/commons/src"
       ],
-      "@management-commons/*": [
+      "@lib-commons/*": [
         "libs/commons/src/*"
       ],
-      "@management-main": [
+      "@app-main": [
         "apps/main/src"
       ],
-      "@management-main/*": [
+      "@app-main/*": [
         "apps/main/src/*"
       ],
-      "@management-auth": [
+      "@module-eco": [
+        "apps/main/src/modules/ecosystem"
+      ],
+      "@module-eco/*": [
+        "apps/main/src/modules/ecosystem/*"
+      ],
+      "@app-auth": [
         "apps/auth/src"
       ],
-      "@management-auth/*": [
+      "@app-auth/*": [
         "apps/auth/src/*"
       ],
     }

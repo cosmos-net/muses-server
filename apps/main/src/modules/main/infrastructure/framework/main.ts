@@ -7,11 +7,8 @@ import {
   Logger,
   ValidationError,
 } from '@nestjs/common';
-import { MainModule } from '@management-main/modules/main/infrastructure/framework/main.module';
-import { HttpExceptionFilter } from '@management-main/modules/main/infrastructure/framework/http-exception.filter';
-import { TransformInterceptor } from '@management-main/modules/main/infrastructure/framework/transform.interceptor';
-import { ClientType } from '@management-commons/domain/contracts/types/var-environment-map/client/client.type';
-import { ServerMainType } from '@management-commons/domain/contracts/types/var-environment-map/servers/server-main.type';
+import { MainModule, HttpExceptionFilter, TransformInterceptor } from '@app-main/modules/main/infrastructure';
+import { ClientType, ServerMainType } from '@lib-commons/domain';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);

@@ -1,13 +1,11 @@
-import { ConfigModule } from '@management-commons/infrastructure/framework/common-main.module';
+import { ConfigModule, DatabasesLoader } from '@lib-commons/infrastructure';
 import { Module } from '@nestjs/common';
-import { MainConfigOptions } from '@management-auth/modules/main/infrastructure/config/options/config.options';
-import { AuthModuleFacade } from '@management-auth/modules/main/infrastructure/api-facade/auth-module.facade';
-import { AuthUserModule } from '@management-auth/modules/user/infrastructure/framework/auth-user.module';
-import { AuthAuthenticationModule } from '@management-auth/modules/authentication/infrastructure/framework/auth-authentication.module';
+import { MainConfigOptions, AuthModuleFacade } from '@app-auth/modules/main/infrastructure';
+import { AuthUserModule } from '@app-auth/modules/user/infrastructure';
+import { AuthAuthenticationModule } from '@app-auth/modules/authentication/infrastructure';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
-import { DatabasesLoader } from '@management-commons/infrastructure/config/loaders/database.loader';
 import { ConfigService } from '@nestjs/config';
-import { PostgresType } from '@management-commons/domain/contracts/types/var-environment-map/db/postgres.type';
+import { PostgresType } from '@lib-commons/domain';
 
 @Module({
   imports: [

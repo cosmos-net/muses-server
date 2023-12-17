@@ -1,10 +1,6 @@
-import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
-import { ConfigSchema } from '@management-main/modules/main/infrastructure/config/schemas/config.schema';
-import { ServersLoader } from '@management-commons/infrastructure/config/loaders/servers.loader';
-import { DatabasesLoader } from '@management-commons/infrastructure/config/loaders/database.loader';
-import { ClientLoader } from '@management-commons/infrastructure/config/loaders/client.loader';
-import { JwtLoader } from '@management-commons/infrastructure/config/loaders/jwt.loader';
-import { UserRootLoader } from '@management-commons/infrastructure/config/loaders/user-root.loader';
+import { ConfigModuleOptions } from '@nestjs/config';
+import { ConfigSchema } from '@app-main/modules/main/infrastructure';
+import { ServersLoader, DatabasesLoader, UserRootLoader, JwtLoader, ClientLoader } from '@lib-commons/infrastructure';
 
 export const MainConfigOptions: ConfigModuleOptions = {
   cache: true,
