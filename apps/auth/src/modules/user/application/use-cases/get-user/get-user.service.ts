@@ -1,9 +1,8 @@
-import { IApplicationServiceQuery } from '@management-commons/application/application-service-query';
+import { IApplicationServiceQuery } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
-import { GetUserQuery } from '@management-auth/modules/user/application/use-cases/get-user/get-user.query';
-import { IUserRepository } from '@management-auth/modules/user/domain/contracts/user-repository';
-import { USER_REPOSITORY } from '@management-auth/modules/user/application/use-cases/get-user/constants/injection-tokens';
-import { User } from '@management-auth/modules/user/domain/user';
+import { GetUserQuery, USER_REPOSITORY } from '@app-auth/modules/user/application';
+import { IUserRepository } from '@app-auth/modules/user/domain';
+import { User } from '@app-auth/modules/user/domain/user';
 
 @Injectable()
 export class GetUserService implements IApplicationServiceQuery<GetUserQuery> {

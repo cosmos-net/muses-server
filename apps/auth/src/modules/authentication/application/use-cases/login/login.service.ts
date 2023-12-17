@@ -3,8 +3,8 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 // TODO: FIX THIS WARNING: HANDLER IN INFRASTRUCTURE LAYER
 // eslint-disable-next-line hexagonal-architecture/enforce
-import { AuthModuleFacade } from '@management-auth/modules/main/infrastructure/api-facade/auth-module.facade';
-import { LoginCommand } from '@management-auth/modules/authentication/application/use-cases/login/login.command';
+import { AuthModuleFacade } from '@app-auth/modules/main/infrastructure';
+import { LoginCommand } from '@app-auth/modules/authentication/application';
 
 // TODO: HANDLE TYPES CORRECTLY
 interface PayloadTokenType extends jwt.JwtPayload {

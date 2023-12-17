@@ -1,7 +1,7 @@
-import { IQuery } from '@management-commons/domain/contracts/presentation/query';
+import { IQuery } from "@lib-commons/domain";
 
 export interface IApplicationServiceQuery<QueryBase extends IQuery = IQuery> {
   process<T extends QueryBase>(
     query: T,
-  ): Promise<unknown> | Promise<void> | unknown | void;
+  ): Promise<unknown> | Promise<void> | void;
 }

@@ -1,4 +1,4 @@
-import { User } from '@management-auth/modules/user/domain/user';
+import { User } from '@app-auth/modules/user/domain';
 
 export interface IUserRepository {
   getByEmailOrFail(email: string): Promise<User>;
