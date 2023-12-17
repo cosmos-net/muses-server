@@ -1,8 +1,8 @@
-import { ConfigModule } from '@management-commons/infrastructure/framework/common-main.module';
+import { ConfigModule } from '@lib-commons/infrastructure';
 import { Module } from '@nestjs/common';
-import { MainConfigOptions } from '@management-main/modules/main/infrastructure/config/options/config.options';
-import { MainHealthServerModule } from '@management-main/modules/health/infrastructure/framework/main.module';
-import { MainEcosystemServerModule } from '@management-main/modules/ecosystem/infrastructure/framework/ecosystem.module';
+import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
+import { MainHealthServerModule } from '@app-main/modules/health/infrastructure';
+import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastructure';
 
 @Module({
   imports: [ConfigModule.forRoot(MainConfigOptions), MainHealthServerModule, MainEcosystemServerModule],

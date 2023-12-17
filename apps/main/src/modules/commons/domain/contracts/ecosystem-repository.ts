@@ -1,4 +1,4 @@
-import { Ecosystem } from '@management-main/modules/ecosystem/domain/ecosystem';
+import { Ecosystem } from '@app-main/modules/ecosystem/domain';
 
 export interface IEcosystemRepository {
   persist(model: Ecosystem): Promise<void>;

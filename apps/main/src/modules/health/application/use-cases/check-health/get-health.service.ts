@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GetHealthQuery } from '@management-main/modules/health/application/use-cases/check-health/get-health.query';
-import { IApplicationServiceQuery } from '@management-commons/application/application-service-query';
-import { Health } from '@management-main/modules/health/domain/health';
-import { EXTERNAL_SYSTEM } from '@management-main/modules/health/application/constants/injection-tokens';
-import { IExternalSystem } from '@management-main/modules/health/domain/contracts/external-system';
+import { GetHealthQuery, EXTERNAL_SYSTEM } from '@app-main/modules/health/application';
+import { IApplicationServiceQuery } from '@lib-commons/application';
+import { Health } from '@app-main/modules/health/domain/health';
+import { IExternalSystem } from '@app-main/modules/health/domain';
 
 @Injectable()
 export class GetHealthService

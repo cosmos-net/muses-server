@@ -7,11 +7,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { LoginInputDto } from '@management-auth/modules/authentication/infrastructure/controllers/login/presentation/login-input.dto';
-import { LogInService } from '@management-auth/modules/authentication/application/use-cases/login/login.service';
-import { JwtType } from '@management-commons/domain/contracts/types/var-environment-map/jwt/jwt.type';
-import { LoginCommand } from '@management-auth/modules/authentication/application/use-cases/login/login.command';
-import { LoginOutputDto } from '@management-auth/modules/authentication/infrastructure/controllers/login/presentation/login-output.dto';
+import { LoginInputDto, LoginOutputDto } from '@app-auth/modules/authentication/infrastructure';
+import { LogInService, LoginCommand } from '@app-auth/modules/authentication/application';
+import { JwtType } from '@lib-commons/domain';
 
 @Controller('authentication/')
 export class LogInController {
@@ -36,7 +34,7 @@ export class LogInController {
 
       const token = await this.loginService.process(command);
 
-      const loginOutputDto = new LoginOutputDto(token);
+      const loginOutputDto = new LoginOutputDto({ token });
 
       return loginOutputDto;
     } catch (error) {

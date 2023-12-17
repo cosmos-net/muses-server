@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GetUserService } from '@management-auth/modules/user/application/use-cases/get-user/get-user.service';
-import { GetUserQuery } from '@management-auth/modules/user/application/use-cases/get-user/get-user.query';
+import { GetUserService, GetUserQuery } from '@app-auth/modules/user/application';
 
 @Injectable()
 export class UserModuleFacade {

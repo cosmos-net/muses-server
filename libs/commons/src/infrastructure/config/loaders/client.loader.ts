@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
-import { ConfigLoader } from '@management-commons/infrastructure/config/loaders/config.loader';
-import { ClientType } from '@management-commons/domain/contracts/types/var-environment-map/client/client.type';
+import { ConfigLoader } from '@lib-commons/infrastructure';
+import { ClientType } from '@lib-commons/domain';
 
 export const ClientLoader = registerAs(
   'client',

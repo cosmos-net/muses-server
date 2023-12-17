@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
-import { ConfigLoader } from '@management-commons/infrastructure/config/loaders/config.loader';
-import { DatabaseType } from '@management-commons/domain/contracts/types/var-environment-map/db/database.type';
+import { ConfigLoader } from '@lib-commons/infrastructure';
+import { DatabaseType } from '@lib-commons/domain';
 
 export const DatabasesLoader = {
   mongo: registerAs(

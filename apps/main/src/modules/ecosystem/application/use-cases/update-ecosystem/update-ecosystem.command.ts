@@ -1,4 +1,4 @@
-import { ICommand } from '@management-commons/domain/contracts/presentation/command';
+import { ICommand } from '@lib-commons/domain';
 
 export class UpdateEcosystemCommand implements ICommand {
   readonly id: string;

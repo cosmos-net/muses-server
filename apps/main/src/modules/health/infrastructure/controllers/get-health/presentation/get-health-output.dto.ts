@@ -1,7 +1,7 @@
 import {
   Health,
   HealthSchema,
-} from '@management-main/modules/health/domain/health';
+} from '@app-main/modules/health/domain/health';
 import { HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
 
 export class GetHealthOutput implements HealthSchema {

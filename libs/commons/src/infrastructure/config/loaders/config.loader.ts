@@ -1,5 +1,4 @@
-import { EnvironmentEnum } from '@management-commons/domain/contracts/enums/environment.enum';
-import { VarEnvMapConfigType } from '@management-commons/domain/contracts/types/var-environment-map/var-env-map-config.type';
+import { EnvironmentEnum, VarEnvMapConfigType } from '@lib-commons/domain';
 
 export const ConfigLoader = (): VarEnvMapConfigType => ({
   client: {
