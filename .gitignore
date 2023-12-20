@@ -35,5 +35,12 @@ lerna-debug.log*
 !.vscode/extensions.json
 .env
 
-/db/mongodb/*
-/db/postgres/*
+#muses db
+/dbs/muses/*
+!/dbs/muses/scripts
+!/dbs/muses/migrations
+
+#hades db
+/dbs/hades/*
+!/dbs/hades/scripts
+!/dbs/hades/migrations

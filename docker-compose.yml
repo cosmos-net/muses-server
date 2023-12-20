@@ -9,8 +9,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor
     volumes:
-      - ./db/mongodb:/data/db
-      - ./db/mongodb/logs:/var/log/mongodb/
+      - ./dbs/muses:/data/db
+      - ./dbs/muses/logs:/var/log/mongodb/
     ports:
       - 27018:27017
   
@@ -23,8 +23,8 @@ services:
       DATABASE_HOST: 127.0.0.1
       POSTGRES_USER: root
       POSTGRES_PASSWORD: toor
-      POSTGRES_DB: muses
+      POSTGRES_DB: hades
     volumes:
-      - ./db/postgresql:/var/lib/postgresql
+      - ./dbs/hades:/var/lib/postgresql
     ports:
       - 5433:5432

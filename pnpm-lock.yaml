@@ -26,9 +26,6 @@ dependencies:
   '@nestjs/typeorm':
     specifier: ^10.0.1
     version: 10.0.1(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.17)
-  '@types/mongodb':
-    specifier: ^4.0.7
-    version: 4.0.7
   axios:
     specifier: ^1.6.2
     version: 1.6.2
@@ -103,6 +100,9 @@ devDependencies:
   '@types/jsonwebtoken':
     specifier: ^9.0.5
     version: 9.0.5
+  '@types/mongodb':
+    specifier: ^4.0.7
+    version: 4.0.7
   '@types/node':
     specifier: 18.15.11
     version: 18.15.11
@@ -1640,7 +1640,7 @@ packages:
       - mongodb-client-encryption
       - snappy
       - socks
-    dev: false
+    dev: true
 
   /@types/node@18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}

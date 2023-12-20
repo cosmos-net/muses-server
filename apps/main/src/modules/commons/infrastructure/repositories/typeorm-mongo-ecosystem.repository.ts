@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
-import { Ecosystem } from '@app-main/modules/ecosystem/domain';
+import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
@@ -33,6 +33,12 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
     const domain = new Ecosystem(ecosystem);
 
     return domain;
+  }
+
+  async list(): Promise<ListEcosystem> {
+    const ecosystems = await this.ecosystemRepository.find();
+
+    return new ListEcosystem(ecosystems, ecosystems.length);
   }
 
 }
