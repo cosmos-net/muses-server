@@ -6,3 +6,7 @@ export * from '@lib-commons/infrastructure/config/loaders/jwt.loader';
 export * from '@lib-commons/infrastructure/config/loaders/servers.loader';
 export * from '@lib-commons/infrastructure/config/loaders/user-root.loader';
 export * from '@lib-commons/infrastructure/domain/base.entity';
+export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-meta-parameters.interface';
+export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-meta.dto';
+export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
+export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-order.enum';

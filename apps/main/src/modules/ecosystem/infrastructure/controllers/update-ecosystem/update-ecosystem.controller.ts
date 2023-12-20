@@ -12,13 +12,13 @@ import { UpdateEcosystemService, UpdateEcosystemCommand } from '@app-main/module
 import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@app-main/modules/ecosystem/infrastructure';
 
 @Controller('management-ecosystem/')
-export class EcosystemController {
-  private readonly logger = new Logger(EcosystemController.name);
+export class UpdateEcosystemController {
+  private readonly logger = new Logger(UpdateEcosystemController.name);
   constructor(private readonly updateEcosystemService: UpdateEcosystemService) {}
 
   @Patch(':uuid')
   async UpdateEcosystem(
-    @Param('uuid', ParseUUIDPipe) uuid: string,
+    @Param('uuid', ParseUUIDPipe) id: string,
     @Body() updateInputDto: UpdateEcosystemInputDto,
   ): Promise<UpdateEcosystemOutputDto> {
     try {
