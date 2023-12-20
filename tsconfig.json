@@ -36,6 +36,12 @@
       "@module-eco/*": [
         "apps/main/src/modules/ecosystem/*"
       ],
+      "@module-user": [
+        "apps/auth/src/modules/user"
+      ],
+      "@module-user/*": [
+        "apps/auth/src/modules/user/*"
+      ],
       "@app-auth": [
         "apps/auth/src"
       ],
