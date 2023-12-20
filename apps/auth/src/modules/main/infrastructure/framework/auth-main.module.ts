@@ -28,9 +28,6 @@ import { PostgresType } from '@lib-commons/domain';
           synchronize: db.synchronize,
           autoLoadEntities: db.autoLoadEntities,
           migrationsTableName: db.migrationsTableName,
-          cli: {
-            migrationsDir: 'db/postgres/migration',
-          },
           logging: db.logging,
           legacySpatialSupport: false,
           ssl: db.tls,
