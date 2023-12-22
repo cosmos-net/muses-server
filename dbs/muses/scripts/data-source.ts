@@ -37,20 +37,21 @@ const synchronize = withSynchronize === 'true';
 const autoLoadEntities = true;
 const migrationsTableName = 'migrations';
 const ssl = withSSL === 'true' ? { rejectUnauthorized: false } : false;
-const cli = { migrationsDir: `${relative}/dbs/muses/migrations`};
+const cli = { migrationsDir: `${relative}/dbs/muses/migrations` };
 const entities = [`${relative}/apps/**/*-muses.entity.ts`];
 const migrations = [`${relative}/dbs/muses/migrations/*.ts`];
 const seeds = [`${relative}/dbs/muses/seeds/**/*{.ts,.js}`];
 const factories = [`${relative}/dbs/muses/factories/**/*{.ts,.js}`];
 
 const options = {
-  "type": type, 
-  "host": host,
-  "port": port, 
-  "database": "test", 
-  "synchronize": true, 
-  "logging": false, 
-  // synchronize,
+  username,
+  password,
+  type,
+  host,
+  port,
+  database,
+  synchronize,
+  logging: true,
   autoLoadEntities,
   migrationsTableName,
   ssl,

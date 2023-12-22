@@ -8,6 +8,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor
+      MONGO_INITDB_DATABASE: muses
     volumes:
       - ./dbs/muses:/data/db
       - ./dbs/muses/logs:/var/log/mongodb/
