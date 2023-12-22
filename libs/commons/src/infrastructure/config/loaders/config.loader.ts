@@ -52,10 +52,7 @@ export const ConfigLoader = (): VarEnvMapConfigType => ({
       synchronize: process.env.DB_MONGO_SYNC === 'true',
       logging: process.env.DB_MONGO_LOGGING === 'true',
       runMigrations: process.env.DB_MONGO_RUN_MIGRATIONS === 'true',
-      tls:
-        process.env.DB_MONGO_SSL === 'true'
-          ? { rejectUnauthorized: false }
-          : false,
+      tls: process.env.DB_MONGO_SSL === 'true',
     },
   },
   jwt: {
