@@ -20,22 +20,20 @@ import { MongoType } from '@lib-commons/domain';
 
         if (db === undefined) throw new Error('Configuration Error');
 
-        console.log(db);
-
         return {
           type: db.type,
           host: db.host,
           port: db.port,
           username: db.username,
           password: db.password,
-          database: db.name,
-          synchronize: db.synchronize,
-          autoLoadEntities: db.autoLoadEntities,
+          // database: db.name,
+          synchronize: true,
+          autoLoadEntities: true,
           migrationsTableName: db.migrationsTableName,
           logging: true,
           legacySpatialSupport: false,
           ssl: false,
-          entities: [process.cwd + '/apps/main/src/modules/'],
+          entities: [process.cwd() + '/apps/main/src/modules/**/*-hades.entity.ts'],
         } as TypeOrmModuleAsyncOptions;
       },
     }),
