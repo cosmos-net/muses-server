@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IUserRepository, User } from '@app-auth/modules/user/domain';
-import { UserEntity } from '@app-auth/modules/user/infrastructure';
+import { IUserRepository } from '@app-auth/modules/user/domain/contracts/user-repository';
+import { UserEntity } from '@app-auth/modules/user/infrastructure/domain/user-hades.entity';
+import { User } from '@app-auth/modules/user/domain/user';
 
 @Injectable()
 export class TypeOrmUserRepository implements IUserRepository {

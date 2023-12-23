@@ -1,14 +1,6 @@
 import { Module } from '@nestjs/common';
-import {
-  USER_REPOSITORY,
-  CreateUserRootService,
-  GetUserService,
-} from '@app-auth/modules/user/application';
-import {
-  TypeOrmUserRepository,
-  UserModuleFacade,
-  UserEntity,
-} from '@app-auth/modules/user/infrastructure';
+import { USER_REPOSITORY, GetUserService, CreateUserRootService } from '@app-auth/modules/user/application';
+import { TypeOrmUserRepository, UserModuleFacade, UserEntity } from '@app-auth/modules/user/infrastructure';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
