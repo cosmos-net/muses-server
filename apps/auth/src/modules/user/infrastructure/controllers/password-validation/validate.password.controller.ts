@@ -8,8 +8,7 @@ import {
     Param,
   } from '@nestjs/common';
 import { ValidatePasswordInputDto, ValidatePasswordOutputDto } from '@module-user/infrastructure';
-// import { ValidatePasswordService, PasswordValidationQuery } from '@module-user/application';
-import { ValidatePasswordService } from '@module-user/application';
+import { ValidatePasswordService, ValidatePasswordQuery } from '@module-user/application';
   
   @Controller('user/')
   export class PasswordValidationController {
@@ -17,22 +16,17 @@ import { ValidatePasswordService } from '@module-user/application';
     constructor(private readonly validatePasswordService: ValidatePasswordService) {}
   
     @Get('validate-password/:password')
-    async UpdateEcosystem(
+    async PasswordValidation(
       @Headers() headers,
-      @Param('password') password: ValidatePasswordInputDto,
+      @Param('password') password: string,
     ): Promise<ValidatePasswordOutputDto> {
       try {
-        console.log(headers);
-        console.log(password);
+        const query = new ValidatePasswordQuery( { token: headers.authorization, password } );
 
-        // const query = new PasswordValidationQuery(password, "sadsadassad");
-  
-        // const command = new UpdateEcosystemCommand({ id, name, description, isEnabled });
-  
-        // const domain = await this.updateEcosystemService.process(command);
+        const isValidated = await this.validatePasswordService.process(query);
   
         return new ValidatePasswordOutputDto({
-          validated: true,
+          validated: isValidated,
         });
   
       } catch (error) {

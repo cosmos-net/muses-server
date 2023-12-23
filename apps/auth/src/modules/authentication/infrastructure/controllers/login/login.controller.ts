@@ -22,11 +22,11 @@ export class LogInController {
   @Post('login/')
   async login(@Body() loginInputDto: LoginInputDto): Promise<LoginOutputDto> {
     try {
-      const { username, password } = loginInputDto;
+      const { email, password } = loginInputDto;
       const { secret, expiresIn } = this.config.get<JwtType>('jwt') as JwtType;
 
       const command = new LoginCommand({
-        username,
+        email,
         password,
         secret,
         expiresIn,
