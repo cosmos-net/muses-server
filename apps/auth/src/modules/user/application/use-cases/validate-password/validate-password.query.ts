@@ -1,7 +1,7 @@
 import { IQuery } from '@lib-commons/domain';
 
 export class ValidatePasswordQuery implements IQuery {
-  email: string;
+  token: string;
   password: string;
 
   constructor(props?: Partial<ValidatePasswordQuery>) {

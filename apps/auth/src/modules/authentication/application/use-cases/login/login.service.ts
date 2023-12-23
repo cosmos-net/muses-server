@@ -8,7 +8,6 @@ import { LoginCommand } from '@app-auth/modules/authentication/application';
 
 // TODO: HANDLE TYPES CORRECTLY
 interface PayloadTokenType extends jwt.JwtPayload {
-  roles: string[];
   sub: string;
 }
 
@@ -32,10 +31,10 @@ export class LogInService {
   }
 
   public async process(command: LoginCommand): Promise<string> {
-    const { username, password, secret, expiresIn } = command;
+    const { email, password, secret, expiresIn } = command;
 
     const user = await this.authModuleFacade.userModule.getUserByEmail({
-      email: username,
+      email: email,
     });
 
     const match = await bcrypt.compare(password, user.password);
@@ -45,10 +44,9 @@ export class LogInService {
     }
 
     const { id, uuid, roles } = user.toPrimitives();
-    const sub = JSON.stringify({ id, uuid, roles });
+    const sub = JSON.stringify({ id, uuid, roles, email });
 
     const payloadTokenType: PayloadTokenType = {
-      roles,
       sub,
     };
 

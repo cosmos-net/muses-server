@@ -1,7 +1,7 @@
 import { ICommand } from '@lib-commons/domain';
 
 export class LoginCommand implements ICommand {
-  readonly username: string;
+  readonly email: string;
 
   readonly password: string;
 
