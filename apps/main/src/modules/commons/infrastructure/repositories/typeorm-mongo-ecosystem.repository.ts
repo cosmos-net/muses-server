@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
 import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
+import { IPaginationOrder } from '@lib-commons/domain';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
@@ -27,7 +28,7 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
     const ecosystem = await this.ecosystemRepository.findOneBy({
-      id
+      id,
     });
 
     const domain = new Ecosystem(ecosystem);
@@ -35,10 +36,34 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
     return domain;
   }
 
-  async list(): Promise<ListEcosystem> {
-    const ecosystems = await this.ecosystemRepository.find();
+  async list(paginationOrder?: IPaginationOrder): Promise<ListEcosystem> {
+    const params: Record<string, unknown> = {};
 
-    return new ListEcosystem(ecosystems, ecosystems.length);
+    if (paginationOrder) {
+      const { options } = paginationOrder;
+
+      if (options) {
+        const { pagination, order, filter } = options;
+
+        if (pagination) {
+          params.skip = pagination.limit;
+          params.take = pagination.take;
+        }
+
+        if (order) {
+          params.orderBy = order.by;
+          params.direction = order.direction;
+        }
+
+        if (filter) {
+          params.where = filter;
+        }
+      }
+    }
+
+    const ecosystems = await this.ecosystemRepository.find(params);
+    const listEcosystem: ListEcosystem = new ListEcosystem(ecosystems);
+
+    return listEcosystem;
   }
-
 }

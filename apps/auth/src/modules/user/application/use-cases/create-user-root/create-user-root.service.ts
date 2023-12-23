@@ -4,7 +4,11 @@ import {
   Logger,
   OnApplicationBootstrap,
 } from '@nestjs/common';
-import { IUserRepository, User, RolesEnum } from '@app-auth/modules/user/domain';
+import {
+  IUserRepository,
+  User,
+  RolesEnum,
+} from '@app-auth/modules/user/domain';
 import { USER_REPOSITORY } from '@app-auth/modules/user/application';
 import { UserRootType, ServerAuthType } from '@lib-commons/domain';
 import { ConfigService } from '@nestjs/config';
@@ -14,7 +18,8 @@ export class CreateUserRootService implements OnApplicationBootstrap {
   private logger = new Logger(CreateUserRootService.name);
 
   constructor(
-    @Inject(USER_REPOSITORY) private userRepository: IUserRepository,
+    @Inject(USER_REPOSITORY)
+    private userRepository: IUserRepository,
     private readonly config: ConfigService,
   ) {}
 
