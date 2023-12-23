@@ -23,12 +23,7 @@ function validateBys(validationOptions?: ValidationOptions) {
       constraints: [],
       validator: {
         validate(value: any) {
-          return (
-            value === 'name' ||
-            value === 'description' ||
-            value === 'enabled' ||
-            value === 'createdAt'
-          );
+          return value === 'name' || value === 'description' || value === 'enabled' || value === 'createdAt';
         },
       },
     });
