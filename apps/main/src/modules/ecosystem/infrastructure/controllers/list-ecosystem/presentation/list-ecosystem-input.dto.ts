@@ -1,15 +1,69 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
+  IsOptional,
+  IsString,
+  ValidateNested,
+  ValidationOptions,
+  registerDecorator,
+} from 'class-validator';
 
-export class ListEcosystemInputDto {
+function validateBys(validationOptions?: ValidationOptions) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: {
+        validate(value: any) {
+          return (
+            value === 'name' ||
+            value === 'description' ||
+            value === 'enabled' ||
+            value === 'createdAt'
+          );
+        },
+      },
+    });
+  };
+}
+
+class Params {
   @IsString()
-  @IsNotEmpty()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsString()
-  @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @IsBoolean()
+  @IsOptional()
+  enabled?: boolean;
+
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date | string;
+}
+
+export class ListEcosystemInputDto extends PaginationOptionsQuery {
+  @validateBys()
+  @IsString()
   @IsNotEmpty()
-  isEnabled: boolean;
+  @IsOptional()
+  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'name';
+
+  @Type(() => Params)
+  @IsNotEmptyObject()
+  @IsObject()
+  @ValidateNested()
+  @IsOptional()
+  filterBy?: Params;
 }
