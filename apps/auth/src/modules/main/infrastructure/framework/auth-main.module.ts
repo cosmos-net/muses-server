@@ -1,7 +1,8 @@
 import { ConfigModule, DatabasesLoader } from '@lib-commons/infrastructure';
 import { Module } from '@nestjs/common';
 import { MainConfigOptions, AuthModuleFacade } from '@app-auth/modules/main/infrastructure';
-import { AuthUserModule } from '@app-auth/modules/user/infrastructure';
+import { AuthUserModule } from '@app-auth/modules/user/infrastructure/framework/auth-user.module';
+// import { AuthUserModule } from '@app-auth/modules/user/infrastructure';
 import { AuthAuthenticationModule } from '@app-auth/modules/authentication/infrastructure';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
