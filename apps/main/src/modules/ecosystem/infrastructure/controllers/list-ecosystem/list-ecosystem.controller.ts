@@ -1,19 +1,6 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  Logger,
-} from '@nestjs/common';
-import {
-  ListEcosystemQuery,
-  ListEcosystemService,
-} from '@module-eco/application';
-import {
-  ListEcosystemInputDto,
-  ListEcosystemOutputDto,
-} from '@module-eco/infrastructure';
+import { BadRequestException, Body, Controller, Get, HttpException, Logger } from '@nestjs/common';
+import { ListEcosystemQuery, ListEcosystemService } from '@module-eco/application';
+import { ListEcosystemInputDto, ListEcosystemOutputDto } from '@module-eco/infrastructure';
 
 @Controller('management-ecosystem/')
 export class ListEcosystemController {
@@ -21,9 +8,7 @@ export class ListEcosystemController {
   constructor(private readonly listEcosystemService: ListEcosystemService) {}
 
   @Get('list')
-  async list(
-    @Body() dto: ListEcosystemInputDto,
-  ): Promise<ListEcosystemOutputDto> {
+  async list(@Body() dto: ListEcosystemInputDto): Promise<ListEcosystemOutputDto> {
     try {
       const { page, limit, take, sort, orderBy, filterBy } = dto;
       const paramsFilterBy: Record<string, unknown> = {};
