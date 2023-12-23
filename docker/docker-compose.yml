@@ -10,8 +10,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: toor
       MONGO_INITDB_DATABASE: muses
     volumes:
-      - ./dbs/muses:/data/db
-      - ./dbs/muses/logs:/var/log/mongodb/
+      - ../dbs/muses:/data/db
+      - ../dbs/muses/logs:/var/log/mongodb/
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - 27018:27017
   
@@ -26,6 +27,6 @@ services:
       POSTGRES_PASSWORD: toor
       POSTGRES_DB: hades
     volumes:
-      - ./dbs/hades:/var/lib/postgresql
+      - ../dbs/hades:/var/lib/postgresql
     ports:
       - 5433:5432
