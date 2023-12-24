@@ -6,6 +6,9 @@ import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastru
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import { TypeORMPostgresCamelCaseNamingStrategy } from '@z-brain/typeorm-postgres-camelcase-naming-strategy';
+import { DefaultNamingStrategy } from 'typeorm';
 
 @Module({
   imports: [
@@ -17,6 +20,7 @@ import { MongoType } from '@lib-commons/domain';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const db = configService.get<MongoType>('mongo') as MongoType;
+        const namingStrategy = new DefaultNamingStrategy();
 
         if (db === undefined) throw new Error('Configuration Error');
 
@@ -34,6 +38,7 @@ import { MongoType } from '@lib-commons/domain';
           legacySpatialSupport: false,
           ssl: false,
           entities: [process.cwd() + '/apps/main/src/modules/**/*-hades.entity.ts'],
+          namingStrategy,
         } as TypeOrmModuleAsyncOptions;
       },
     }),

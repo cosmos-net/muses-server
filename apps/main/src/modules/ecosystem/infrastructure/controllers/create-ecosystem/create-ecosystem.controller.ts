@@ -18,7 +18,8 @@ export class CreateEcosystemController {
 
       const domain = await this.createEcosystemService.process(command);
 
-      return new CreateEcosystemOutputDto(domain);
+      const mapper = new CreateEcosystemOutputDto(domain);
+      return mapper;
     } catch (error) {
       if (error instanceof HttpException) throw error;
       const err = error as Error;

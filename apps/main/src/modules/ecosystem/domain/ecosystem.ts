@@ -4,6 +4,7 @@ export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
 
   constructor(schema?: IEcosystemSchema | null) {
+    this._entityRoot.enabled = true;
     if (schema === null) {
       this.newError('Schema not found');
     }
