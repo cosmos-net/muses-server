@@ -3,8 +3,8 @@ import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 export class ListEcosystem {
   private total: number;
 
-  constructor(public domains: IEcosystemSchema[]) {
-    this.setTotal(domains.length);
+  constructor(public domains: IEcosystemSchema[], total: number) {
+    this.setTotal(total);
   }
 
   public hydrate(domains: IEcosystemSchema[]): void {

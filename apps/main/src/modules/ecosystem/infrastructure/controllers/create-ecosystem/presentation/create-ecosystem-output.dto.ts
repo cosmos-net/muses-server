@@ -13,9 +13,9 @@ export class CreateEcosystemOutputDto implements ICreateEcosystemOutputDto {
   name: string;
   description: string;
   isEnabled: boolean;
-  createdAt: string | Date;
-  updatedAt: string | Date;
-  deletedAt: string | Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 
   constructor(root: ICreateEcosystemOutputDto) {
     this.id = root.id;

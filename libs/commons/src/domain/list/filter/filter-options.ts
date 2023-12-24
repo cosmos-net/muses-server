@@ -1,3 +1,3 @@
 export interface IFilterOptions {
-  by?: Record<string, unknown>;
+  by: Record<string, unknown>;
 }
