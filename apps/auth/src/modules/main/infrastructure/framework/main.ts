@@ -1,15 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import {
-  ValidationPipe,
-  HttpException,
-  BadRequestException,
-  Logger,
-  ValidationError,
-} from '@nestjs/common';
-import { AuthMainModule, HttpExceptionFilter, TransformInterceptor } from '@app-auth/modules/main/infrastructure';
-import { ClientType } from '@lib-commons/domain/contracts/types/var-environment-map/client/client.type';
-import { ServerAuthType } from '@lib-commons/domain/contracts/types/var-environment-map/servers/server-auth.type';
+import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
+import { AuthMainModule } from '@app-auth/modules/main/infrastructure/framework/auth-main.module';
+import { HttpExceptionFilter, TransformInterceptor } from '@app-auth/modules/main/infrastructure';
+import { ClientType, ServerAuthType } from '@lib-commons/domain';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthMainModule);
@@ -40,9 +34,7 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
 
-  const serverAuth = configService.get<ServerAuthType>(
-    'auth',
-  ) as ServerAuthType;
+  const serverAuth = configService.get<ServerAuthType>('auth') as ServerAuthType;
   const client = configService.get<ClientType>('client');
 
   // TODO: Validate origin of client
@@ -59,9 +51,7 @@ async function bootstrap() {
     throw new Error('Server auth is not defined');
   }
 
-  await app.listen(serverAuth.port, () =>
-    Logger.log(`Running on port ${serverAuth.port}`, serverAuth.name),
-  );
+  await app.listen(serverAuth.port, () => Logger.log(`Running on port ${serverAuth.port}`, serverAuth.name));
 }
 
 bootstrap();

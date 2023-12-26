@@ -1,3 +1,5 @@
+import { PageDto, IPagination, PaginationMetadataDto } from '@lib-commons/infrastructure';
+
 interface IUpdateEcosystemOutputDto {
   id: string;
   name: string;
@@ -8,18 +10,21 @@ interface IUpdateEcosystemOutputDto {
   deletedAt: Date | string;
 }
 
-export class ListEcosystemOutputDto {
-  items: IUpdateEcosystemOutputDto[] = [];
+interface IUpdateEcosystemOutputDtoResponse {
+  list: IUpdateEcosystemOutputDto[];
+  total: number;
+}
 
-  constructor(ecosystems: IUpdateEcosystemOutputDto[]) {
-    this.items = ecosystems.map<IUpdateEcosystemOutputDto>((ecosystem) => ({
-      id: ecosystem.id,
-      name: ecosystem.name,
-      description: ecosystem.description,
-      enabled: ecosystem.enabled,
-      createdAt: ecosystem.createdAt instanceof Date ? ecosystem.createdAt.toISOString() : ecosystem.createdAt,
-      updatedAt: ecosystem.updatedAt instanceof Date ? ecosystem.updatedAt.toISOString() : ecosystem.updatedAt,
-      deletedAt: ecosystem.deletedAt instanceof Date ? ecosystem.deletedAt.toISOString() : ecosystem.deletedAt,
-    }));
+export class ListEcosystemOutputDto {
+  ecosystems: PageDto<IUpdateEcosystemOutputDto>;
+
+  constructor(items: IUpdateEcosystemOutputDtoResponse, pagination: IPagination) {
+    const paginationMetadataDto = new PaginationMetadataDto({
+      page: pagination.page,
+      limit: pagination.limit,
+      totalItems: items.total,
+    });
+
+    this.ecosystems = new PageDto<IUpdateEcosystemOutputDto>(items.list, paginationMetadataDto);
   }
 }

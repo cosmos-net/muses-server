@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpException,
-  Logger,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-} from '@nestjs/common';
+import { BadRequestException, Controller, Get, HttpException, Logger, Query, ValidationPipe } from '@nestjs/common';
 import { ListEcosystemQuery, ListEcosystemService } from '@module-eco/application';
 import { ListEcosystemInputDto, ListEcosystemOutputDto } from '@module-eco/infrastructure';
 
@@ -16,20 +7,56 @@ export class ListEcosystemController {
   private readonly logger = new Logger(ListEcosystemController.name);
   constructor(private readonly listEcosystemService: ListEcosystemService) {}
 
-  @Patch(':uuid')
-  async UpdateEcosystem(
-    @Param('uuid', ParseUUIDPipe) uuid: string,
-    @Body() dto: ListEcosystemInputDto,
+  @Get('list')
+  async list(
+    @Query(new ValidationPipe({ transform: true })) dto: ListEcosystemInputDto,
   ): Promise<ListEcosystemOutputDto> {
     try {
-      const { name, description, isEnabled } = dto;
+      const { page, limit, offset, sort, orderBy, ...filters } = dto;
+      const paramsFilterBy: Record<string, unknown> = {};
+      const params: ListEcosystemQuery = {
+        order: {
+          by: orderBy,
+          direction: sort,
+        },
+        pagination: {
+          page,
+          limit,
+          offset,
+        },
+      };
 
-      const command = new ListEcosystemQuery({ name, description, isEnabled });
+      if (filters) {
+        Object.keys(filters).forEach((key) => {
+          if (filters[key]) {
+            paramsFilterBy[key] = filters[key];
+          }
+        });
+
+        if (paramsFilterBy) {
+          params.filter = {
+            by: paramsFilterBy,
+          };
+        }
+      }
+
+      const command = new ListEcosystemQuery(params);
 
       const domain = await this.listEcosystemService.process(command);
 
-      return new ListEcosystemOutputDto(domain.entities());
+      const mapper = new ListEcosystemOutputDto(
+        {
+          list: domain.items,
+          total: domain.totalItems,
+        },
+        {
+          page,
+          limit,
+          offset,
+        },
+      );
 
+      return mapper;
     } catch (error) {
       if (error instanceof HttpException) throw error;
       const err = error as Error;

@@ -4,10 +4,13 @@ export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
 
   constructor(schema?: IEcosystemSchema | null) {
+    this._entityRoot.enabled = true;
+    if (schema === null) {
+      this.newError('Schema not found');
+    }
+
     if (schema) {
       this.hydrate(schema);
-    } else {
-      this.newError('Schema not founded');
     }
   }
 
@@ -39,11 +42,23 @@ export class Ecosystem {
     return this._entityRoot.deletedAt;
   }
 
-  public describe(name: string, description: string): void {
+  public describe(name: string, description?: string): void {
     this._entityRoot.name = name;
-    this._entityRoot.description = description;
+
+    if (description) {
+      this._entityRoot.description = description;
+    }
   }
 
+  public rename(name?: string, description?: string): void {
+    if (name) {
+      this._entityRoot.name = name;
+    }
+
+    if (description) {
+      this._entityRoot.description = description;
+    }
+  }
 
   public enabled(): void {
     this._entityRoot.enabled = true;
@@ -73,11 +88,10 @@ export class Ecosystem {
       createdAt: this._entityRoot.createdAt,
       updatedAt: this._entityRoot.updatedAt,
       deletedAt: this._entityRoot.deletedAt,
-    }
+    };
   }
 
   public newError(message: string): void {
     throw new Error(message);
   }
-
 }

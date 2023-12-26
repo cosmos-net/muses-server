@@ -1,13 +1,10 @@
-import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
+import { BaseEntity } from '@lib-commons/infrastructure';
 
-@Entity({ name: 'Ecosystem' })
+@Entity({ name: 'ecosystem' })
 export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
-
   @ObjectIdColumn()
-  _id: string;
-
-  @PrimaryColumn()
   id: string;
 
   @Column({
@@ -21,24 +18,6 @@ export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
     nullable: false,
   })
   description: string;
-
-  @Column({
-    name: 'created_at',
-    nullable: false,
-  })
-  createdAt: Date;
-
-  @Column({
-    name: 'updated_at',
-    nullable: true,
-  })
-  updatedAt: Date;
-
-  @Column({
-    name: 'deleted_at',
-    nullable: true,
-  })
-  deletedAt: Date;
 
   @Column({
     name: 'is_enabled',
