@@ -1,13 +1,11 @@
-import { IQuery } from '@lib-commons/domain';
+import { IPagination, IOrderOptions, IFilterOptions, IQuery } from '@lib-commons/domain';
 
 export class ListEcosystemQuery implements IQuery {
-  readonly id: string;
+  filter?: IFilterOptions;
 
-  readonly name: string;
+  pagination: IPagination;
 
-  readonly description: string;
-
-  readonly isEnabled: boolean;
+  order: IOrderOptions;
 
   constructor(props: Partial<ListEcosystemQuery>) {
     if (props) {

@@ -1,10 +1,10 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
-import { PaginationOrderEnum } from '@lib-commons/infrastructure';
+import { SortEnum } from '@lib-commons/infrastructure';
 
-export class PageOptionsDto {
+export class PaginationOptionsQuery {
   @IsOptional()
-  readonly order: PaginationOrderEnum = PaginationOrderEnum.ASC;
+  readonly sort: SortEnum = SortEnum.ASC;
 
   @Type(() => Number)
   @IsInt()
@@ -17,9 +17,9 @@ export class PageOptionsDto {
   @Min(1)
   @Max(50)
   @IsOptional()
-  readonly take: number = 10;
+  readonly limit: number = 10;
 
-  get skip(): number {
-    return (this.page - 1) * this.take;
+  get offset(): number {
+    return (this.page - 1) * this.limit;
   }
 }

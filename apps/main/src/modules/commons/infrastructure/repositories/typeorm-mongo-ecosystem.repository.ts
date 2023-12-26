@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
 import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
+import { IPaginationOrder } from '@lib-commons/domain';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
@@ -27,7 +28,7 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
     const ecosystem = await this.ecosystemRepository.findOneBy({
-      id
+      id,
     });
 
     const domain = new Ecosystem(ecosystem);
@@ -35,10 +36,35 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
     return domain;
   }
 
-  async list(): Promise<ListEcosystem> {
-    const ecosystems = await this.ecosystemRepository.find();
+  async list(paginationOrder?: IPaginationOrder): Promise<ListEcosystem> {
+    const params: FindManyOptions = {};
 
-    return new ListEcosystem(ecosystems, ecosystems.length);
+    if (paginationOrder) {
+      const { options } = paginationOrder;
+      const { pagination, order, filter } = options;
+
+      params.take = pagination.limit;
+      params.skip = pagination.offset;
+
+      params.order = {
+        [order.by]: order.direction,
+      };
+
+      if (filter?.by) {
+        const where: FindOptionsWhere<EcosystemEntity> = {};
+
+        Object.keys(filter.by).forEach((key) => {
+          where[key] = filter.by[key];
+        });
+
+        params.where = where;
+      }
+    }
+
+    const [ecosystems, total] = await this.ecosystemRepository.findAndCount(params);
+
+    const listEcosystem = new ListEcosystem(ecosystems, total);
+
+    return listEcosystem;
   }
-
 }
