@@ -19,7 +19,7 @@ export class PaginationOptionsQuery {
   @IsOptional()
   readonly limit: number = 10;
 
-  get take(): number {
+  get offset(): number {
     return (this.page - 1) * this.limit;
   }
 }

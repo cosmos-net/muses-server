@@ -1,16 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import {
-  ECOSYSTEM_REPOSITORY,
-  ListEcosystemQuery,
-} from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, ListEcosystemQuery } from '@app-main/modules/ecosystem/application/';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { IApplicationServiceQuery } from '@lib-commons/application';
 import { ListEcosystem } from '@module-eco/domain';
 
 @Injectable()
-export class ListEcosystemService
-  implements IApplicationServiceQuery<ListEcosystemQuery>
-{
+export class ListEcosystemService implements IApplicationServiceQuery<ListEcosystemQuery> {
   private logger = new Logger(ListEcosystemService.name);
 
   constructor(
@@ -18,9 +13,7 @@ export class ListEcosystemService
     private ecosystemRepository: IEcosystemRepository,
   ) {}
 
-  async process<T extends ListEcosystemQuery>(
-    command: T,
-  ): Promise<ListEcosystem> {
+  async process<T extends ListEcosystemQuery>(command: T): Promise<ListEcosystem> {
     const { filter, order, pagination } = command;
 
     const ecosystems = await this.ecosystemRepository.list({

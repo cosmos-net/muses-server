@@ -1,5 +1,5 @@
 export interface IPagination {
   limit: number;
   page: number;
-  take: number;
+  offset: number;
 }

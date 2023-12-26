@@ -6,6 +6,7 @@ import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastru
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain';
+import { DefaultNamingStrategy } from 'typeorm';
 
 @Module({
   imports: [
@@ -17,10 +18,9 @@ import { MongoType } from '@lib-commons/domain';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const db = configService.get<MongoType>('mongo') as MongoType;
+        const namingStrategy = new DefaultNamingStrategy();
 
         if (db === undefined) throw new Error('Configuration Error');
-
-        console.log(db);
 
         return {
           type: db.type,
@@ -28,14 +28,15 @@ import { MongoType } from '@lib-commons/domain';
           port: db.port,
           username: db.username,
           password: db.password,
-          database: db.name,
-          synchronize: db.synchronize,
-          autoLoadEntities: db.autoLoadEntities,
+          // database: db.name,
+          synchronize: true,
+          autoLoadEntities: true,
           migrationsTableName: db.migrationsTableName,
           logging: true,
           legacySpatialSupport: false,
           ssl: false,
-          entities: [process.cwd + '/apps/main/src/modules/'],
+          entities: [process.cwd() + '/apps/main/src/modules/**/*-hades.entity.ts'],
+          namingStrategy,
         } as TypeOrmModuleAsyncOptions;
       },
     }),

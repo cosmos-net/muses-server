@@ -1,8 +1,4 @@
-import {
-  IOrderOptions,
-  IPagination,
-  IFilterOptions,
-} from '@lib-commons/domain';
+import { IOrderOptions, IPagination, IFilterOptions } from '@lib-commons/domain';
 
 export interface IPaginationOrder {
   options: {
