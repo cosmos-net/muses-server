@@ -32,6 +32,12 @@ module.exports = {
           'match': true
         }
       }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
     ]
   },
 };
