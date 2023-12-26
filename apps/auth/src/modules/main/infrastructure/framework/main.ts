@@ -1,17 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import {
-  ValidationPipe,
-  HttpException,
-  BadRequestException,
-  Logger,
-  ValidationError,
-} from '@nestjs/common';
+import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
 import { AuthMainModule } from '@app-auth/modules/main/infrastructure/framework/auth-main.module';
-import {
-  HttpExceptionFilter,
-  TransformInterceptor,
-} from '@app-auth/modules/main/infrastructure';
+import { HttpExceptionFilter, TransformInterceptor } from '@app-auth/modules/main/infrastructure';
 import { ClientType, ServerAuthType } from '@lib-commons/domain';
 
 async function bootstrap() {
@@ -43,9 +34,7 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
 
-  const serverAuth = configService.get<ServerAuthType>(
-    'auth',
-  ) as ServerAuthType;
+  const serverAuth = configService.get<ServerAuthType>('auth') as ServerAuthType;
   const client = configService.get<ClientType>('client');
 
   // TODO: Validate origin of client
@@ -62,9 +51,7 @@ async function bootstrap() {
     throw new Error('Server auth is not defined');
   }
 
-  await app.listen(serverAuth.port, () =>
-    Logger.log(`Running on port ${serverAuth.port}`, serverAuth.name),
-  );
+  await app.listen(serverAuth.port, () => Logger.log(`Running on port ${serverAuth.port}`, serverAuth.name));
 }
 
 bootstrap();

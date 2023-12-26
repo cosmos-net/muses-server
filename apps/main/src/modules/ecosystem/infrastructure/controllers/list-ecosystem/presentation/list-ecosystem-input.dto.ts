@@ -1,19 +1,16 @@
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
   IsOptional,
   IsString,
-  ValidateNested,
   ValidationOptions,
   registerDecorator,
 } from 'class-validator';
 
-function validateBys(validationOptions?: ValidationOptions) {
+function ValidateBys(validationOptions?: ValidationOptions) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return function (object: Object, propertyName: string) {
     registerDecorator({
@@ -23,11 +20,14 @@ function validateBys(validationOptions?: ValidationOptions) {
       constraints: [],
       validator: {
         validate(value: any) {
+          return value === 'name' || value === 'description' || value === 'enabled' || value === 'createdAt';
+        },
+        defaultMessage() {
           return (
-            value === 'name' ||
-            value === 'description' ||
-            value === 'enabled' ||
-            value === 'createdAt'
+            'The property ' +
+            propertyName +
+            ' must be a valid value, only can be ' +
+            'name, description, enabled or createdAt'
           );
         },
       },
@@ -35,7 +35,13 @@ function validateBys(validationOptions?: ValidationOptions) {
   };
 }
 
-class Params {
+export class ListEcosystemInputDto extends PaginationOptionsQuery {
+  @ValidateBys()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'name';
+
   @IsString()
   @IsOptional()
   name?: string;
@@ -44,6 +50,9 @@ class Params {
   @IsOptional()
   description?: string;
 
+  @Transform(({ obj, key }) => {
+    return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+  })
   @IsBoolean()
   @IsOptional()
   enabled?: boolean;
@@ -51,19 +60,4 @@ class Params {
   @IsDate()
   @IsOptional()
   createdAt?: Date | string;
-}
-
-export class ListEcosystemInputDto extends PaginationOptionsQuery {
-  @validateBys()
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'name';
-
-  @Type(() => Params)
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @IsOptional()
-  filterBy?: Params;
 }

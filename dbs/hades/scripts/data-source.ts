@@ -44,10 +44,10 @@ const seeds = [`${relative}/dbs/hades/seeds/**/*{.ts,.js}`];
 const factories = [`${relative}/dbs/hades/factories/**/*{.ts,.js}`];
 
 const options = {
-  type: "mongodb",
-  host: "localhost",
-  port: 27017,
-  database: "test",
+  type,
+  host,
+  port,
+  database,
   autoLoadEntities,
   migrationsTableName,
   ssl,

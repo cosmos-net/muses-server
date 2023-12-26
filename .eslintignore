@@ -1,0 +1,10 @@
+# allowed
+!.vscode/
+!**/*.json
+!**/*.yml
+
+# ignore
+dist/
+Dockerfile
+package-lock.json
+README.md

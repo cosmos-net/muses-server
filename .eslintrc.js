@@ -7,8 +7,8 @@ module.exports = {
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'hexagonal-architecture'],
   extends: [
-    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   root: true,
   env: {
