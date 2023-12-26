@@ -6,8 +6,6 @@ import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastru
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { TypeORMPostgresCamelCaseNamingStrategy } from '@z-brain/typeorm-postgres-camelcase-naming-strategy';
 import { DefaultNamingStrategy } from 'typeorm';
 
 @Module({
