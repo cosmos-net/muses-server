@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "eslint",
     "ecosystem-module",
-    "main-module-muses"
+    "main-module-muses",
+    "auth-module"
   ]
 }
