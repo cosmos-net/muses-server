@@ -37,13 +37,15 @@ const synchronize = withSynchronize === 'true';
 const autoLoadEntities = true;
 const migrationsTableName = 'migrations';
 const ssl = withSSL === 'true' ? { rejectUnauthorized: false } : false;
-const cli = { migrationsDir: `${relative}/dbs/hades/migrations`};
-const entities = [`${relative}/apps/**/*-hades.entity.ts`];
+const cli = { migrationsDir: `${relative}/dbs/hades/migrations` };
+const entities = [`${relative}/apps/**/*-hades.entity.ts`, `${relative}/libs/**/*-commons.entity.ts`];
 const migrations = [`${relative}/dbs/hades/migrations/*.ts`];
 const seeds = [`${relative}/dbs/hades/seeds/**/*{.ts,.js}`];
 const factories = [`${relative}/dbs/hades/factories/**/*{.ts,.js}`];
 
 const options = {
+  username,
+  password,
   type,
   host,
   port,
@@ -58,6 +60,7 @@ const options = {
   migrations,
   seeds,
   factories,
+  synchronize,
 } as DataSourceOptions & SeederOptions;
 
 export const dataSource = new DataSource(options);
