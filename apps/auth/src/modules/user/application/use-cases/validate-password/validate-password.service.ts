@@ -1,17 +1,20 @@
 import { IApplicationServiceQuery } from '@lib-commons/application';
 import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ValidatePasswordQuery } from '@app-auth/modules/user/application/use-cases/validate-password/validate-password.query';
-import { USER_REPOSITORY } from '@app-auth/modules/user/application/constants/injection-tokens';
+import { JSON_WEB_TOKEN_SERVICE, USER_REPOSITORY } from '@app-auth/modules/user/application/constants/injection-tokens';
 import { IUserRepository } from '@app-auth/modules/user/domain';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { JwtType } from '@lib-commons/domain';
+import { IJsonWebTokenService } from '@app-auth/modules/commons/domain/contracts/json-web-token.service.contract';
+import { IPayloadTokenDecodedType } from '@app-auth/modules/commons/domain/payload-token-decoded.type';
 
 @Injectable()
 export class ValidatePasswordService implements IApplicationServiceQuery<ValidatePasswordQuery> {
   constructor(
-    @Inject(USER_REPOSITORY) private userRepository: IUserRepository,
+    @Inject(JSON_WEB_TOKEN_SERVICE)
+    private readonly jsonWebTokenService: IJsonWebTokenService,
+    @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     private readonly config: ConfigService,
   ) {}
 
@@ -21,19 +24,14 @@ export class ValidatePasswordService implements IApplicationServiceQuery<Validat
       let validated: boolean = true;
 
       const { secret } = this.config.get<JwtType>('jwt') as JwtType;
-
       const tokenWithoutBearer = token.replace('Bearer ', '');
+      const decodedToken = this.jsonWebTokenService.verify<IPayloadTokenDecodedType>(tokenWithoutBearer, secret);
 
-      const decodedToken = jwt.verify(tokenWithoutBearer, secret) as jwt.JwtPayload;
-
-      if (!decodedToken.sub) {
+      if (!(decodedToken instanceof Object)) {
         throw new UnauthorizedException('Invalid Token');
       }
 
-      const claims = JSON.parse(decodedToken.sub);
-
-      const user = await this.userRepository.getByEmailOrFail(claims.email);
-
+      const user = await this.userRepository.getByEmailOrUsernameOrFail(decodedToken.email);
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {

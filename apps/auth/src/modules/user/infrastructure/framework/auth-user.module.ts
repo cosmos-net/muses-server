@@ -5,6 +5,7 @@ import {
   CreateUserRootService,
   GetUserService,
   USER_REPOSITORY,
+  JSON_WEB_TOKEN_SERVICE,
 } from '@module-user/application';
 import {
   PasswordValidationController,
@@ -12,6 +13,7 @@ import {
   UserModuleFacade,
   TypeOrmUserRepository,
 } from '@module-user/infrastructure';
+import { JsonWebTokenService } from '@app-auth/modules/commons/infrastructure/domain/json-web-token.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
@@ -24,6 +26,10 @@ import {
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository,
+    },
+    {
+      provide: JSON_WEB_TOKEN_SERVICE,
+      useClass: JsonWebTokenService,
     },
   ],
   exports: [UserModuleFacade],

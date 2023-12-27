@@ -71,8 +71,14 @@ export class User {
     return this._entityRoot;
   }
 
-  public toPrimitives(): IUserSchema {
-    return this._entityRoot;
+  public toPrimitives(): Omit<IUserSchema, 'roles'> & { roles: string[] } {
+    const root = this._entityRoot;
+    const roles = root.roles.map((role) => role.toString());
+
+    return {
+      ...root,
+      roles,
+    };
   }
 
   public enabled(): void {

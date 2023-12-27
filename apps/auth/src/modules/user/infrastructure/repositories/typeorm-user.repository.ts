@@ -12,11 +12,13 @@ export class TypeOrmUserRepository implements IUserRepository {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async getByEmailOrFail(email: string): Promise<User> {
-    const user = await this.userRepository.findOneBy({ email });
+  async getByEmailOrUsernameOrFail(emailOrUsername: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: [{ email: emailOrUsername }, { username: emailOrUsername }],
+    });
 
     if (!user) {
-      throw new NotFoundException(`User with email ${email} not found`);
+      throw new NotFoundException(`User with email or username ${emailOrUsername} not found`);
     }
 
     return new User(user);
