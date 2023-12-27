@@ -1,5 +1,7 @@
 {
   "conventionalCommits.scopes": [
-    "eslint"
+    "eslint",
+    "ecosystem-module",
+    "main-module-muses"
   ]
 }
