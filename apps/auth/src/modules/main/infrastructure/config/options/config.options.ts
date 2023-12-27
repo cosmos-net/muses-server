@@ -1,12 +1,6 @@
 import { ConfigModuleOptions } from '@nestjs/config';
 import { ConfigSchema } from '@app-auth/modules/main/infrastructure';
-import {
-  ServersLoader,
-  DatabasesLoader,
-  UserRootLoader,
-  JwtLoader,
-  ClientLoader,
-} from '@lib-commons/infrastructure';
+import { ServersLoader, DatabasesLoader, UserRootLoader, JwtLoader, ClientLoader } from '@lib-commons/infrastructure';
 
 export const MainConfigOptions: ConfigModuleOptions = {
   cache: true,

@@ -5,10 +5,7 @@ import { AuthMainModule, MainConfigOptions } from '@app-auth/modules/main/infras
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(MainConfigOptions),
-    forwardRef(() => AuthMainModule),
-  ],
+  imports: [ConfigModule.forRoot(MainConfigOptions), forwardRef(() => AuthMainModule)],
   controllers: [LogInController],
   providers: [LogInService],
 })

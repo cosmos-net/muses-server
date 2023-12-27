@@ -1,23 +1,26 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  USER_REPOSITORY,
+  ValidatePasswordService,
   CreateUserRootService,
   GetUserService,
-} from '@app-auth/modules/user/application';
+  USER_REPOSITORY,
+} from '@module-user/application';
 import {
-  TypeOrmUserRepository,
-  UserModuleFacade,
+  PasswordValidationController,
   UserEntity,
-} from '@app-auth/modules/user/infrastructure';
-import { TypeOrmModule } from '@nestjs/typeorm';
+  UserModuleFacade,
+  TypeOrmUserRepository,
+} from '@module-user/infrastructure';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
-  controllers: [],
+  controllers: [PasswordValidationController],
   providers: [
     GetUserService,
     UserModuleFacade,
     CreateUserRootService,
+    ValidatePasswordService,
     {
       provide: USER_REPOSITORY,
       useClass: TypeOrmUserRepository,
