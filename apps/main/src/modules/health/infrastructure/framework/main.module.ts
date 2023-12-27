@@ -7,11 +7,7 @@ import { HealthController, ExternalSystemService } from '@app-main/modules/healt
 import { GetHealthService, EXTERNAL_SYSTEM } from '@app-main/modules/health/application';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(MainConfigOptions),
-    TerminusModule,
-    HttpModule,
-  ],
+  imports: [ConfigModule.forRoot(MainConfigOptions), TerminusModule, HttpModule],
   controllers: [HealthController],
   providers: [
     GetHealthService,

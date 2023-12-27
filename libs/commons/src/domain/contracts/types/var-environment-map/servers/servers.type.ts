@@ -1,4 +1,4 @@
-import { ServerMainType, ServerAuthType } from "@lib-commons/domain";
+import { ServerMainType, ServerAuthType } from '@lib-commons/domain';
 
 export type ServersType = {
   main: ServerMainType;

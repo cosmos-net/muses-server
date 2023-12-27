@@ -9,9 +9,9 @@ export class GetUserService implements IApplicationServiceQuery<GetUserQuery> {
   constructor(@Inject(USER_REPOSITORY) private userRepository: IUserRepository) {}
 
   process<T extends GetUserQuery>(query: T): Promise<User> {
-    const { email } = query;
+    const { emailOrUsername } = query;
 
-    const user = this.userRepository.getByEmailOrFail(email);
+    const user = this.userRepository.getByEmailOrUsernameOrFail(emailOrUsername);
 
     return user;
   }

@@ -1,12 +1,11 @@
 interface IValidatePasswordOutputDto {
-    validated: boolean;
+  validated: boolean;
+}
+
+export class ValidatePasswordOutputDto {
+  readonly validated: boolean;
+
+  constructor(validation: IValidatePasswordOutputDto) {
+    this.validated = validation.validated;
   }
-  
-  export class ValidatePasswordOutputDto {
-    readonly validated: boolean;
-  
-    constructor(validation: IValidatePasswordOutputDto) {
-      this.validated = validation.validated;
-    }
-  }
-  
+}

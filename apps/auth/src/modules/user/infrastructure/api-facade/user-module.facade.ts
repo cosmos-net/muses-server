@@ -5,7 +5,7 @@ import { GetUserService, GetUserQuery } from '@app-auth/modules/user/application
 export class UserModuleFacade {
   constructor(private readonly getUserService: GetUserService) {}
 
-  getUserByEmail(getUserQuery: GetUserQuery) {
+  getUserByEmailOrUsername(getUserQuery: GetUserQuery) {
     return this.getUserService.process(getUserQuery);
   }
 }

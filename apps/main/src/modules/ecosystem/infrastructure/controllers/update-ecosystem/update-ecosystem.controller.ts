@@ -37,7 +37,6 @@ export class UpdateEcosystemController {
         updatedAt: domain.updatedAt,
         deletedAt: domain.deletedAt,
       });
-
     } catch (error) {
       if (error instanceof HttpException) throw error;
       const err = error as Error;
