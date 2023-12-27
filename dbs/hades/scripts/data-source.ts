@@ -49,8 +49,6 @@ const options = {
   type,
   host,
   port,
-  username,
-  password,
   database,
   autoLoadEntities,
   migrationsTableName,
