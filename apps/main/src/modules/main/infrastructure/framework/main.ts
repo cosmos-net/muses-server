@@ -1,12 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import {
-  ValidationPipe,
-  HttpException,
-  BadRequestException,
-  Logger,
-  ValidationError,
-} from '@nestjs/common';
+import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
 import { MainModule, HttpExceptionFilter, TransformInterceptor } from '@app-main/modules/main/infrastructure';
 import { ClientType, ServerMainType } from '@lib-commons/domain';
 
@@ -40,9 +34,7 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService);
 
   // TODO: Server and client no undefined
-  const serverMain = configService.get<ServerMainType>(
-    'main',
-  ) as ServerMainType;
+  const serverMain = configService.get<ServerMainType>('main') as ServerMainType;
   const client = configService.get<ClientType>('client');
 
   // TODO: Validate origin of client
@@ -59,9 +51,7 @@ async function bootstrap() {
     throw new Error('Server main is not defined');
   }
 
-  await app.listen(serverMain.port, () =>
-    Logger.log(`Running on port ${serverMain.port}`, serverMain.name),
-  );
+  await app.listen(serverMain.port, () => Logger.log(`Running on port ${serverMain.port}`, serverMain.name));
 }
 
 bootstrap();

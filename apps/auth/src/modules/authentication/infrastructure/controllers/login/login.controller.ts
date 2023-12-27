@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpException,
-  Logger,
-  Post,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, HttpException, Logger, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoginInputDto, LoginOutputDto } from '@app-auth/modules/authentication/infrastructure';
 import { LogInService, LoginCommand } from '@app-auth/modules/authentication/application';
@@ -15,10 +8,7 @@ import { JwtType } from '@lib-commons/domain';
 export class LogInController {
   private logger = new Logger(LogInController.name);
 
-  constructor(
-    private readonly loginService: LogInService,
-    private readonly config: ConfigService,
-  ) {}
+  constructor(private readonly loginService: LogInService, private readonly config: ConfigService) {}
   @Post('login/')
   async login(@Body() loginInputDto: LoginInputDto): Promise<LoginOutputDto> {
     try {
