@@ -1,12 +1,5 @@
 import { GetHealthService } from '@app-main/modules/health/application';
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  HttpException,
-  Logger,
-  Query,
-} from '@nestjs/common';
+import { BadRequestException, Controller, Get, HttpException, Logger, Query } from '@nestjs/common';
 import { GetHealthInputDto } from '@app-main/modules/health/infrastructure';
 import { GetHealthQuery } from '@app-main/modules//health/application';
 import { GetHealthOutput } from '@app-main/modules//health/infrastructure';
@@ -19,9 +12,7 @@ export class HealthController {
 
   @Get('status/')
   @HealthCheck()
-  async CheckHealth(
-    @Query() queryParams: GetHealthInputDto,
-  ): Promise<GetHealthOutput> {
+  async CheckHealth(@Query() queryParams: GetHealthInputDto): Promise<GetHealthOutput> {
     try {
       const query = new GetHealthQuery(queryParams);
 

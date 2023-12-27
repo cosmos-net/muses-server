@@ -1,4 +1,4 @@
-import { EnvironmentEnum } from "@lib-commons/domain";
+import { EnvironmentEnum } from '@lib-commons/domain';
 
 export type ServerMainType = {
   name: string;

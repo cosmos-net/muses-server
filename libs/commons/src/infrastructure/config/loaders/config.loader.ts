@@ -33,12 +33,8 @@ export const ConfigLoader = (): VarEnvMapConfigType => ({
       synchronize: process.env.DB_POSTGRES_SYNC === 'true',
       logging: process.env.DB_POSTGRES_LOGGING === 'true',
       runMigrations: process.env.DB_POSTGRES_RUN_MIGRATIONS === 'true',
-      migrationsTableName: process.env
-        .DB_POSTGRES_MIGRATIONS_TABLE_NAME as string,
-      tls:
-        process.env.DB_POSTGRES_SSL === 'true'
-          ? { rejectUnauthorized: false }
-          : false,
+      migrationsTableName: process.env.DB_POSTGRES_MIGRATIONS_TABLE_NAME as string,
+      tls: process.env.DB_POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false,
     },
     mongo: {
       name: process.env.DB_MONGO_NAME as string,

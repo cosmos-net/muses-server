@@ -1,10 +1,6 @@
-import {
-  HealthCheckResult,
-  HealthCheckStatus,
-  HealthIndicatorResult,
-} from '@nestjs/terminus';
+import { HealthCheckResult, HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
 
-export interface HealthSchema {
+export interface IHealthSchema {
   status: HealthCheckStatus;
   details: HealthIndicatorResult;
   error?: HealthIndicatorResult;
@@ -17,9 +13,9 @@ export interface HealthSchema {
 }
 
 export class Health {
-  private _entityRoot = {} as HealthSchema;
+  private _entityRoot = {} as IHealthSchema;
 
-  constructor(schema?: HealthSchema) {
+  constructor(schema?: IHealthSchema) {
     if (schema) {
       this._entityRoot.version = schema.version || 'v1.0.0';
       this._entityRoot.uptime = schema.uptime || 9999;
@@ -47,7 +43,7 @@ export class Health {
     return this._entityRoot.status;
   }
 
-  public hydrate(entityRoot: HealthSchema): void {
+  public hydrate(entityRoot: IHealthSchema): void {
     this._entityRoot = entityRoot;
   }
 
