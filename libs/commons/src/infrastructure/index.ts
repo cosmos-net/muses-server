@@ -5,7 +5,7 @@ export * from '@lib-commons/infrastructure/config/loaders/database.loader';
 export * from '@lib-commons/infrastructure/config/loaders/jwt.loader';
 export * from '@lib-commons/infrastructure/config/loaders/servers.loader';
 export * from '@lib-commons/infrastructure/config/loaders/user-root.loader';
-export * from '@lib-commons/infrastructure/domain/base.entity';
+export * from '@lib-commons/infrastructure/domain/base-commons.entity';
 export * from '@lib-commons/domain/list/pagination/pagination';
 export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
 export * from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
