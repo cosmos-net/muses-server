@@ -1,4 +1,4 @@
-import { BaseEntity } from '@lib-commons/infrastructure/domain/base.entity';
+import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { IUserSchema, RolesEnum } from '@app-auth/modules/user/domain';
 
