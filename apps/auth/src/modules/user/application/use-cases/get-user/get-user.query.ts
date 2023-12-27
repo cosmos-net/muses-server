@@ -1,7 +1,7 @@
 import { IQuery } from '@lib-commons/domain';
 
 export class GetUserQuery implements IQuery {
-  email: string;
+  emailOrUsername: string;
 
   constructor(props?: Partial<GetUserQuery>) {
     if (props) {

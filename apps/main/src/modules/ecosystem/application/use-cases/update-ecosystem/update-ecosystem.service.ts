@@ -1,8 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  Logger
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ECOSYSTEM_REPOSITORY, UpdateEcosystemCommand } from '@app-main/modules/ecosystem/application/';
 import { ConfigService } from '@nestjs/config';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
@@ -19,16 +15,15 @@ export class UpdateEcosystemService implements IApplicationServiceCommand<Update
   ) {}
 
   async process<T extends UpdateEcosystemCommand>(command: T): Promise<Ecosystem> {
-    
-      const { id, name, description, isEnabled } = command;
+    const { id, name, description, isEnabled } = command;
 
-      const ecosystem = await this.ecosystemRepository.byIdOrFail(id);
-      
-      ecosystem.describe(name, description);
-      isEnabled ? ecosystem.enabled() : ecosystem.disabled();
+    const ecosystem = await this.ecosystemRepository.byIdOrFail(id);
 
-      await this.ecosystemRepository.persist(ecosystem);
+    ecosystem.describe(name, description);
+    isEnabled ? ecosystem.enabled() : ecosystem.disabled();
 
-      return ecosystem;
+    await this.ecosystemRepository.persist(ecosystem);
+
+    return ecosystem;
   }
 }

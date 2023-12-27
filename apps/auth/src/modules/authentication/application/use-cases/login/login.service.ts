@@ -1,41 +1,25 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-// TODO: FIX THIS WARNING: HANDLER IN INFRASTRUCTURE LAYER
-// eslint-disable-next-line hexagonal-architecture/enforce
-import { AuthModuleFacade } from '@app-auth/modules/main/infrastructure';
 import { LoginCommand } from '@app-auth/modules/authentication/application';
-
-// TODO: HANDLE TYPES CORRECTLY
-interface PayloadTokenType extends jwt.JwtPayload {
-  sub: string;
-}
-
-type SignJsonWebTokenType = {
-  payload: PayloadTokenType;
-  secret: string;
-  signOptions: jwt.SignOptions;
-};
-
-// TODO: THIS FUNCTION HAS A LOT RESPONSABILITY
+import {
+  AUTH_MODULE_FACADE_SERVICE,
+  JSON_WEB_TOKEN_SERVICE,
+} from '@app-auth/modules/authentication/application/use-cases/constants/injection-tokens';
+import { IAuthModuleFacadeService } from '@app-auth/modules/authentication/domain/contracts/auth-module-facade-service.contract';
+import { IJsonWebTokenService } from '@app-auth/modules/commons/domain/contracts/json-web-token.service.contract';
 @Injectable()
 export class LogInService {
-  constructor(private readonly authModuleFacade: AuthModuleFacade) {}
-
-  private generateJsonWebToken(
-    signJsonWebTokenType: SignJsonWebTokenType,
-  ): string {
-    const { payload, secret, signOptions } = signJsonWebTokenType;
-
-    return jwt.sign(payload, secret, signOptions);
-  }
+  constructor(
+    @Inject(AUTH_MODULE_FACADE_SERVICE)
+    private readonly authModuleFacadeService: IAuthModuleFacadeService,
+    @Inject(JSON_WEB_TOKEN_SERVICE)
+    private readonly jsonWebTokenService: IJsonWebTokenService,
+  ) {}
 
   public async process(command: LoginCommand): Promise<string> {
     const { email, password, secret, expiresIn } = command;
 
-    const user = await this.authModuleFacade.userModule.getUserByEmail({
-      email: email,
-    });
+    const user = await this.authModuleFacadeService.getUserByEmailOrUsername(email);
 
     const match = await bcrypt.compare(password, user.password);
 
@@ -43,20 +27,17 @@ export class LogInService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const { id, uuid, roles } = user.toPrimitives();
-    const sub = JSON.stringify({ id, uuid, roles, email });
-
-    const payloadTokenType: PayloadTokenType = {
-      sub,
-    };
-
-    const payloadSignJsonWebTokenType: SignJsonWebTokenType = {
-      payload: payloadTokenType,
+    const token = this.jsonWebTokenService.sign({
+      payload: {
+        id: user.id,
+        uuid: user.uuid,
+        roles: user.roles,
+        email: user.email,
+        username: user.username,
+      },
       secret,
       signOptions: { expiresIn },
-    };
-
-    const token = this.generateJsonWebToken(payloadSignJsonWebTokenType);
+    });
 
     return token;
   }

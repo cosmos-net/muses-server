@@ -1,1 +1,2 @@
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
+export const JSON_WEB_TOKEN_SERVICE = Symbol('JSON_WEB_TOKEN_SERVICE');
