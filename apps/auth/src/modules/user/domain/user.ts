@@ -87,20 +87,13 @@ export class User {
     this._entityRoot.roles = roles;
   }
 
-  public initializeCredentials(
-    email: string,
-    username: string,
-    password: string,
-  ): void {
+  public initializeCredentials(email: string, username: string, password: string): void {
     this._entityRoot.email = email;
     this._entityRoot.username = username;
     this._entityRoot.password = password;
   }
 
   public async encryptPassword(hashSalt: number): Promise<void> {
-    this._entityRoot.password = await bcrypt.hash(
-      this._entityRoot.password,
-      hashSalt,
-    );
+    this._entityRoot.password = await bcrypt.hash(this._entityRoot.password, hashSalt);
   }
 }
