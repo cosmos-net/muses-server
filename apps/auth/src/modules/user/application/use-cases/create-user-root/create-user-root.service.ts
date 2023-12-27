@@ -1,25 +1,16 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
-import {
-  IUserRepository,
-  User,
-  RolesEnum,
-} from '@app-auth/modules/user/domain';
-import { USER_REPOSITORY } from '@app-auth/modules/user/application';
-import { UserRootType, ServerAuthType } from '@lib-commons/domain';
+import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { USER_REPOSITORY } from '@app-auth/modules/user/application/constants/injection-tokens';
+import { UserRootType } from '@lib-commons/domain/contracts/types/var-environment-map/user-root/user-root.type';
 import { ConfigService } from '@nestjs/config';
+import { RolesEnum, User, IUserRepository } from '@app-auth/modules/user/domain';
+import { ServerAuthType } from '@lib-commons/domain/contracts/types/var-environment-map/servers/server-auth.type';
 
 @Injectable()
 export class CreateUserRootService implements OnApplicationBootstrap {
   private logger = new Logger(CreateUserRootService.name);
 
   constructor(
-    @Inject(USER_REPOSITORY)
-    private userRepository: IUserRepository,
+    @Inject(USER_REPOSITORY) private userRepository: IUserRepository,
     private readonly config: ConfigService,
   ) {}
 
@@ -27,17 +18,13 @@ export class CreateUserRootService implements OnApplicationBootstrap {
   // TODO: To level business logic an user root should be created only once and only exists one user root
   async onApplicationBootstrap(): Promise<void> {
     try {
-      const userRoot = this.config.get<UserRootType>(
-        'userRoot',
-      ) as UserRootType;
+      const userRoot = this.config.get<UserRootType>('userRoot') as UserRootType;
 
       if (!userRoot) {
         throw new Error('User root not found');
       }
 
-      const serverAuth = this.config.get<ServerAuthType>(
-        'auth',
-      ) as ServerAuthType;
+      const serverAuth = this.config.get<ServerAuthType>('auth') as ServerAuthType;
 
       const { email, username, password } = userRoot;
       const user = new User();

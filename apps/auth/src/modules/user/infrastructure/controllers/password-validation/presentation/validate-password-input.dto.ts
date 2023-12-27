@@ -1,15 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginInputDto {
-  @IsString()
-  @IsNotEmpty()
-  email: string;
-
+export class ValidatePasswordInputDto {
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  constructor(props: Partial<LoginInputDto>) {
+  constructor(props: Partial<ValidatePasswordInputDto>) {
     Object.assign(this, props);
   }
 }
