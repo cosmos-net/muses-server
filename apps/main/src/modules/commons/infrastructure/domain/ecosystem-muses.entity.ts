@@ -1,10 +1,14 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 import { BaseEntity } from '@lib-commons/infrastructure';
+import { ObjectId } from 'mongodb';
 
 @Entity({ name: 'ecosystem' })
 export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
   @ObjectIdColumn()
+  _id: ObjectId;
+
+  @PrimaryColumn()
   id: string;
 
   @Column({
