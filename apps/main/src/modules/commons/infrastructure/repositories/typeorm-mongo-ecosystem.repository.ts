@@ -5,6 +5,7 @@ import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
 import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
 import { IPaginationOrder } from '@lib-commons/domain';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
@@ -27,13 +28,24 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
   }
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
+    const objId = new ObjectId(id);
+
     const ecosystem = await this.ecosystemRepository.findOneBy({
-      id,
+      _id: objId,
     });
 
     const domain = new Ecosystem(ecosystem);
 
     return domain;
+  }
+
+  async update(model: Ecosystem): Promise<Ecosystem> {
+    await this.ecosystemRepository.update(
+      { _id: model._id },
+      { name: model.name, description: model.description, enabled: model.isEnabled, updatedAt: new Date() },
+    );
+
+    return model;
   }
 
   async list(paginationOrder?: IPaginationOrder): Promise<ListEcosystem> {

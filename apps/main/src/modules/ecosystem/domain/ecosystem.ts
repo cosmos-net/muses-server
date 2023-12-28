@@ -1,4 +1,5 @@
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
+import { ObjectId } from 'mongodb';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
@@ -12,6 +13,10 @@ export class Ecosystem {
     if (schema) {
       this.hydrate(schema);
     }
+  }
+
+  get _id(): ObjectId {
+    return this._entityRoot._id;
   }
 
   get id(): string {

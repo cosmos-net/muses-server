@@ -22,7 +22,7 @@ export class UpdateEcosystemService implements IApplicationServiceCommand<Update
     ecosystem.describe(name, description);
     isEnabled ? ecosystem.enabled() : ecosystem.disabled();
 
-    await this.ecosystemRepository.persist(ecosystem);
+    await this.ecosystemRepository.update(ecosystem);
 
     return ecosystem;
   }
