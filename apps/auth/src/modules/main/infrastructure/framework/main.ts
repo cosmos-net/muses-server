@@ -2,8 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
 import { AuthMainModule } from '@app-auth/modules/main/infrastructure/framework/auth-main.module';
-import { HttpExceptionFilter, TransformInterceptor } from '@app-auth/modules/main/infrastructure';
 import { ClientType, ServerAuthType } from '@lib-commons/domain';
+import { HttpExceptionFilter } from '@lib-commons/infrastructure/framework/http-exception.filter';
+import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthMainModule);
@@ -35,21 +36,20 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService);
 
   const serverAuth = configService.get<ServerAuthType>('auth') as ServerAuthType;
-  const client = configService.get<ClientType>('client');
+  if (!serverAuth) {
+    throw new Error('Server auth is not defined');
+  }
 
-  // TODO: Validate origin of client
+  const client = configService.get<ClientType>('client');
   if (!client) {
     throw new Error('Client is not defined');
   }
+
   app.enableCors({
     origin: `${client.protocol}://${client.host}:${client.port}`,
     methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
   });
-
-  if (!serverAuth) {
-    throw new Error('Server auth is not defined');
-  }
 
   await app.listen(serverAuth.port, () => Logger.log(`Running on port ${serverAuth.port}`, serverAuth.name));
 }
