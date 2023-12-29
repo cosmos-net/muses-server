@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { IUserRepository } from '@app-auth/modules/user/domain/contracts/user-repository';
 import { UserEntity } from '@app-auth/modules/user/infrastructure/domain/user-hades.entity';
 import { User } from '@app-auth/modules/user/domain/user';
+import { RolesEnum } from '@module-user/domain';
 
 @Injectable()
 export class TypeOrmUserRepository implements IUserRepository {
@@ -26,5 +27,17 @@ export class TypeOrmUserRepository implements IUserRepository {
 
   async persist(user: User): Promise<void> {
     await this.userRepository.save(user.entityRoot());
+  }
+
+  async findUserRoot(): Promise<User | null> {
+    const user = await this.userRepository.findOne({
+      where: { roles: RolesEnum.root },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return new User(user);
   }
 }
