@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
-import { MainModule, HttpExceptionFilter, TransformInterceptor } from '@app-main/modules/main/infrastructure';
+import { MainModule } from '@app-main/modules/main/infrastructure';
 import { ClientType, ServerMainType } from '@lib-commons/domain';
+import { HttpExceptionFilter } from '@lib-commons/infrastructure/framework/http-exception.filter';
+import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
@@ -33,23 +35,24 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
 
-  // TODO: Server and client no undefined
   const serverMain = configService.get<ServerMainType>('main') as ServerMainType;
-  const client = configService.get<ClientType>('client');
+  if (!serverMain) {
+    throw new Error('Server main is not defined');
+  }
 
-  // TODO: Validate origin of client
+  const client = configService.get<ClientType>('client');
   if (!client) {
     throw new Error('Client is not defined');
   }
+
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.setGlobalPrefix('api/v1');
+
   app.enableCors({
     origin: `${client.protocol}://${client.host}:${client.port}`,
     methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
   });
-
-  if (!serverMain) {
-    throw new Error('Server main is not defined');
-  }
 
   await app.listen(serverMain.port, () => Logger.log(`Running on port ${serverMain.port}`, serverMain.name));
 }
