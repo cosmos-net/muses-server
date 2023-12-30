@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpException,
-  Logger,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, HttpException, Logger, Patch } from '@nestjs/common';
 import { UpdateEcosystemService, UpdateEcosystemCommand } from '@app-main/modules/ecosystem/application';
 import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@app-main/modules/ecosystem/infrastructure';
 
@@ -16,11 +7,8 @@ export class UpdateEcosystemController {
   private readonly logger = new Logger(UpdateEcosystemController.name);
   constructor(private readonly updateEcosystemService: UpdateEcosystemService) {}
 
-  @Patch(':uuid')
-  async UpdateEcosystem(
-    @Param('uuid', ParseUUIDPipe) id: string,
-    @Body() updateInputDto: UpdateEcosystemInputDto,
-  ): Promise<UpdateEcosystemOutputDto> {
+  @Patch()
+  async UpdateEcosystem(@Body() updateInputDto: UpdateEcosystemInputDto): Promise<UpdateEcosystemOutputDto> {
     try {
       const { id, name, description, isEnabled } = updateInputDto;
 

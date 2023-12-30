@@ -24,6 +24,6 @@ export class UpdateEcosystemOutputDto {
     this.enabled = ecosystem.enabled;
     this.createdAt = ecosystem.createdAt.toISOString();
     this.updatedAt = ecosystem.updatedAt.toISOString();
-    this.deletedAt = ecosystem.deletedAt.toISOString();
+    if (this.deletedAt !== undefined) this.deletedAt = ecosystem.deletedAt.toISOString();
   }
 }
