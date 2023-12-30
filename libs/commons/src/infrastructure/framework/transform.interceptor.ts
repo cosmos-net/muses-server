@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -18,14 +18,19 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
 
         if (data === undefined) {
           response.status(204);
-          return undefined;
+          return undefined as unknown as IResponse<T>;
         }
         if (data === null) {
           response.status(404);
-          return undefined;
+          return undefined as unknown as IResponse<T>;
         }
 
-        return data;
+        return {
+          statusCode: response.statusCode,
+          data,
+          timestamp: new Date().toISOString(),
+          path: context.switchToHttp().getRequest().url,
+        } as IResponse<T>;
       }),
     );
   }
