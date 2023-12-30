@@ -3,13 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
 import { MainModule } from '@app-main/modules/main/infrastructure';
 import { ClientType, ServerMainType } from '@lib-commons/domain';
-import { HttpExceptionFilter } from '@lib-commons/infrastructure/framework/http-exception.filter';
 import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
-
-  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -45,7 +42,6 @@ async function bootstrap() {
     throw new Error('Client is not defined');
   }
 
-  app.useGlobalInterceptors(new TransformInterceptor());
   app.setGlobalPrefix('api/v1');
 
   app.enableCors({
