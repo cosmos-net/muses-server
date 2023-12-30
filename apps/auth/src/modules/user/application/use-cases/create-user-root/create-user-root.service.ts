@@ -14,23 +14,32 @@ export class CreateUserRootService implements OnApplicationBootstrap {
     private readonly config: ConfigService,
   ) {}
 
-  // TODO: Validate if user root already exists or change persist to method upsert
-  // TODO: To level business logic an user root should be created only once and only exists one user root
   async onApplicationBootstrap(): Promise<void> {
     try {
       const userRoot = this.config.get<UserRootType>('userRoot') as UserRootType;
 
       if (!userRoot) {
-        throw new Error('User root not found');
+        throw new Error('User root not defined in config file');
       }
 
       const serverAuth = this.config.get<ServerAuthType>('auth') as ServerAuthType;
+
+      if (!serverAuth) {
+        throw new Error('Server auth not defined in config file');
+      }
+
+      const existsUserRoot = await this.userRepository.findUserRoot();
+
+      if (existsUserRoot) {
+        throw new Error('User root already exists');
+      }
 
       const { email, username, password } = userRoot;
       const user = new User();
 
       user.initializeCredentials(email, username, password);
       await user.encryptPassword(serverAuth.hashSalt);
+
       user.enabled();
       user.withRoles([RolesEnum.root]);
 

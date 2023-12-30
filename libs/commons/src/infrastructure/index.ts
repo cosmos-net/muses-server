@@ -12,3 +12,5 @@ export * from '@lib-commons/infrastructure/presentation/input-pagination/paginat
 export * from '@lib-commons/domain/list/order/sort.enum';
 export * from '@lib-commons/infrastructure/presentation/output-pagination/page.dto';
 export * from '@lib-commons/infrastructure/presentation/output-pagination/pagination-metadata.dto';
+export * from '@lib-commons/infrastructure/framework/transform.interceptor';
+export * from '@lib-commons/infrastructure/framework/http-exception.filter';
