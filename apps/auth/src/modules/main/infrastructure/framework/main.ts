@@ -9,8 +9,6 @@ import { TransformInterceptor } from '@lib-commons/infrastructure/framework/tran
 async function bootstrap() {
   const app = await NestFactory.create(AuthMainModule);
 
-  app.useGlobalFilters(new HttpExceptionFilter());
-
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -35,6 +33,8 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
 
+  app.useGlobalFilters(new HttpExceptionFilter(configService));
+
   const serverAuth = configService.get<ServerAuthType>('auth') as ServerAuthType;
   if (!serverAuth) {
     throw new Error('Server auth is not defined');
@@ -45,6 +45,7 @@ async function bootstrap() {
     throw new Error('Client is not defined');
   }
 
+  // TODO: separate cors config
   app.enableCors({
     origin: `${client.protocol}://${client.host}:${client.port}`,
     methods: 'GET,POST,PUT,DELETE,PATCH',
