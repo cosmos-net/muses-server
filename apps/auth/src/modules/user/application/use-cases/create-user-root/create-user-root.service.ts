@@ -3,6 +3,7 @@ import { USER_REPOSITORY } from '@app-auth/modules/user/application/constants/in
 import { UserRootType, ServerAuthType } from '@lib-commons/domain';
 import { ConfigService } from '@nestjs/config';
 import { RolesEnum, User, IUserRepository } from '@app-auth/modules/user/domain';
+import { UserRootNotFoundException } from '@module-user/domain/exceptions/user-root-not-found.exception';
 
 @Injectable()
 export class CreateUserRootService implements OnApplicationBootstrap {
@@ -16,13 +17,17 @@ export class CreateUserRootService implements OnApplicationBootstrap {
 
   async onApplicationBootstrap(): Promise<void> {
     try {
-      const userRoot = this.config.get<UserRootType>('userRoot') as UserRootType;
+      const userRoot = this.config.get<UserRootType>('userRoot');
 
       if (!userRoot) {
-        throw new Error('User root not defined in config file');
+        throw new UserRootNotFoundException();
       }
 
-      const serverAuth = this.config.get<ServerAuthType>('auth') as ServerAuthType;
+      const serverAuth = this.config.get<ServerAuthType>('auth');
+
+      if (!serverAuth) {
+        throw new Error('Server auth is not defined');
+      }
 
       if (!serverAuth) {
         throw new Error('Server auth not defined in config file');

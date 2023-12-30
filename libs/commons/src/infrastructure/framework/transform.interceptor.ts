@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 export interface IResponse<T> {
   statusCode: number;
+  error: string | null;
   data: T;
   timestamp: string;
   path: string;
@@ -20,6 +21,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
           response.status(204);
           return undefined as unknown as IResponse<T>;
         }
+
         if (data === null) {
           response.status(404);
           return undefined as unknown as IResponse<T>;
@@ -27,6 +29,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
 
         return {
           statusCode: response.statusCode,
+          error: null,
           data,
           timestamp: new Date().toISOString(),
           path: context.switchToHttp().getRequest().url,

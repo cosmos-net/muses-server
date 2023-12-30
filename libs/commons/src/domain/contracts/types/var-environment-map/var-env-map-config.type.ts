@@ -2,7 +2,7 @@ import { DatabaseType, ClientType, JwtType, ServersType, UserRootType } from '@l
 
 export type VarEnvMapConfigType = {
   readonly client: ClientType;
-  readonly servers: ServersType;
+  readonly servers: ServersType & { serverEnv: string };
   readonly databases: DatabaseType;
   readonly jwt: JwtType;
   readonly userRoot: UserRootType;

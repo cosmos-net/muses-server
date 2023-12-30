@@ -7,17 +7,16 @@ export const ConfigLoader = (): VarEnvMapConfigType => ({
     protocol: process.env.CLIENT_PROTOCOL as string,
   },
   servers: {
+    serverEnv: process.env.SERVER_ENV as EnvironmentEnum,
     main: {
       host: process.env.SERVER_MAIN_HOST as string,
       port: parseInt(process.env.SERVER_MAIN_PORT!, 10),
       name: process.env.SERVER_MAIN_NAME as string,
-      env: process.env.SERVER_MAIN_ENV as EnvironmentEnum,
     },
     auth: {
       host: process.env.SERVER_AUTH_HOST as string,
       port: parseInt(process.env.SERVER_AUTH_PORT!, 10),
       name: process.env.SERVER_AUTH_NAME as string,
-      env: process.env.SERVER_AUTH_ENV as EnvironmentEnum,
       hashSalt: parseInt(process.env.CRYPT_SALT_ROUNDS!, 10),
     },
   },

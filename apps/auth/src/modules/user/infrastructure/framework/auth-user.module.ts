@@ -13,7 +13,7 @@ import {
   UserModuleFacade,
   TypeOrmUserRepository,
 } from '@module-user/infrastructure';
-import { JsonWebTokenService } from '@app-auth/modules/commons/infrastructure/domain/json-web-token.service';
+import { JsonWebTokenService } from '@app-auth/modules/common/infrastructure/domain/json-web-token.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
