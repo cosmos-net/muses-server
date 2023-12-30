@@ -21,6 +21,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
           response.status(204);
           return undefined as unknown as IResponse<T>;
         }
+
         if (data === null) {
           response.status(404);
           return undefined as unknown as IResponse<T>;
