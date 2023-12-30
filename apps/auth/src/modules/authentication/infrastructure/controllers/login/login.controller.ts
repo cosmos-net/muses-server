@@ -1,8 +1,9 @@
-import { BadRequestException, Body, Controller, HttpException, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoginInputDto, LoginOutputDto } from '@app-auth/modules/authentication/infrastructure';
 import { LogInService, LoginCommand } from '@app-auth/modules/authentication/application';
 import { JwtType } from '@lib-commons/domain';
+import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('authentication/')
 export class LogInController {
@@ -28,10 +29,7 @@ export class LogInController {
 
       return loginOutputDto;
     } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const err = error as Error;
-      this.logger.error(err.message, err.stack);
-      throw new BadRequestException(err.message, err.name);
+      throw ExceptionManager.createSignatureError(error);
     }
   }
 }

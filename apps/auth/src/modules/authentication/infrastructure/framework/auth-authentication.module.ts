@@ -1,7 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { LogInController } from '@app-auth/modules/authentication/infrastructure';
 import { AuthModuleFacadeService } from '@app-auth/modules/authentication/infrastructure/domain/auth-module-facade.service';
-import { JsonWebTokenService } from '@app-auth/modules/commons/infrastructure/domain/json-web-token.service';
+import { JsonWebTokenService } from '@app-auth/modules/common/infrastructure/domain/json-web-token.service';
 import {
   LogInService,
   AUTH_MODULE_FACADE_SERVICE,

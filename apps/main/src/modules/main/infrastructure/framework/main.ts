@@ -9,8 +9,6 @@ import { TransformInterceptor } from '@lib-commons/infrastructure/framework/tran
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
 
-  app.useGlobalFilters(new HttpExceptionFilter());
-
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -34,6 +32,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   const configService: ConfigService = app.get(ConfigService);
+
+  app.useGlobalFilters(new HttpExceptionFilter(configService));
 
   const serverMain = configService.get<ServerMainType>('main') as ServerMainType;
   if (!serverMain) {

@@ -6,8 +6,8 @@ import { IUserRepository } from '@app-auth/modules/user/domain';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtType } from '@lib-commons/domain';
-import { IJsonWebTokenService } from '@app-auth/modules/commons/domain/contracts/json-web-token.service.contract';
-import { IPayloadTokenDecodedType } from '@app-auth/modules/commons/domain/payload-token-decoded.type';
+import { IJsonWebTokenService } from '@app-auth/modules/common/domain/contracts/json-web-token.service.contract';
+import { IPayloadTokenDecodedType } from '@app-auth/modules/common/domain/payload-token-decoded.type';
 
 @Injectable()
 export class ValidatePasswordService implements IApplicationServiceQuery<ValidatePasswordQuery> {
