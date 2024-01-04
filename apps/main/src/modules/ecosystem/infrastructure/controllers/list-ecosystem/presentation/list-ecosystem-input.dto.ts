@@ -55,7 +55,7 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
   })
   @IsBoolean()
   @IsOptional()
-  enabled?: boolean;
+  isEnabled?: boolean;
 
   @IsDate()
   @IsOptional()
