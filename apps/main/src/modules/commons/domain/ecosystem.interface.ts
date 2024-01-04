@@ -2,7 +2,7 @@ export interface IEcosystemSchema {
   id: string;
   name: string;
   description: string;
-  enabled: boolean;
+  isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;

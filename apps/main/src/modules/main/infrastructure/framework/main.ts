@@ -4,6 +4,7 @@ import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationE
 import { MainModule } from '@app-main/modules/main/infrastructure';
 import { ClientType, ServerMainType } from '@lib-commons/domain';
 import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
+import { HttpExceptionFilter } from '@lib-commons/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
@@ -31,6 +32,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   const configService: ConfigService = app.get(ConfigService);
+
+  app.useGlobalFilters(new HttpExceptionFilter(configService));
 
   const serverMain = configService.get<ServerMainType>('main') as ServerMainType;
   if (!serverMain) {
