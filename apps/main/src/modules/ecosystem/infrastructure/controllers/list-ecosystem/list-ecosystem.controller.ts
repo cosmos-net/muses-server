@@ -13,7 +13,6 @@ export class ListEcosystemController {
   ): Promise<ListEcosystemOutputDto> {
     try {
       const { page, limit, offset, sort, orderBy, ...filters } = dto;
-      const paramsFilterBy: Record<string, unknown> = {};
       const params: ListEcosystemQuery = {
         order: {
           by: orderBy,
@@ -28,16 +27,15 @@ export class ListEcosystemController {
 
       if (filters) {
         Object.keys(filters).forEach((key) => {
-          if (filters[key]) {
-            paramsFilterBy[key] = filters[key];
+          if (key in filters) {
+            params.filter = {
+              by: {
+                ...params.filter?.by,
+                [key]: filters[key],
+              },
+            };
           }
         });
-
-        if (paramsFilterBy) {
-          params.filter = {
-            by: paramsFilterBy,
-          };
-        }
       }
 
       const command = new ListEcosystemQuery(params);

@@ -24,8 +24,8 @@ export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
   description: string;
 
   @Column({
-    name: 'is_enabled',
+    name: 'isEnabled',
     nullable: false,
   })
-  enabled: boolean;
+  isEnabled: boolean;
 }

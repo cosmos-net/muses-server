@@ -4,7 +4,7 @@ export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
 
   constructor(schema?: IEcosystemSchema | null) {
-    this._entityRoot.enabled = true;
+    this._entityRoot.isEnabled = true;
     if (schema === null) {
       this.newError('Schema not found');
     }
@@ -27,7 +27,7 @@ export class Ecosystem {
   }
 
   get isEnabled(): boolean {
-    return this._entityRoot.enabled;
+    return this._entityRoot.isEnabled;
   }
 
   get createdAt(): Date {
@@ -61,11 +61,11 @@ export class Ecosystem {
   }
 
   public enabled(): void {
-    this._entityRoot.enabled = true;
+    this._entityRoot.isEnabled = true;
   }
 
   public disabled(): void {
-    this._entityRoot.enabled = false;
+    this._entityRoot.isEnabled = false;
   }
 
   public hydrate(schema: IEcosystemSchema): void {
@@ -84,7 +84,7 @@ export class Ecosystem {
     return {
       name: this._entityRoot.name,
       description: this._entityRoot.description,
-      enabled: this._entityRoot.enabled,
+      enabled: this._entityRoot.isEnabled,
       createdAt: this._entityRoot.createdAt,
       updatedAt: this._entityRoot.updatedAt,
       deletedAt: this._entityRoot.deletedAt,
