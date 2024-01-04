@@ -4,7 +4,7 @@ interface IUpdateEcosystemOutputDto {
   id: string;
   name: string;
   description: string;
-  enabled: boolean;
+  isEnabled: boolean;
   createdAt: Date | string;
   updatedAt: Date | string;
   deletedAt: Date | string;
@@ -16,15 +16,31 @@ interface IUpdateEcosystemOutputDtoResponse {
 }
 
 export class ListEcosystemOutputDto {
-  ecosystems: PageDto<IUpdateEcosystemOutputDto>;
+  readonly items: IUpdateEcosystemOutputDto[];
+  readonly meta?: PaginationMetadataDto;
 
   constructor(items: IUpdateEcosystemOutputDtoResponse, pagination: IPagination) {
+    const list = items.list.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        isEnabled: item.isEnabled,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        deletedAt: item.deletedAt,
+      };
+    });
+
     const paginationMetadataDto = new PaginationMetadataDto({
       page: pagination.page,
       limit: pagination.limit,
       totalItems: items.total,
     });
 
-    this.ecosystems = new PageDto<IUpdateEcosystemOutputDto>(items.list, paginationMetadataDto);
+    const { items: itemsPage, meta } = new PageDto<IUpdateEcosystemOutputDto>(list, paginationMetadataDto);
+
+    this.items = itemsPage;
+    this.meta = meta;
   }
 }

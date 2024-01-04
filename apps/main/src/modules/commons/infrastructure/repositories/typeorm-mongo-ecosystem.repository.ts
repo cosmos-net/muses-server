@@ -17,7 +17,10 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
 
   async persist(model: Ecosystem): Promise<void> {
     const ecosystem = await this.ecosystemRepository.save(model.entityRoot());
-    model.hydrate(ecosystem);
+    model.hydrate({
+      ...ecosystem,
+      id: ecosystem._id.toHexString(),
+    });
   }
 
   async byNameOrFail(name: string): Promise<Ecosystem> {
