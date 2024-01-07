@@ -1,51 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe, HttpException, BadRequestException, Logger, ValidationError } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { AuthMainModule } from '@app-auth/modules/main/infrastructure/framework/auth-main.module';
 import { ClientType, ServerAuthType } from '@lib-commons/domain';
 import { HttpExceptionFilter } from '@lib-commons/infrastructure/framework/http-exception.filter';
 import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
+import { ValidationPipeWithExceptionFactory } from '@lib-commons/infrastructure/framework/global-validation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthMainModule);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      exceptionFactory: (errors: ValidationError[]): HttpException => {
-        const err = errors.map((error) => ({
-          [error.property]: Object.keys(
-            error.constraints as {
-              [type: string]: string;
-            },
-          ),
-        }));
+  const configService = app.get(ConfigService);
+  const serverAuth = configService.get<ServerAuthType>('auth');
+  const client = configService.get<ClientType>('client');
 
-        throw new BadRequestException(err);
-      },
-    }),
-  );
-
-  app.useGlobalInterceptors(new TransformInterceptor());
-  app.setGlobalPrefix('api/v1');
-
-  const configService: ConfigService = app.get(ConfigService);
-
-  app.useGlobalFilters(new HttpExceptionFilter(configService));
-
-  const serverAuth = configService.get<ServerAuthType>('auth') as ServerAuthType;
   if (!serverAuth) {
-    throw new Error('Server auth is not defined');
+    throw new Error('Server is not defined');
   }
 
-  const client = configService.get<ClientType>('client');
   if (!client) {
     throw new Error('Client is not defined');
   }
 
-  // TODO: separate cors config
+  app.useGlobalPipes(new ValidationPipeWithExceptionFactory());
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter(configService));
+  app.setGlobalPrefix('api/v1');
+
   app.enableCors({
     origin: `${client.protocol}://${client.host}:${client.port}`,
     methods: 'GET,POST,PUT,DELETE,PATCH',

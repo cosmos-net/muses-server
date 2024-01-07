@@ -8,13 +8,15 @@ import { ConfigService } from '@nestjs/config';
 import { JwtType } from '@lib-commons/domain';
 import { IJsonWebTokenService } from '@app-auth/modules/common/domain/contracts/json-web-token.service.contract';
 import { IPayloadTokenDecodedType } from '@app-auth/modules/common/domain/payload-token-decoded.type';
+import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Injectable()
 export class ValidatePasswordService implements IApplicationServiceQuery<ValidatePasswordQuery> {
   constructor(
     @Inject(JSON_WEB_TOKEN_SERVICE)
     private readonly jsonWebTokenService: IJsonWebTokenService,
-    @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
     private readonly config: ConfigService,
   ) {}
 
@@ -40,7 +42,7 @@ export class ValidatePasswordService implements IApplicationServiceQuery<Validat
 
       return validated;
     } catch (error) {
-      throw new BadRequestException(error.message, error.name);
+      throw ExceptionManager.createSignatureError(error);
     }
   }
 }

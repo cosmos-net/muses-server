@@ -16,16 +16,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse() as Record<string, string>;
     const isProduction = this.config.get<string>('servers.serverEnv') === 'production';
 
-    const error = typeof exceptionResponse === 'object' ? exceptionResponse.message : exceptionResponse;
-
     this.logger.error(
-      `Http Status: ${status} Error: ${JSON.stringify(error)}} Path: ${request.url} stack ${exception.stack}`,
+      `Http Status: ${status} Error: ${JSON.stringify(exceptionResponse)}} Path: ${request.url} stack ${
+        exception.stack
+      }`,
     );
 
     response.status(status).json({
       statusCode: status,
-      error,
-      data: null,
+      errors: exceptionResponse,
+      data: {},
       timestamp: new Date().toISOString(),
       path: request.url,
       ...(!isProduction && { stack: exception.stack }),
