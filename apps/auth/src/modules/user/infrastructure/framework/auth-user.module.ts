@@ -6,6 +6,7 @@ import {
   GetUserService,
   USER_REPOSITORY,
   JSON_WEB_TOKEN_SERVICE,
+  ENCRYPTER_SERVICE,
 } from '@module-user/application';
 import {
   PasswordValidationController,
@@ -14,6 +15,7 @@ import {
   TypeOrmUserRepository,
 } from '@module-user/infrastructure';
 import { JsonWebTokenService } from '@app-auth/modules/common/infrastructure/domain/json-web-token.service';
+import { EncrypterService } from '@app-auth/modules/user/infrastructure/domain/services/encrypter.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
@@ -30,6 +32,10 @@ import { JsonWebTokenService } from '@app-auth/modules/common/infrastructure/dom
     {
       provide: JSON_WEB_TOKEN_SERVICE,
       useClass: JsonWebTokenService,
+    },
+    {
+      provide: ENCRYPTER_SERVICE,
+      useClass: EncrypterService,
     },
   ],
   exports: [UserModuleFacade],

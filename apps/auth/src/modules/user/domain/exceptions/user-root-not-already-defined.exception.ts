@@ -1,7 +1,7 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-export class UserRootNotFoundException {
-  private readonly message = 'User root not defined in config file';
+export class UserRootAlreadyDefinedException {
+  private readonly message = 'User root already defined';
 
   constructor() {
     ExceptionManager.badGateway(this.message);

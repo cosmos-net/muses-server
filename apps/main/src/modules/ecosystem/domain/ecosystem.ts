@@ -1,4 +1,5 @@
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
+import { EcosystemNotFoundException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-not-found.exception';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
@@ -6,7 +7,7 @@ export class Ecosystem {
   constructor(schema?: IEcosystemSchema | null) {
     this._entityRoot.isEnabled = true;
     if (schema === null) {
-      this.newError('Schema not found');
+      throw new EcosystemNotFoundException();
     }
 
     if (schema) {
@@ -70,7 +71,7 @@ export class Ecosystem {
 
   public hydrate(schema: IEcosystemSchema): void {
     if (!schema) {
-      throw new Error('Information not found error');
+      throw new EcosystemNotFoundException();
     }
 
     this._entityRoot = schema;
@@ -89,9 +90,5 @@ export class Ecosystem {
       updatedAt: this._entityRoot.updatedAt,
       deletedAt: this._entityRoot.deletedAt,
     };
-  }
-
-  public newError(message: string): void {
-    throw new Error(message);
   }
 }
