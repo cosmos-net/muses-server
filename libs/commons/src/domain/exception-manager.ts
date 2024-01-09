@@ -4,14 +4,16 @@ export class ExceptionManager extends HttpException {
   static httpType: keyof typeof HttpStatus;
 
   constructor(message: string, type: keyof typeof HttpStatus) {
-    super(message, HttpStatus[type]);
+    const httpStatusParam = HttpStatus[type];
+
+    super(message, httpStatusParam);
     ExceptionManager.httpType = type;
   }
 
-  public static createSignatureError(messageOrPayload: any): HttpException {
-    const { ...params } = messageOrPayload;
+  public static createSignatureError(messageOrPayload: string | Record<string, unknown>): HttpException {
+    const httpStatus = HttpStatus[ExceptionManager.httpType] | HttpStatus.INTERNAL_SERVER_ERROR;
 
-    return new HttpException(params, HttpStatus[ExceptionManager.httpType]);
+    return new HttpException(messageOrPayload, httpStatus);
   }
 
   public static badRequest(messageOrPayload: string | Record<string, unknown>): HttpException {

@@ -4,6 +4,7 @@ import { GetHealthInputDto } from '@app-main/modules/health/infrastructure';
 import { GetHealthQuery } from '@app-main/modules//health/application';
 import { GetHealthOutput } from '@app-main/modules//health/infrastructure';
 import { HealthCheck } from '@nestjs/terminus';
+import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('management-health/')
 export class HealthController {
@@ -22,10 +23,7 @@ export class HealthController {
 
       return output;
     } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const err = error as Error;
-      this.logger.error(err.message, err.stack);
-      throw new BadRequestException(err.message, err.name);
+      throw ExceptionManager.createSignatureError(error);
     }
   }
 }
