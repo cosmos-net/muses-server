@@ -1,4 +1,6 @@
 import { HealthCheckResult, HealthCheckStatus, HealthIndicatorResult } from '@nestjs/terminus';
+import { UrlNotFoundException } from '@app-main/modules/health/domain/exceptions/url-not-defined.exception';
+import { NameNotFoundException } from '@app-main/modules/health/domain/exceptions/name-not-defined.exception';
 
 export interface IHealthSchema {
   status: HealthCheckStatus;
@@ -69,11 +71,11 @@ export class Health {
 
   public pingWith(url: string, name: string): void {
     if (url.trim().length === 0) {
-      throw new Error('Url is required');
+      throw new UrlNotFoundException();
     }
 
     if (name.trim().length === 0) {
-      throw new Error('Name is required');
+      throw new NameNotFoundException();
     }
 
     this._entityRoot.url = url;

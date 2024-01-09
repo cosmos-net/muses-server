@@ -20,8 +20,6 @@ import { DefaultNamingStrategy } from 'typeorm';
         const db = configService.get<MongoType>('mongo') as MongoType;
         const namingStrategy = new DefaultNamingStrategy();
 
-        if (db === undefined) throw new Error('Configuration Error');
-
         return {
           type: db.type,
           host: db.host,

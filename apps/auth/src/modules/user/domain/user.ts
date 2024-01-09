@@ -1,5 +1,4 @@
 import { RolesEnum } from '@app-auth/modules/user/domain';
-import * as bcrypt from 'bcrypt';
 
 export interface IUserSchema {
   id: number;
@@ -97,9 +96,5 @@ export class User {
     this._entityRoot.email = email;
     this._entityRoot.username = username;
     this._entityRoot.password = password;
-  }
-
-  public async encryptPassword(hashSalt: number): Promise<void> {
-    this._entityRoot.password = await bcrypt.hash(this._entityRoot.password, hashSalt);
   }
 }

@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, HttpException, Logger, Post } from '@nestjs/common';
 import { CreateEcosystemCommand, CreateEcosystemService } from '@module-eco/application';
 import { CreateEcosystemInputDto, CreateEcosystemOutputDto } from '@module-eco/infrastructure';
+import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('management-ecosystem/')
 export class CreateEcosystemController {
@@ -21,10 +22,7 @@ export class CreateEcosystemController {
       const mapper = new CreateEcosystemOutputDto(domain);
       return mapper;
     } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const err = error as Error;
-      this.logger.error(err.message, err.stack);
-      throw new BadRequestException(err.message, err.name);
+      throw ExceptionManager.createSignatureError(error);
     }
   }
 }
