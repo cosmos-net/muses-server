@@ -8,3 +8,5 @@ export * from '@module-eco/infrastructure/controllers/create-ecosystem/presentat
 export * from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
 export * from '@module-eco/infrastructure/controllers/create-ecosystem/create-ecosystem.controller';
 export * from '@module-eco/infrastructure/framework/ecosystem.module';
+export * from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
+export * from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';

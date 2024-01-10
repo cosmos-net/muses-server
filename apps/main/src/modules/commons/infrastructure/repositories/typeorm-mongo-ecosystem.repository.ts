@@ -24,23 +24,21 @@ export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
   }
 
   async byNameOrFail(name: string): Promise<Ecosystem> {
-    const ecosystem = await this.ecosystemRepository.findOneBy({ name });
+    const entity = await this.ecosystemRepository.findOneBy({ name });
 
-    const domain = new Ecosystem(ecosystem);
+    const ecosystem = new Ecosystem(entity);
 
-    return domain;
+    return ecosystem;
   }
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
-    const objId = new ObjectId(id);
-
-    const ecosystem = await this.ecosystemRepository.findOneBy({
-      _id: objId,
+    const entity = await this.ecosystemRepository.findOneBy({
+      _id: new ObjectId(id),
     });
 
-    const domain = new Ecosystem(ecosystem);
+    const ecosystem = new Ecosystem(entity);
 
-    return domain;
+    return ecosystem;
   }
 
   async list(paginationOrder?: IPaginationOrder): Promise<ListEcosystem> {
