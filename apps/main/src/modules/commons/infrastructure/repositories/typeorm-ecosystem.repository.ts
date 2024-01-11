@@ -131,4 +131,9 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
 
     return listEcosystem;
   }
+
+  async delete(id: string): Promise<void> {
+    const objId = new ObjectId(id);
+    await this.ecosystemRepository.delete(objId);
+  }
 }
