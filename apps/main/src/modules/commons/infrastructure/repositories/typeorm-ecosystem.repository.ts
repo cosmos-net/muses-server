@@ -60,20 +60,33 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
       if (filter?.by) {
         const where: FindOneOptions<EcosystemEntity> = {};
         Object.keys(filter.by).forEach((key) => {
-          if (key === 'createdAt') {
-            const { createdAt } = filter.by;
+          if (key === 'createdAtTo') {
+            return;
+          } else if (key === 'createdAt') {
+            const { createdAt, createdAtTo } = filter.by;
             let pivotDate: string;
+            let pivotDateTo: string;
 
             try {
               pivotDate = new Date(createdAt as string).toLocaleString('en-US', {
                 timeZone: 'America/Tijuana',
               });
+
+              if (createdAtTo) {
+                pivotDateTo = new Date(createdAtTo as string).toLocaleString('en-US', {
+                  timeZone: 'America/Tijuana',
+                });
+              } else {
+                pivotDateTo = new Date(createdAt as string).toLocaleString('en-US', {
+                  timeZone: 'America/Tijuana',
+                });
+              }
             } catch (err) {
               throw new BadRequestException('The date format is invalid');
             }
 
             const dateClientFrom = new Date(new Date(pivotDate).setHours(0, 0, 0, 0));
-            const dateClientTo = new Date(new Date(pivotDate).setHours(23, 59, 59, 999));
+            const dateClientTo = new Date(new Date(pivotDateTo).setHours(23, 59, 59, 999));
 
             const from = new Date(
               Date.UTC(
