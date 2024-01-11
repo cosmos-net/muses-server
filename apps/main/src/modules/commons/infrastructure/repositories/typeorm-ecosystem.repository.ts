@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOneOptions } from 'typeorm';
+import { FindOneOptions, MongoRepository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
 import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
@@ -12,8 +12,7 @@ import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindMany
 export class TypeOrmEcosystemRepository implements IEcosystemRepository {
   constructor(
     @InjectRepository(EcosystemEntity)
-    private readonly ecosystemRepository: Repository<EcosystemEntity>,
-    private readonly dataSource: DataSource,
+    private readonly ecosystemRepository: MongoRepository<EcosystemEntity>,
   ) {}
 
   async persist(model: Ecosystem): Promise<void> {
@@ -113,7 +112,7 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
       }
     }
 
-    const [ecosystems, total] = await this.dataSource.getMongoRepository(EcosystemEntity).findAndCount(params);
+    const [ecosystems, total] = await this.ecosystemRepository.findAndCount(params);
 
     const listEcosystem = new ListEcosystem(ecosystems, total);
 
