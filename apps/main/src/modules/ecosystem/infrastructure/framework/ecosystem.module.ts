@@ -14,14 +14,22 @@ import {
 } from '@module-eco/application';
 import { EcosystemEntity, TypeOrmMongoEcosystemRepository } from '@app-main/modules/commons/infrastructure';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RetrieveEcosystemController } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/retrieve-ecosystem.controller';
+import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 
 @Module({
   imports: [ConfigModule.forRoot(MainConfigOptions), TypeOrmModule.forFeature([EcosystemEntity])],
-  controllers: [UpdateEcosystemController, ListEcosystemController, CreateEcosystemController],
+  controllers: [
+    UpdateEcosystemController,
+    ListEcosystemController,
+    CreateEcosystemController,
+    RetrieveEcosystemController,
+  ],
   providers: [
     UpdateEcosystemService,
     ListEcosystemService,
     CreateEcosystemService,
+    RetrieveEcosystemService,
     {
       provide: ECOSYSTEM_REPOSITORY,
       useClass: TypeOrmMongoEcosystemRepository,
