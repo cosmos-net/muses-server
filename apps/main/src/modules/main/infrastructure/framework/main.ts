@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { MainModule } from '@app-main/modules/main/infrastructure';
 import { ClientType, ServerMainType } from '@lib-commons/domain';
 import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
@@ -22,7 +22,7 @@ async function bootstrap() {
     throw new Error('Client is not defined');
   }
 
-  app.useGlobalPipes(new ValidationPipeWithExceptionFactory());
+  app.useGlobalPipes(new ValidationPipeWithExceptionFactory(), new ValidationPipe({ forbidUnknownValues: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter(configService));
   app.setGlobalPrefix('api/v1');
