@@ -12,7 +12,7 @@ import {
   ListEcosystemService,
   CreateEcosystemService,
 } from '@module-eco/application';
-import { EcosystemEntity, TypeOrmMongoEcosystemRepository } from '@app-main/modules/commons/infrastructure';
+import { EcosystemEntity, TypeOrmEcosystemRepository } from '@app-main/modules/commons/infrastructure';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -24,7 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     CreateEcosystemService,
     {
       provide: ECOSYSTEM_REPOSITORY,
-      useClass: TypeOrmMongoEcosystemRepository,
+      useClass: TypeOrmEcosystemRepository,
     },
   ],
 })

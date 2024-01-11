@@ -11,7 +11,15 @@ export class ExceptionManager extends HttpException {
   }
 
   public static createSignatureError(messageOrPayload: string | Record<string, unknown>): HttpException {
-    const httpStatus = HttpStatus[ExceptionManager.httpType] | HttpStatus.INTERNAL_SERVER_ERROR;
+    let httpStatus: HttpStatus | number = HttpStatus.INTERNAL_SERVER_ERROR;
+
+    if (messageOrPayload instanceof Object) {
+      const status = messageOrPayload.status as any;
+
+      if (status in HttpStatus) {
+        httpStatus = status;
+      }
+    }
 
     return new HttpException(messageOrPayload, httpStatus);
   }
