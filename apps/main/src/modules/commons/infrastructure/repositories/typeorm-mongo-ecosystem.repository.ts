@@ -6,7 +6,6 @@ import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
 import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
 import { IPaginationOrder } from '@lib-commons/domain';
 import { ObjectId } from 'mongodb';
-// import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class TypeOrmMongoEcosystemRepository implements IEcosystemRepository {
