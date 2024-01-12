@@ -29,6 +29,7 @@ export class LogInController {
 
       return loginOutputDto;
     } catch (error) {
+      this.logger.error(error);
       throw ExceptionManager.createSignatureError(error);
     }
   }

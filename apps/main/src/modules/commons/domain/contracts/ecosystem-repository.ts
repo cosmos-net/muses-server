@@ -7,4 +7,5 @@ export interface IEcosystemRepository {
   byIdOrFail(id: string): Promise<Ecosystem>;
   list(): Promise<ListEcosystem>;
   list(options: IPaginationOrder): Promise<ListEcosystem>;
+  softDeleteBy(id: string): Promise<number | undefined>;
 }
