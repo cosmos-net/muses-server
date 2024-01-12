@@ -1,8 +1,9 @@
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
+import { transformIsEnabled } from '@lib-commons/infrastructure/helpers/utils';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,
-  IsDate,
+  IsISO8601,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -50,14 +51,16 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
   @IsOptional()
   description?: string;
 
-  @Transform(({ obj, key }) => {
-    return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
-  })
+  @Transform(({ obj, key }) => transformIsEnabled(obj[key]))
   @IsBoolean()
   @IsOptional()
   isEnabled?: boolean;
 
-  @IsDate()
+  @IsISO8601()
   @IsOptional()
-  createdAt?: Date | string;
+  createdAt?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  createdAtTo?: string;
 }
