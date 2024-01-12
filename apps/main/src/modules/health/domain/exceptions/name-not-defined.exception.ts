@@ -1,9 +1,11 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
+import { HttpStatus } from '@nestjs/common';
 
-export class NameNotFoundException {
-  private readonly message = 'Name not defined';
+export class NameNotFoundException extends ExceptionManager {
+  private static readonly message = 'Name not defined';
+  private static readonly type: keyof typeof HttpStatus = 'BAD_REQUEST';
 
   constructor() {
-    ExceptionManager.badRequest(this.message);
+    super(NameNotFoundException.message, NameNotFoundException.type);
   }
 }
