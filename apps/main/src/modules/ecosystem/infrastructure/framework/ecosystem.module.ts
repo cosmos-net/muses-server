@@ -12,7 +12,7 @@ import {
   ListEcosystemService,
   CreateEcosystemService,
 } from '@module-eco/application';
-import { EcosystemEntity, TypeOrmMongoEcosystemRepository } from '@app-main/modules/commons/infrastructure';
+import { EcosystemEntity, TypeOrmEcosystemRepository } from '@app-main/modules/commons/infrastructure';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RetrieveEcosystemController } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/retrieve-ecosystem.controller';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
@@ -32,7 +32,7 @@ import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retr
     RetrieveEcosystemService,
     {
       provide: ECOSYSTEM_REPOSITORY,
-      useClass: TypeOrmMongoEcosystemRepository,
+      useClass: TypeOrmEcosystemRepository,
     },
   ],
 })
