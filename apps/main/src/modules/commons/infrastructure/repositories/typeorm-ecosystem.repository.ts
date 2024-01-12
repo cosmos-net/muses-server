@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
@@ -17,6 +17,7 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
 
   async persist(model: Ecosystem): Promise<void> {
     const ecosystem = await this.ecosystemRepository.save(model.entityRoot());
+
     model.hydrate({
       ...ecosystem,
       id: ecosystem._id.toHexString(),
@@ -32,10 +33,9 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
   }
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
-    const objId = new ObjectId(id);
-
-    const ecosystem = await this.ecosystemRepository.findOneBy({
-      _id: objId,
+    const ecosystem = await this.ecosystemRepository.findOne({
+      where: { _id: new ObjectId(id) },
+      withDeleted: true,
     });
 
     const domain = new Ecosystem(ecosystem);
@@ -132,8 +132,18 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
     return listEcosystem;
   }
 
-  async delete(id: string): Promise<void> {
-    const objId = new ObjectId(id);
-    await this.ecosystemRepository.delete(objId);
+  async softDeleteBy(id: string): Promise<number | undefined> {
+    const ecosystem = await this.byIdOrFail(id);
+    ecosystem.disabled();
+
+    const partialEntity = ecosystem.entityRootWithoutIdentifier();
+
+    const result = await this.ecosystemRepository.update(new ObjectId(id), partialEntity);
+
+    if (result.affected === 0) {
+      throw new InternalServerErrorException('The ecosystem could not be deleted');
+    }
+
+    return result.affected;
   }
 }
