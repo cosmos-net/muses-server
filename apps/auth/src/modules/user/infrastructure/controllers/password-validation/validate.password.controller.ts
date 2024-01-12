@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Headers, HttpException, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Headers, Logger, Param } from '@nestjs/common';
 import { ValidatePasswordOutputDto } from '@module-user/infrastructure/controllers/password-validation/presentation/validate-password-output.dto';
 import { ValidatePasswordService } from '@module-user/application/use-cases/validate-password/validate-password.service';
 import { ValidatePasswordQuery } from '@module-user/application/use-cases/validate-password/validate-password.query';
@@ -23,6 +23,7 @@ export class PasswordValidationController {
         validated: isValidated,
       });
     } catch (error) {
+      this.logger.error(error);
       throw ExceptionManager.createSignatureError(error);
     }
   }
