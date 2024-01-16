@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 export interface IResponse<T> {
   statusCode: number;
-  errors: [];
+  errors: object;
   data: T;
   timestamp: string;
   path: string;
@@ -29,7 +29,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
 
         return {
           statusCode: response.statusCode,
-          errors: [],
+          errors: {},
           data,
           timestamp: new Date().toISOString(),
           path: context.switchToHttp().getRequest().url,

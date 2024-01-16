@@ -1,5 +1,6 @@
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 import { EcosystemNotFoundException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-not-found.exception';
+import { EcosystemAlreadyDeletedException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-already-deleted.exception';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
@@ -66,7 +67,12 @@ export class Ecosystem {
   }
 
   public disabled(): void {
+    if (this._entityRoot.isEnabled === false) {
+      throw new EcosystemAlreadyDeletedException();
+    }
+
     this._entityRoot.isEnabled = false;
+    this._entityRoot.deletedAt = new Date();
   }
 
   public hydrate(schema: IEcosystemSchema): void {
@@ -74,11 +80,30 @@ export class Ecosystem {
       throw new EcosystemNotFoundException();
     }
 
-    this._entityRoot = schema;
+    this._entityRoot = {
+      id: schema.id,
+      name: schema.name,
+      description: schema.description,
+      isEnabled: schema.isEnabled,
+      createdAt: schema.createdAt,
+      updatedAt: schema.updatedAt,
+      deletedAt: schema.deletedAt,
+    };
   }
 
   public entityRoot(): IEcosystemSchema {
     return this._entityRoot;
+  }
+
+  public entityRootWithoutIdentifier(): Omit<IEcosystemSchema, 'id'> {
+    return {
+      name: this._entityRoot.name,
+      description: this._entityRoot.description,
+      isEnabled: this._entityRoot.isEnabled,
+      createdAt: this._entityRoot.createdAt,
+      updatedAt: this._entityRoot.updatedAt,
+      deletedAt: this._entityRoot.deletedAt,
+    };
   }
 
   public toPrimitives(): Record<string, unknown> {
