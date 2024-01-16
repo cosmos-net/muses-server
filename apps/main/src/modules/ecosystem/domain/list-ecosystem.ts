@@ -7,6 +7,10 @@ export class ListEcosystem {
     this.setTotal(total);
   }
 
+  private setTotal(total: number) {
+    this.total = total;
+  }
+
   public hydrate(domains: IEcosystemSchema[]): void {
     this.domains = [...domains];
     this.setTotal(domains.length);
@@ -20,15 +24,11 @@ export class ListEcosystem {
     return this.domains;
   }
 
-  private setTotal(total: number) {
-    this.total = total;
-  }
-
-  get totalItems(): number {
+  public get totalItems(): number {
     return this.total;
   }
 
-  get items(): IEcosystemSchema[] {
+  public get items(): IEcosystemSchema[] {
     return this.domains;
   }
 }
