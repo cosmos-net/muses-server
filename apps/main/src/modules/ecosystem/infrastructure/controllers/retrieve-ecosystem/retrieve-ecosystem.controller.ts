@@ -1,5 +1,6 @@
-import { BadRequestException, Controller, Get, HttpException, Logger, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure';
+import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { RetrieveEcosystemService } from '@app-main/modules/ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@app-main/modules/ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
 
@@ -19,10 +20,8 @@ export class RetrieveEcosystemController {
 
       return mapper;
     } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const err = error as Error;
-      this.logger.error(err.message, err.stack);
-      throw new BadRequestException(err.message, err.name);
+      this.logger.error(error);
+      throw ExceptionManager.createSignatureError(error);
     }
   }
 }

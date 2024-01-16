@@ -7,6 +7,7 @@ export * from '@module-eco/infrastructure/controllers/list-ecosystem/list-ecosys
 export * from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
 export * from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
 export * from '@module-eco/infrastructure/controllers/create-ecosystem/create-ecosystem.controller';
+export * from '@module-eco/infrastructure/controllers/delete-ecosystem/delete-ecosystem.controller';
 export * from '@module-eco/infrastructure/framework/ecosystem.module';
 export * from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
 export * from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';

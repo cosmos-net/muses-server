@@ -53,8 +53,7 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
 
   @Transform(({ obj, key }) => transformIsEnabled(obj[key]))
   @IsBoolean()
-  @IsOptional()
-  isEnabled?: boolean;
+  isEnabled?: boolean = true;
 
   @IsISO8601()
   @IsOptional()

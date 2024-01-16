@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, HttpException, Logger, Patch } from '@nestjs/common';
+import { Body, Controller, Logger, Patch } from '@nestjs/common';
 import { UpdateEcosystemService, UpdateEcosystemCommand } from '@app-main/modules/ecosystem/application';
 import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@app-main/modules/ecosystem/infrastructure';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
@@ -27,6 +27,7 @@ export class UpdateEcosystemController {
         deletedAt: domain.deletedAt,
       });
     } catch (error) {
+      this.logger.error(error);
       throw ExceptionManager.createSignatureError(error);
     }
   }
