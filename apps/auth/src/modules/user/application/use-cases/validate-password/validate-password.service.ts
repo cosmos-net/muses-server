@@ -1,5 +1,5 @@
 import { IApplicationServiceQuery } from '@lib-commons/application';
-import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ValidatePasswordQuery } from '@app-auth/modules/user/application/use-cases/validate-password/validate-password.query';
 import { JSON_WEB_TOKEN_SERVICE, USER_REPOSITORY } from '@app-auth/modules/user/application/constants/injection-tokens';
 import { IUserRepository } from '@app-auth/modules/user/domain';

@@ -1,7 +1,6 @@
-import { IEcosystemSchema } from '@app-main/modules/commons/domain';
-import { EcosystemNotFoundException } from '@module-eco/domain/exceptions/ecosystem-not-found.exception';
-import { EcosystemAlreadyDeletedException } from '@module-eco/domain/exceptions/ecosystem-already-deleted.exception';
-
+import { EcosystemNotFoundException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-not-found.exception';
+import { EcosystemAlreadyDeletedException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-already-deleted.exception';
+import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/ecosystem.interface';
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchema;
 
