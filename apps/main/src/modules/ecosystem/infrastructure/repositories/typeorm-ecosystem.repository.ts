@@ -7,6 +7,7 @@ import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
 import { EcosystemEntity } from '@app-main/modules/ecosystem/infrastructure/domain/ecosystem-muses.entity';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
 
 @Injectable()
 export class TypeOrmEcosystemRepository implements IEcosystemRepository {
@@ -145,5 +146,27 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
     }
 
     return result.affected;
+  }
+
+  async matching(criteria: Criteria): Promise<ListEcosystem> {
+    const { filters, order, limit, offset } = criteria;
+
+    criteria.hasFilters
+
+    const [results, total] = await this.ecosystemRepository.findAndCount({
+      where: filters,
+      order: {
+        [order.orderBy.value === 'id' ? '_id' : order.orderBy.value]: order.orderType.isAsc() ? 'asc' : 'desc',
+      },
+      skip: offset,
+      take: limit,
+    });
+
+    return {
+      data: results,
+      total,
+      limit,
+      offset,
+    };
   }
 }

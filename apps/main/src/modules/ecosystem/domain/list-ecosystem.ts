@@ -1,4 +1,4 @@
-import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/ecosystem.interface';
+import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/ecosystem.schema';
 
 export class ListEcosystem {
   private total: number;
