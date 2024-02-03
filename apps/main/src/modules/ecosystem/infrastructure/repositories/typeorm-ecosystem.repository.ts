@@ -8,13 +8,16 @@ import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindMany
 import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
 import { EcosystemEntity } from '@app-main/modules/ecosystem/infrastructure/domain/ecosystem-muses.entity';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
+import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 
 @Injectable()
-export class TypeOrmEcosystemRepository implements IEcosystemRepository {
+export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntity> implements IEcosystemRepository {
   constructor(
     @InjectRepository(EcosystemEntity)
     private readonly ecosystemRepository: MongoRepository<EcosystemEntity>,
-  ) {}
+  ) {
+    super();
+  }
 
   async persist(model: Ecosystem): Promise<void> {
     const ecosystem = await this.ecosystemRepository.save(model.entityRoot());
@@ -149,24 +152,12 @@ export class TypeOrmEcosystemRepository implements IEcosystemRepository {
   }
 
   async matching(criteria: Criteria): Promise<ListEcosystem> {
-    const { filters, order, limit, offset } = criteria;
+    const query = this.getQueryByCriteria(criteria);
 
-    criteria.hasFilters
+    const [ecosystems, total] = await this.ecosystemRepository.findAndCount(query);
 
-    const [results, total] = await this.ecosystemRepository.findAndCount({
-      where: filters,
-      order: {
-        [order.orderBy.value === 'id' ? '_id' : order.orderBy.value]: order.orderType.isAsc() ? 'asc' : 'desc',
-      },
-      skip: offset,
-      take: limit,
-    });
+    const listEcosystem = new ListEcosystem(ecosystems, total);
 
-    return {
-      data: results,
-      total,
-      limit,
-      offset,
-    };
+    return listEcosystem;
   }
 }

@@ -5,9 +5,15 @@ export enum Operator {
   EQUAL = '=',
   NOT_EQUAL = '!=',
   GT = '>',
+  GTE = '>=',
   LT = '<',
+  LTE = '<=',
   CONTAINS = 'CONTAINS',
   NOT_CONTAINS = 'NOT_CONTAINS',
+  STARTS_WITH = 'STARTS_WITH',
+  ENDS_WITH = 'ENDS_WITH',
+  IS_NULL = 'IS_NULL',
+  NOT_NULL = 'NOT_NULL',
 }
 
 export class FilterOperator extends EnumValueObject<Operator> {
@@ -23,12 +29,24 @@ export class FilterOperator extends EnumValueObject<Operator> {
         return new FilterOperator(Operator.NOT_EQUAL);
       case Operator.GT:
         return new FilterOperator(Operator.GT);
+      case Operator.GTE:
+        return new FilterOperator(Operator.GTE);
       case Operator.LT:
         return new FilterOperator(Operator.LT);
+      case Operator.LTE:
+        return new FilterOperator(Operator.LTE);
       case Operator.CONTAINS:
         return new FilterOperator(Operator.CONTAINS);
       case Operator.NOT_CONTAINS:
         return new FilterOperator(Operator.NOT_CONTAINS);
+      case Operator.STARTS_WITH:
+        return new FilterOperator(Operator.STARTS_WITH);
+      case Operator.ENDS_WITH:
+        return new FilterOperator(Operator.ENDS_WITH);
+      case Operator.IS_NULL:
+        return new FilterOperator(Operator.IS_NULL);
+      case Operator.NOT_NULL:
+        return new FilterOperator(Operator.NOT_NULL);
       default:
         throw new ConflictException(`The filter operator ${value} is invalid`);
     }

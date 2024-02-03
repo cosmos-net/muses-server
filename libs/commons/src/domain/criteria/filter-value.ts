@@ -1,7 +1,7 @@
-import { StringValueObject } from '@lib-commons/domain/value-object/string-value-object';
+import { Primitives, ValueObject } from '@lib-commons/domain/value-object/value-object';
 
-export class FilterValue extends StringValueObject {
-  constructor(value: string) {
+export class FilterValue<T extends Primitives> extends ValueObject<T> {
+  constructor(value: T) {
     super(value);
   }
 }
