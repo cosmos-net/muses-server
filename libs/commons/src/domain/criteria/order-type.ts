@@ -2,9 +2,9 @@ import { ConflictException } from '@nestjs/common';
 import { EnumValueObject } from '@lib-commons/domain/value-object/enum-value-object';
 
 export enum OrderTypes {
-  ASC = 'asc',
-  DESC = 'desc',
-  NONE = 'none',
+  ASC = 'ASC',
+  DESC = 'DESC',
+  NONE = 'NONE',
 }
 
 export class OrderType extends EnumValueObject<OrderTypes> {

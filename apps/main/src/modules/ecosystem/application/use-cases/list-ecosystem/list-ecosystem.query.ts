@@ -1,7 +1,8 @@
 import { IQuery } from '@lib-commons/domain';
+import { Primitives } from '@lib-commons/domain/value-object/value-object';
 
 export class ListEcosystemQuery implements IQuery {
-  readonly filters: Array<Map<string, string>>;
+  readonly filters: Array<Map<string, Primitives>>;
 
   readonly orderBy?: string;
 

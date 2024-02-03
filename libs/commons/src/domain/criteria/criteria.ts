@@ -17,4 +17,8 @@ export class Criteria {
   public hasFilters(): boolean {
     return this.filters.filters.length > 0;
   }
+
+  public hasOrder(): boolean {
+    return this.order.hasOrder();
+  }
 }

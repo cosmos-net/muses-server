@@ -3,7 +3,7 @@ import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/ecosystem.s
 export class ListEcosystem {
   private total: number;
 
-  constructor(public domains: IEcosystemSchema[], total: number) {
+  constructor(public ecosystem: IEcosystemSchema[], total: number) {
     this.setTotal(total);
   }
 
@@ -11,17 +11,17 @@ export class ListEcosystem {
     this.total = total;
   }
 
-  public hydrate(domains: IEcosystemSchema[]): void {
-    this.domains = [...domains];
-    this.setTotal(domains.length);
+  public hydrate(ecosystem: IEcosystemSchema[]): void {
+    this.ecosystem = [...ecosystem];
+    this.setTotal(ecosystem.length);
   }
 
   public add(entity: IEcosystemSchema): void {
-    this.domains.push(entity);
+    this.ecosystem.push(entity);
   }
 
   public entities(): IEcosystemSchema[] {
-    return this.domains;
+    return this.ecosystem;
   }
 
   public get totalItems(): number {
@@ -29,6 +29,6 @@ export class ListEcosystem {
   }
 
   public get items(): IEcosystemSchema[] {
-    return this.domains;
+    return this.ecosystem;
   }
 }
