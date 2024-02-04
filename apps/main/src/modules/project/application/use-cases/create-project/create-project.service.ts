@@ -12,10 +12,10 @@ import {
 @Injectable()
 export class CreateProjectService implements IApplicationServiceCommand<CreateProjectCommand> {
   constructor(
-    @Inject(PROJECT_REPOSITORY)
-    private projectRepository: IProjectRepository,
     @Inject(ECOSYSTEM_MODULE_FACADE)
     private ecosystemModuleFacade: IEcosystemModuleFacade,
+    @Inject(PROJECT_REPOSITORY)
+    private projectRepository: IProjectRepository,
   ) {}
 
   async process<T extends CreateProjectCommand>(command: T): Promise<Project> {

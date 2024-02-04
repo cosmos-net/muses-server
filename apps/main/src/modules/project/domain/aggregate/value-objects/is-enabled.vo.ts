@@ -1,7 +1,7 @@
 export default class IsEnabled {
-  constructor(private readonly props: boolean) {}
+  constructor(private readonly value: boolean) {}
 
-  get value(): boolean {
-    return this.props;
+  getValue(): boolean {
+    return this.value;
   }
 }
