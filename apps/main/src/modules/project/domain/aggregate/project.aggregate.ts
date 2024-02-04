@@ -12,33 +12,32 @@ export interface IProjectAggregate {
   id: Id;
   name: Name;
   description: Description;
-  ecosystem: Ecosystem;
+  ecosystem?: Ecosystem;
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
-  deletedAt: DeletedAt;
+  deletedAt?: DeletedAt;
 }
 
-export interface IProject {
+export interface IProjectSchema {
   id: string;
   name: string;
   description: string;
-  ecosystem: IEcosystemSchema;
+  ecosystem?: IEcosystemSchema;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date;
+  deletedAt?: Date;
 }
 
 export class Project {
-  private _entityRoot: IProjectAggregate;
+  private _entityRoot = {} as IProjectAggregate;
 
-  constructor(schema?: IProject) {
-    this._entityRoot = {} as IProjectAggregate;
-    this._entityRoot.isEnabled = new IsEnabled(true);
-
-    if (schema) {
+  constructor(schema?: IProjectSchema | null) {
+    if (schema instanceof Object) {
       this.hydrate(schema);
+    } else {
+      this._entityRoot.isEnabled = new IsEnabled(true);
     }
   }
 
@@ -54,9 +53,9 @@ export class Project {
     return this._entityRoot.description.getValue();
   }
 
-  get ecosystem(): string {
-    const ecosystem = this._entityRoot.ecosystem.getValue();
-    return ecosystem.id;
+  get ecosystem(): string | undefined {
+    const ecosystem = this._entityRoot.ecosystem?.getValue();
+    return ecosystem?.id;
   }
 
   get isEnabled(): boolean {
@@ -71,8 +70,8 @@ export class Project {
     return this._entityRoot.updatedAt.getValue();
   }
 
-  get deletedAt(): Date {
-    return this._entityRoot.deletedAt.getValue();
+  get deletedAt(): Date | undefined {
+    return this._entityRoot?.deletedAt?.getValue();
   }
 
   enabled(): void {
@@ -83,16 +82,14 @@ export class Project {
     this._entityRoot.isEnabled = new IsEnabled(false);
   }
 
-  public hydrate(schema: IProject): void {
+  public hydrate(schema: IProjectSchema): void {
     this._entityRoot = {
       id: new Id(schema.id),
       name: new Name(schema.name),
       description: new Description(schema.description),
-      ecosystem: new Ecosystem(schema.ecosystem),
       isEnabled: new IsEnabled(schema.isEnabled),
       createdAt: new CreatedAt(schema.createdAt),
       updatedAt: new UpdatedAt(schema.updatedAt),
-      deletedAt: new DeletedAt(schema.deletedAt),
     };
   }
 
@@ -112,16 +109,31 @@ export class Project {
     return this._entityRoot;
   }
 
-  public toPrimitives(): IProject {
+  public toPrimitives(): IProjectSchema {
     return {
       id: this._entityRoot.id.getValue(),
       name: this._entityRoot.name.getValue(),
       description: this._entityRoot.description.getValue(),
-      ecosystem: this._entityRoot.ecosystem.getValue(),
+      ecosystem: this._entityRoot.ecosystem?.getValue(),
       isEnabled: this._entityRoot.isEnabled.getValue(),
       createdAt: this._entityRoot.createdAt.getValue(),
       updatedAt: this._entityRoot.updatedAt.getValue(),
-      deletedAt: this._entityRoot.deletedAt.getValue(),
+      deletedAt: this._entityRoot.deletedAt?.getValue(),
     };
+  }
+
+  public fromPrimitives(schema: IProjectSchema): void {
+    this.hydrate(schema);
+  }
+
+  public entityRootPartial(): Partial<IProjectSchema> {
+    const partialSchema: Partial<IProjectSchema> = {};
+    for (const [key, value] of Object.entries(this._entityRoot)) {
+      if (value instanceof Object) {
+        partialSchema[key] = value.value;
+      }
+    }
+
+    return partialSchema;
   }
 }
