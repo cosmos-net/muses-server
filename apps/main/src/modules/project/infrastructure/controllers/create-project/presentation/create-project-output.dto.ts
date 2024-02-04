@@ -2,22 +2,22 @@ interface ICreateProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystem: string;
+  ecosystem?: string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
-  deletedAt: string | Date;
+  deletedAt?: string | Date;
 }
 
 export class CreateProjectOutputDto implements ICreateProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystem: string;
+  ecosystem?: string;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 
   constructor(root: ICreateProjectOutputDto) {
     this.id = root.id;

@@ -2,10 +2,10 @@ import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 import { BaseEntity } from '@lib-commons/infrastructure';
 import { ObjectId } from 'mongodb';
-import { IProject } from '@module-project/domain/aggregate/project.aggregate';
+import { IProjectSchema } from '@module-project/domain/aggregate/project.aggregate';
 
 @Entity({ name: 'project' })
-export class ProjectEntity extends BaseEntity implements IProject {
+export class ProjectEntity extends BaseEntity implements IProjectSchema {
   @ObjectIdColumn()
   _id: ObjectId;
 
