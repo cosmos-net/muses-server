@@ -13,7 +13,7 @@ export class CreateProjectInputDto {
 
   @IsString()
   @IsOptional()
-  readonly ecosystem: string;
+  readonly ecosystem?: string;
 
   @IsBoolean()
   @IsNotEmpty()

@@ -96,7 +96,7 @@ export class Project {
     };
   }
 
-  public describe(name: string, description: string | undefined): void {
+  public describe(name: string, description?: string): void {
     this._entityRoot.name = new Name(name);
 
     if (description) {
