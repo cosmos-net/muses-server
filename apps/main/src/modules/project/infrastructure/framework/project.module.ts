@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { MainConfigOptions } from '@app-auth/modules/main/infrastructure';
+import { ConfigModule } from '@lib-commons/infrastructure';
+import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
 import { CreateProjectController } from '../controllers/create-project/create-project.controller';
 import { CreateProjectService } from '../../application/use-cases/create-project/create-project.service';
 import { ProjectEntity } from '../domain/project-muses.entity';
