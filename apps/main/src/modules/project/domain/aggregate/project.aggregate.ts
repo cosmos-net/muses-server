@@ -42,6 +42,39 @@ export class Project {
     }
   }
 
+  get id(): string {
+    return this._entityRoot.id.getValue();
+  }
+
+  get name(): string {
+    return this._entityRoot.name.getValue();
+  }
+
+  get description(): string {
+    return this._entityRoot.description.getValue();
+  }
+
+  get ecosystem(): string {
+    const ecosystem = this._entityRoot.ecosystem.getValue();
+    return ecosystem.id;
+  }
+
+  get isEnabled(): boolean {
+    return this._entityRoot.isEnabled.getValue();
+  }
+
+  get createdAt(): Date {
+    return this._entityRoot.createdAt.getValue();
+  }
+
+  get updatedAt(): Date {
+    return this._entityRoot.updatedAt.getValue();
+  }
+
+  get deletedAt(): Date {
+    return this._entityRoot.deletedAt.getValue();
+  }
+
   enabled(): void {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
@@ -73,5 +106,22 @@ export class Project {
 
   public useEcosystem(ecosystem: IEcosystemSchema): void {
     this._entityRoot.ecosystem = new Ecosystem(ecosystem);
+  }
+
+  public entityRoot(): IProjectAggregate {
+    return this._entityRoot;
+  }
+
+  public toPrimitives(): IProject {
+    return {
+      id: this._entityRoot.id.getValue(),
+      name: this._entityRoot.name.getValue(),
+      description: this._entityRoot.description.getValue(),
+      ecosystem: this._entityRoot.ecosystem.getValue(),
+      isEnabled: this._entityRoot.isEnabled.getValue(),
+      createdAt: this._entityRoot.createdAt.getValue(),
+      updatedAt: this._entityRoot.updatedAt.getValue(),
+      deletedAt: this._entityRoot.deletedAt.getValue(),
+    };
   }
 }

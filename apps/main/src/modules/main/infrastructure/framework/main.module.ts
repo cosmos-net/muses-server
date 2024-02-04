@@ -7,11 +7,13 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain';
 import { DefaultNamingStrategy } from 'typeorm';
+import { MainProjectServerModule } from '@app-main/modules/project/infrastructure/framework/project.module';
 
 @Module({
   imports: [
     MainHealthServerModule,
     MainEcosystemServerModule,
+    MainProjectServerModule,
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(DatabasesLoader.postgres)],

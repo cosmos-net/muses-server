@@ -1,7 +1,9 @@
+import { IEcosystemModuleFacade } from '@app-main/modules/project/domain/contracts/ecosystem-module-facade';
 import { EcosystemModuleFacade } from '@app-main/modules/ecosystem/infrastructure/api-facade/ecosystem-module.facade';
 import { Ecosystem } from '@app-main/modules/ecosystem/domain/ecosystem';
-import { IEcosystemModuleFacade } from '@app-main/modules/project/domain/contracts/ecosystem-module-facade';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class EcosystemModuleFacadeService implements IEcosystemModuleFacade {
   constructor(private readonly ecosystemModuleFacade: EcosystemModuleFacade) {}
 

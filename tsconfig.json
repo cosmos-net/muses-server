@@ -48,6 +48,12 @@
       "@app-auth/*": [
         "apps/auth/src/*"
       ],
+      "@module-project": [
+        "apps/main/src/modules/project"
+      ],
+      "@module-project/*": [
+        "apps/main/src/modules/project/*"
+      ],
     }
   }
 }
