@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, UpdateEcosystemCommand } from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, UpdateEcosystemCommand } from '@module-eco/application/';
 import { ConfigService } from '@nestjs/config';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { IApplicationServiceCommand } from '@lib-commons/application';
-import { Ecosystem } from '@app-main/modules/ecosystem/domain';
+import { Ecosystem } from '@module-eco/domain';
 
 @Injectable()
 export class UpdateEcosystemService implements IApplicationServiceCommand<UpdateEcosystemCommand> {
