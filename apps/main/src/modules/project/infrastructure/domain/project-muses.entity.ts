@@ -32,7 +32,7 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
 
   @Column({
     name: 'ecosystem',
-    nullable: false,
+    nullable: true,
   })
   ecosystem: IEcosystemSchema;
 }

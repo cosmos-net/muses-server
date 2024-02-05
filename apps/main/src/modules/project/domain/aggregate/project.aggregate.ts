@@ -53,7 +53,7 @@ export class Project {
     return this._entityRoot.description.getValue();
   }
 
-  get ecosystem(): string | undefined {
+  get ecosystemId(): string | undefined {
     const ecosystem = this._entityRoot.ecosystem?.getValue();
     return ecosystem?.id;
   }
@@ -90,6 +90,7 @@ export class Project {
       isEnabled: new IsEnabled(schema.isEnabled),
       createdAt: new CreatedAt(schema.createdAt),
       updatedAt: new UpdatedAt(schema.updatedAt),
+      ecosystem: schema.ecosystem ? new Ecosystem(schema.ecosystem) : undefined,
     };
   }
 
