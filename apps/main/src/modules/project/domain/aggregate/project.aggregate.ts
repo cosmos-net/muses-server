@@ -1,12 +1,12 @@
 import { IEcosystemSchema } from '@app-main/modules/commons/domain';
-import Id from '@app-main/modules/project/domain/aggregate/value-objects/id.vo';
-import Name from '@app-main/modules/project/domain/aggregate/value-objects/name.vo';
-import Description from '@app-main/modules/project/domain/aggregate/value-objects/description.vo';
-import Ecosystem from '@app-main/modules/project/domain/aggregate/value-objects/ecosystem.vo';
-import IsEnabled from '@app-main/modules/project/domain/aggregate/value-objects/is-enabled.vo';
-import CreatedAt from '@app-main/modules/project/domain/aggregate/value-objects/created-at.vo';
-import UpdatedAt from '@app-main/modules/project/domain/aggregate/value-objects/updated-at.vo';
-import DeletedAt from '@app-main/modules/project/domain/aggregate/value-objects/deleted-at.vo';
+import Id from '@module-project/domain/aggregate/value-objects/id.vo';
+import Name from '@module-project/domain/aggregate/value-objects/name.vo';
+import Description from '@module-project/domain/aggregate/value-objects/description.vo';
+import Ecosystem from '@module-project/domain/aggregate/value-objects/ecosystem.vo';
+import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled.vo';
+import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
+import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
+import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
 
 export interface IProjectAggregate {
   id: Id;

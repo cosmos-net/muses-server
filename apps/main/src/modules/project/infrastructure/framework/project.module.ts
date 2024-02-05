@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PROJECT_REPOSITORY, ECOSYSTEM_MODULE_FACADE } from '@module-project/application/constants/injection-token';
 import { TypeOrmProjectRepository } from '@module-project/infrastructure/repositories/typeorm-project.repository';
 import { EcosystemModuleFacadeService } from '@module-project/infrastructure/domain/services/ecosystem-module-facade.service';
-import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastructure';
+import { MainEcosystemServerModule } from '@module-eco/infrastructure';
 
 @Module({
   imports: [

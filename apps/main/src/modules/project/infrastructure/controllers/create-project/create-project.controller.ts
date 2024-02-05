@@ -1,7 +1,7 @@
-import { CreateProjectService } from '@app-main/modules/project/application/use-cases/create-project/create-project.service';
+import { CreateProjectService } from '@module-project/application/use-cases/create-project/create-project.service';
 import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { CreateProjectInputDto } from '@module-project/infrastructure/controllers/create-project/presentation/create-project-input.dto';
-import { CreateProjectCommand } from '@app-main/modules/project/application/use-cases/create-project/create-project.command';
+import { CreateProjectCommand } from '@module-project/application/use-cases/create-project/create-project.command';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { CreateProjectOutputDto } from '@module-project/infrastructure/controllers/create-project/presentation/create-project-output.dto';
 
