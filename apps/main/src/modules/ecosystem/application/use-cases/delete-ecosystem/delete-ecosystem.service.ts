@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, DeleteEcosystemCommand } from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, DeleteEcosystemCommand } from '@module-eco/application/';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { IApplicationServiceCommand } from '@lib-commons/application';
 

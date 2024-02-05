@@ -1,5 +1,5 @@
-import { DeleteEcosystemCommand } from '@app-main/modules/ecosystem/application/use-cases/delete-ecosystem/delete-ecosystem.command';
-import { DeleteEcosystemService } from '@app-main/modules/ecosystem/application/use-cases/delete-ecosystem/delete-ecosystem.service';
+import { DeleteEcosystemCommand } from '@module-eco/application/use-cases/delete-ecosystem/delete-ecosystem.command';
+import { DeleteEcosystemService } from '@module-eco/application/use-cases/delete-ecosystem/delete-ecosystem.service';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Controller, Delete, Logger, Param } from '@nestjs/common';
 import { DeleteEcosystemOutputDto, IDeleteEcosystemOutputDto } from './presentation/delete-ecosystem-output.dto';
