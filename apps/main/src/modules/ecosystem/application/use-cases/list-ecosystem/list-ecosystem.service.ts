@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, ListEcosystemQuery } from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, ListEcosystemQuery } from '@module-eco/application/';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { IApplicationServiceQuery } from '@lib-commons/application';
 import { ListEcosystem } from '@module-eco/domain';

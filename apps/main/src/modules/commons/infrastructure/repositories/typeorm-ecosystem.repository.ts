@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
 import { IEcosystemRepository } from '@app-main/modules/commons/domain';
 import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
-import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
+import { Ecosystem, ListEcosystem } from '@module-eco/domain';
 import { IPaginationOrder } from '@lib-commons/domain';
 import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';

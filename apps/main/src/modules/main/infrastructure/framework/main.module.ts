@@ -2,12 +2,12 @@ import { ConfigModule, DatabasesLoader } from '@lib-commons/infrastructure';
 import { Module } from '@nestjs/common';
 import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
 import { MainHealthServerModule } from '@app-main/modules/health/infrastructure';
-import { MainEcosystemServerModule } from '@app-main/modules/ecosystem/infrastructure';
+import { MainEcosystemServerModule } from '@module-eco/infrastructure';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain';
 import { DefaultNamingStrategy } from 'typeorm';
-import { MainProjectServerModule } from '@app-main/modules/project/infrastructure/framework/project.module';
+import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
 
 @Module({
   imports: [
