@@ -19,8 +19,9 @@ export class CreateProjectController {
         enabled: dto.enabled,
         ecosystem: dto.ecosystem,
       });
-      const domain = await this.createProjectService.process(command);
-      const mapper = new CreateProjectOutputDto(domain);
+
+      const project = await this.createProjectService.process(command);
+      const mapper = new CreateProjectOutputDto(project);
       return mapper;
     } catch (error) {
       this.logger.error(error);
