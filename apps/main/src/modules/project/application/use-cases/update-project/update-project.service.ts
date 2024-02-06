@@ -2,7 +2,7 @@ import { IApplicationServiceCommand } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateProjectCommand } from '@module-project/application/use-cases/update-project/update-project.command';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
-import { Project } from '@module-project/domain/aggregate/project.aggregate';
+import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
@@ -34,11 +34,15 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     // TODO: Check if the project is related to other ecosystems
 
     if (name || description) {
-      project.redescribe(name);
+      project.redescribe(name, description);
     }
 
     if (enabled !== undefined) {
-      enabled ? project.enabled() : project.disable();
+      enabled ? project.enable() : project.disable();
     }
+
+    await this.projectRepository.persist(project);
+
+    return project;
   }
 }

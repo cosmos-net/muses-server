@@ -2,7 +2,7 @@ import { IApplicationServiceCommand } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateProjectCommand } from '@module-project/application/use-cases/create-project/create-project.command';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
-import { Project } from '@module-project/domain/aggregate/project.aggregate';
+import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
 
@@ -23,7 +23,7 @@ export class CreateProjectService implements IApplicationServiceCommand<CreatePr
     project.describe(name, description);
 
     if (!enabled) {
-      project.disabled();
+      project.disable();
     }
 
     if (ecosystem) {
