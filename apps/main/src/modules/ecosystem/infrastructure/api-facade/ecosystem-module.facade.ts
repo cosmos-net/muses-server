@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
-import { Ecosystem } from '@module-eco/domain/ecosystem';
+import { Ecosystem } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem';
 
 @Injectable()
 export class EcosystemModuleFacade {

@@ -20,9 +20,9 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    const ecosystem = await this.ecosystemRepository.save(model.entityRoot());
+    const ecosystem = await this.ecosystemRepository.save(model.projectSchemaPartial());
 
-    model.hydrate({
+    model.fromPrimitives({
       ...ecosystem,
       id: ecosystem._id.toHexString(),
     });
@@ -138,7 +138,7 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
 
   async softDeleteBy(id: string): Promise<number | undefined> {
     const ecosystem = await this.byIdOrFail(id);
-    ecosystem.disabled();
+    ecosystem.disable();
 
     const partialEntity = ecosystem.entityRootWithoutIdentifier();
 

@@ -3,7 +3,7 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { MongoRepository } from 'typeorm';
-import { Project } from '@module-project/domain/aggregate/project.aggregate';
+import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';

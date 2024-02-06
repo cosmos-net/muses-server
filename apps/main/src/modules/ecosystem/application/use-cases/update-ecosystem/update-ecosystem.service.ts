@@ -21,7 +21,7 @@ export class UpdateEcosystemService implements IApplicationServiceCommand<Update
 
     // TODO: check values to update before update the ecosystem
     ecosystem.describe(name, description);
-    isEnabled ? ecosystem.enabled() : ecosystem.disabled();
+    isEnabled ? ecosystem.enable() : ecosystem.disable();
 
     await this.ecosystemRepository.persist(ecosystem);
 

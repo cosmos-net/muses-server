@@ -17,8 +17,8 @@ export class CreateEcosystemService implements IApplicationServiceCommand<Create
     const ecosystem = new Ecosystem();
     ecosystem.describe(name, description);
 
-    if (!enabled) {
-      ecosystem.disabled();
+    if (enabled === false) {
+      ecosystem.disable();
     }
 
     await this.ecosystemRepository.persist(ecosystem);

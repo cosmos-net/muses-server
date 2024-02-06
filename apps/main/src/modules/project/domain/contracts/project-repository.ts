@@ -1,5 +1,5 @@
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { Project } from '@module-project/domain/aggregate/project.aggregate';
+import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 
 export interface IProjectRepository {

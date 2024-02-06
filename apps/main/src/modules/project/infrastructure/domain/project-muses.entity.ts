@@ -1,8 +1,8 @@
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { IEcosystemSchema } from '@module-eco/domain/ecosystem.schema';
+import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem.schema';
 import { BaseEntity } from '@lib-commons/infrastructure';
 import { ObjectId } from 'mongodb';
-import { IProjectSchema } from '@module-project/domain/aggregate/project.aggregate';
+import { IProjectSchema } from '@app-main/modules/project/domain/aggregate/project';
 
 @Entity({ name: 'project' })
 export class ProjectEntity extends BaseEntity implements IProjectSchema {
