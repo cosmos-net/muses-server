@@ -1,5 +1,5 @@
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
-import { IEcosystemSchema } from '@app-main/modules/commons/domain';
+import { IEcosystemSchema } from '@module-eco/domain/ecosystem.schema';
 import { BaseEntity } from '@lib-commons/infrastructure';
 import { ObjectId } from 'mongodb';
 import { IProjectSchema } from '@module-project/domain/aggregate/project.aggregate';
@@ -13,6 +13,7 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   id: string;
 
   @Column({
+    unique: true,
     name: 'name',
     nullable: false,
   })

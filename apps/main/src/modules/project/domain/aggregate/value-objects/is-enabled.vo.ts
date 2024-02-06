@@ -4,4 +4,8 @@ export default class IsEnabled {
   getValue(): boolean {
     return this.value;
   }
+
+  static create(value: boolean): IsEnabled {
+    return new IsEnabled(value);
+  }
 }

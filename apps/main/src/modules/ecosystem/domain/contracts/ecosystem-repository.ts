@@ -1,4 +1,5 @@
 import { IPaginationOrder } from '@lib-commons/domain';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { Ecosystem, ListEcosystem } from '@module-eco/domain';
 
 export interface IEcosystemRepository {
@@ -8,4 +9,5 @@ export interface IEcosystemRepository {
   list(): Promise<ListEcosystem>;
   list(options: IPaginationOrder): Promise<ListEcosystem>;
   softDeleteBy(id: string): Promise<number | undefined>;
+  matching(criteria: Criteria): Promise<ListEcosystem>;
 }

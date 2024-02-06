@@ -1,4 +1,4 @@
-interface ICreateProjectOutputDto {
+export interface ICreateProjectOutputDto {
   id: string;
   name: string;
   description: string;

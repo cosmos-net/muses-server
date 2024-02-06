@@ -1,5 +1,5 @@
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
-import { transformIsEnabled } from '@lib-commons/infrastructure/helpers/utils';
+import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,
@@ -41,25 +41,25 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'name';
+  readonly orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'createdAt';
 
   @IsString()
   @IsOptional()
-  name?: string;
+  readonly name?: string;
 
   @IsString()
   @IsOptional()
-  description?: string;
+  readonly description?: string;
 
-  @Transform(({ obj, key }) => transformIsEnabled(obj[key]))
+  @Transform(({ obj, key }) => tryToTransformBooleanStringToBoolean(obj[key]))
   @IsBoolean()
-  isEnabled?: boolean = true;
+  readonly isEnabled?: boolean = true;
 
   @IsISO8601()
   @IsOptional()
-  createdAt?: string;
+  readonly createdAtFrom: string;
 
   @IsISO8601()
   @IsOptional()
-  createdAtTo?: string;
+  readonly createdAtTo: string;
 }
