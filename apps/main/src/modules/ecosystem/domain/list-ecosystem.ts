@@ -1,9 +1,9 @@
-import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/ecosystem.schema';
+import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 
 export class ListEcosystem {
   private total: number;
 
-  constructor(public ecosystem: IEcosystemSchema[], total: number) {
+  constructor(public domains: IEcosystemSchema[], total: number) {
     this.setTotal(total);
   }
 
@@ -11,17 +11,17 @@ export class ListEcosystem {
     this.total = total;
   }
 
-  public hydrate(ecosystem: IEcosystemSchema[]): void {
-    this.ecosystem = [...ecosystem];
-    this.setTotal(ecosystem.length);
+  public hydrate(domains: IEcosystemSchema[]): void {
+    this.domains = [...domains];
+    this.setTotal(domains.length);
   }
 
   public add(entity: IEcosystemSchema): void {
-    this.ecosystem.push(entity);
+    this.domains.push(entity);
   }
 
   public entities(): IEcosystemSchema[] {
-    return this.ecosystem;
+    return this.domains;
   }
 
   public get totalItems(): number {
@@ -29,6 +29,6 @@ export class ListEcosystem {
   }
 
   public get items(): IEcosystemSchema[] {
-    return this.ecosystem;
+    return this.domains;
   }
 }
