@@ -1,16 +1,11 @@
-import { IQuery } from '@lib-commons/domain';
-import { Primitives } from '@lib-commons/domain/value-object/value-object';
+import { IPagination, IOrderOptions, IFilterOptions, IQuery } from '@lib-commons/domain';
 
 export class ListEcosystemQuery implements IQuery {
-  readonly filters: Array<Map<string, Primitives>>;
+  filter?: IFilterOptions;
 
-  readonly orderBy?: string;
+  pagination: IPagination;
 
-  readonly orderType?: string;
-
-  readonly limit?: number;
-
-  readonly offset?: number;
+  order: IOrderOptions;
 
   constructor(props: Partial<ListEcosystemQuery>) {
     if (props) {
