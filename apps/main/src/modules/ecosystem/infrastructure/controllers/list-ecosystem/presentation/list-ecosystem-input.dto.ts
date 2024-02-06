@@ -1,11 +1,7 @@
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
-import {
-  tryToTransformDatesStringToTwoDatesString,
-  tryToTransformBooleanStringToBoolean,
-} from '@lib-commons/infrastructure/helpers/utils';
+import { transformIsEnabled } from '@lib-commons/infrastructure/helpers/utils';
 import { Transform } from 'class-transformer';
 import {
-  IsArray,
   IsBoolean,
   IsISO8601,
   IsNotEmpty,
@@ -45,7 +41,7 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'createdAt';
+  orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'name';
 
   @IsString()
   @IsOptional()
@@ -55,15 +51,15 @@ export class ListEcosystemInputDto extends PaginationOptionsQuery {
   @IsOptional()
   description?: string;
 
-  @Transform(({ obj, key }) => tryToTransformBooleanStringToBoolean(obj[key]))
+  @Transform(({ obj, key }) => transformIsEnabled(obj[key]))
   @IsBoolean()
   isEnabled?: boolean = true;
 
   @IsISO8601()
   @IsOptional()
-  createdAtFrom: string;
+  createdAt?: string;
 
   @IsISO8601()
   @IsOptional()
-  createdAtTo: string;
+  createdAtTo?: string;
 }

@@ -14,12 +14,11 @@ import {
   CreateEcosystemService,
   DeleteEcosystemService,
 } from '@module-eco/application';
+import { EcosystemEntity, TypeOrmEcosystemRepository } from '@app-main/modules/commons/infrastructure';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RetrieveEcosystemController } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/retrieve-ecosystem.controller';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { EcosystemModuleFacade } from '@module-eco/infrastructure/api-facade/ecosystem-module.facade';
-import { TypeOrmEcosystemRepository } from '@module-eco/infrastructure/repositories/typeorm-ecosystem.repository';
-import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 
 @Module({
   imports: [ConfigModule.forRoot(MainConfigOptions), TypeOrmModule.forFeature([EcosystemEntity])],
