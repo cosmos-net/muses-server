@@ -1,4 +1,3 @@
-import { IEcosystemSchema } from '@app-main/modules/commons/domain';
 import Id from '@module-project/domain/aggregate/value-objects/id.vo';
 import Name from '@module-project/domain/aggregate/value-objects/name.vo';
 import Description from '@module-project/domain/aggregate/value-objects/description.vo';
@@ -7,6 +6,7 @@ import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
+import { IEcosystemSchema } from '@module-eco/domain/ecosystem.schema';
 
 export interface IProjectAggregate {
   id: Id;
@@ -74,11 +74,11 @@ export class Project {
     return this._entityRoot?.deletedAt?.getValue();
   }
 
-  enabled(): void {
+  enable(): void {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
-  disabled(): void {
+  disable(): void {
     this._entityRoot.isEnabled = new IsEnabled(false);
   }
 
@@ -96,6 +96,16 @@ export class Project {
 
   public describe(name: string, description?: string): void {
     this._entityRoot.name = new Name(name);
+
+    if (description) {
+      this._entityRoot.description = new Description(description);
+    }
+  }
+
+  public redescribe(name?: string, description?: string): void {
+    if (name) {
+      this._entityRoot.name = new Name(name);
+    }
 
     if (description) {
       this._entityRoot.description = new Description(description);
