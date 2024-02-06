@@ -6,7 +6,6 @@ import { RolesEnum, User, IUserRepository } from '@app-auth/modules/user/domain'
 import { UserRootNotDefinedException } from '@module-user/domain/exceptions/user-root-not-defined.exception';
 import { IEncrypterService } from '@module-user/domain/contracts/encrypter-service';
 import { UserRootAlreadyDefinedException } from '@module-user/domain/exceptions/user-root-not-already-defined.exception';
-import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Injectable()
 export class CreateUserRootService implements OnApplicationBootstrap {
