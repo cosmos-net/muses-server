@@ -1,23 +1,19 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
-import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
+import { IEcosystemRepository } from '@app-main/modules/commons/domain';
+import { EcosystemEntity } from '@app-main/modules/commons/infrastructure';
+import { Ecosystem, ListEcosystem } from '@module-eco/domain';
 import { IPaginationOrder } from '@lib-commons/domain';
 import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
-import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
-import { EcosystemEntity } from '@app-main/modules/ecosystem/infrastructure/domain/ecosystem-muses.entity';
-import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 
 @Injectable()
-export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntity> implements IEcosystemRepository {
+export class TypeOrmEcosystemRepository implements IEcosystemRepository {
   constructor(
     @InjectRepository(EcosystemEntity)
     private readonly ecosystemRepository: MongoRepository<EcosystemEntity>,
-  ) {
-    super();
-  }
+  ) {}
 
   async persist(model: Ecosystem): Promise<void> {
     const ecosystem = await this.ecosystemRepository.save(model.entityRoot());
@@ -149,15 +145,5 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
     }
 
     return result.affected;
-  }
-
-  async matching(criteria: Criteria): Promise<ListEcosystem> {
-    const query = this.getQueryByCriteria(criteria);
-
-    const [ecosystems, total] = await this.ecosystemRepository.findAndCount(query);
-
-    const listEcosystem = new ListEcosystem(ecosystems, total);
-
-    return listEcosystem;
   }
 }
