@@ -12,7 +12,6 @@ export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
   id: string;
 
   @Column({
-    unique: true,
     name: 'name',
     nullable: false,
   })

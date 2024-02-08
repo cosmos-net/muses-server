@@ -5,7 +5,7 @@ interface IRetrieveEcosystemOutputDto {
   isEnabled: boolean;
   createdAt: Date | string;
   updatedAt: Date | string;
-  deletedAt: Date | string;
+  deletedAt?: Date | string;
 }
 
 export class RetrieveEcosystemOutputDto implements IRetrieveEcosystemOutputDto {
@@ -15,7 +15,7 @@ export class RetrieveEcosystemOutputDto implements IRetrieveEcosystemOutputDto {
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 
   constructor(root: IRetrieveEcosystemOutputDto) {
     this.id = root.id;

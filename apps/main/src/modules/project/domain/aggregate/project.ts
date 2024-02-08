@@ -80,6 +80,7 @@ export class Project {
 
   disable(): void {
     this._entityRoot.isEnabled = new IsEnabled(false);
+    this._entityRoot.deletedAt = new DeletedAt(new Date());
   }
 
   public hydrate(schema: IProjectSchema): void {

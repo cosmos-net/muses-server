@@ -5,7 +5,7 @@ import { DeleteProjectInputDto } from './presentation/delete-project-input.dto';
 import { DeleteProjectOutputDto, IDeleteProjectOutputDto } from './presentation/delete-project-output.dto';
 import { DeleteProjectCommand } from '@app-main/modules/project/application/use-cases/delete-project/delete-project.command';
 
-@Controller('management-project/')
+@Controller('project/')
 export class DeleteProjectController {
   private readonly logger = new Logger(DeleteProjectController.name);
   constructor(private readonly deleteProjectService: DeleteProjectService) {}

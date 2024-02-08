@@ -5,7 +5,7 @@ interface IUpdateEcosystemOutputDto {
   enabled: boolean;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date;
+  deletedAt?: Date;
 }
 
 export class UpdateEcosystemOutputDto {
@@ -15,7 +15,7 @@ export class UpdateEcosystemOutputDto {
   readonly enabled: boolean;
   readonly createdAt: string;
   readonly updatedAt: string;
-  readonly deletedAt: string;
+  readonly deletedAt?: string;
 
   constructor(ecosystem: IUpdateEcosystemOutputDto) {
     this.id = ecosystem.id;
@@ -24,6 +24,6 @@ export class UpdateEcosystemOutputDto {
     this.enabled = ecosystem.enabled;
     this.createdAt = ecosystem.createdAt.toISOString();
     this.updatedAt = ecosystem.updatedAt.toISOString();
-    if (this.deletedAt !== undefined) this.deletedAt = ecosystem.deletedAt.toISOString();
+    if (ecosystem.deletedAt !== undefined) this.deletedAt = ecosystem.deletedAt.toISOString();
   }
 }
