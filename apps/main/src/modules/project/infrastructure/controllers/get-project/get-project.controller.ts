@@ -13,7 +13,7 @@ export class GetProjectController {
   private readonly logger = new Logger(GetProjectController.name);
   constructor(private readonly getProjectService: GetProjectService) {}
 
-  @Get(':id/')
+  @Get('/:id')
   async Get(@Param() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
     try {
       const query = new GetProjectQuery({

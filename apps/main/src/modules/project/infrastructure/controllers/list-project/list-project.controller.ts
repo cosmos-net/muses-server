@@ -12,7 +12,7 @@ export class ListProjectController {
   private readonly logger = new Logger(ListProjectController.name);
   constructor(private readonly listProjectService: ListProjectService) {}
 
-  @Get('list')
+  @Get('list/')
   async list(@Query() dto: ListProjectInputDto): Promise<ListProjectOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;

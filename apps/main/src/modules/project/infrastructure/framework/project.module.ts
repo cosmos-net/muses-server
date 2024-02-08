@@ -27,16 +27,16 @@ import { UpdateProjectService } from '@module-project/application/use-cases/upda
   controllers: [
     CreateProjectController,
     DeleteProjectController,
-    GetProjectController,
     ListProjectController,
     UpdateProjectController,
+    GetProjectController,
   ],
   providers: [
     CreateProjectService,
     DeleteProjectService,
-    GetProjectService,
     ListProjectService,
     UpdateProjectService,
+    GetProjectService,
     {
       provide: ECOSYSTEM_MODULE_FACADE,
       useClass: EcosystemModuleFacadeService,
