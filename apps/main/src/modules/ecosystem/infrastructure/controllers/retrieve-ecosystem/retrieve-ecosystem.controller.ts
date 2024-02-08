@@ -4,7 +4,7 @@ import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
 
-@Controller('management-ecosystem/')
+@Controller('ecosystem//')
 export class RetrieveEcosystemController {
   private readonly logger = new Logger(RetrieveEcosystemController.name);
   constructor(private readonly retrieveEcosystemService: RetrieveEcosystemService) {}

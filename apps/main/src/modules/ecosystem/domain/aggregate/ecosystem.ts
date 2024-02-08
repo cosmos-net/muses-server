@@ -45,8 +45,8 @@ export class Ecosystem {
     return this._entityRoot.updatedAt.value;
   }
 
-  get deletedAt(): Date {
-    return this._entityRoot.deletedAt.value;
+  get deletedAt(): Date | undefined {
+    return this._entityRoot.deletedAt?.value;
   }
 
   private hydrate(schema: IEcosystemSchema): void {
@@ -61,7 +61,6 @@ export class Ecosystem {
       isEnabled: new IsEnabled(schema.isEnabled),
       createdAt: new CreatedAt(schema.createdAt),
       updatedAt: new UpdatedAt(schema.updatedAt),
-      deletedAt: new DeletedAt(schema.deletedAt),
     };
   }
 
@@ -103,7 +102,7 @@ export class Ecosystem {
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
-      deletedAt: this._entityRoot.deletedAt.value,
+      deletedAt: this._entityRoot.deletedAt?.value,
     };
   }
 
@@ -119,7 +118,7 @@ export class Ecosystem {
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
-      deletedAt: this._entityRoot.deletedAt.value,
+      deletedAt: this._entityRoot.deletedAt?.value,
     };
   }
 
@@ -127,7 +126,7 @@ export class Ecosystem {
     this.hydrate(schema);
   }
 
-  public projectSchemaPartial(): Partial<IEcosystemSchema> {
+  public partialEcosystemSchema(): Partial<IEcosystemSchema> {
     const partialSchema: Partial<IEcosystemSchema> = {};
 
     for (const [key, value] of Object.entries(this._entityRoot)) {

@@ -5,7 +5,7 @@ import { CreateProjectCommand } from '@module-project/application/use-cases/crea
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { CreateProjectOutputDto } from '@module-project/infrastructure/controllers/create-project/presentation/create-project-output.dto';
 
-@Controller('management-project/')
+@Controller('project/')
 export class CreateProjectController {
   private readonly logger = new Logger(CreateProjectController.name);
   constructor(private readonly createProjectService: CreateProjectService) {}

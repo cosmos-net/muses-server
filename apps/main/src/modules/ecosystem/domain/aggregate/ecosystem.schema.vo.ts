@@ -13,5 +13,5 @@ export interface IEcosystemSchemaValueObject {
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
-  deletedAt: DeletedAt;
+  deletedAt?: DeletedAt;
 }

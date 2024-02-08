@@ -5,6 +5,7 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
+import { ProjectNameAlreadyUsedException } from '@app-main/modules/project/domain/exceptions/project-name-already-used.exception';
 
 @Injectable()
 export class CreateProjectService implements IApplicationServiceCommand<CreateProjectCommand> {
@@ -17,6 +18,12 @@ export class CreateProjectService implements IApplicationServiceCommand<CreatePr
 
   async process<T extends CreateProjectCommand>(command: T): Promise<Project> {
     const { name, description, ecosystem, enabled } = command;
+
+    const isNameAvailable = await this.projectRepository.isNameAvailable(name);
+
+    if (!isNameAvailable) {
+      throw new ProjectNameAlreadyUsedException();
+    }
 
     const project = new Project();
 

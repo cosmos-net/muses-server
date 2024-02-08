@@ -20,7 +20,15 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    const ecosystem = await this.ecosystemRepository.save(model.projectSchemaPartial());
+    const partialSchema = model.partialEcosystemSchema();
+
+    if (partialSchema.id) {
+      const id = new ObjectId(partialSchema.id);
+      delete partialSchema.id;
+      partialSchema.id = id;
+    }
+
+    const ecosystem = await this.ecosystemRepository.save(partialSchema);
 
     model.fromPrimitives({
       ...ecosystem,
@@ -31,9 +39,16 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   async byNameOrFail(name: string): Promise<Ecosystem> {
     const ecosystem = await this.ecosystemRepository.findOneBy({ name });
 
-    const domain = new Ecosystem(ecosystem);
+    if (!ecosystem) {
+      throw new BadRequestException('The ecosystem does not exist');
+    }
 
-    return domain;
+    const model = new Ecosystem({
+      ...ecosystem,
+      id: ecosystem._id.toHexString(),
+    });
+
+    return model;
   }
 
   async byIdOrFail(id: string): Promise<Ecosystem> {
@@ -42,9 +57,16 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
       withDeleted: true,
     });
 
-    const domain = new Ecosystem(ecosystem);
+    if (!ecosystem) {
+      throw new BadRequestException('The ecosystem does not exist');
+    }
 
-    return domain;
+    const model = new Ecosystem({
+      ...ecosystem,
+      id: ecosystem._id.toHexString(),
+    });
+
+    return model;
   }
 
   async list(paginationOrder?: IPaginationOrder): Promise<ListEcosystem> {
@@ -159,5 +181,11 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
     const listEcosystem = new ListEcosystem(ecosystems, total);
 
     return listEcosystem;
+  }
+
+  async isNameAvailable(name: string): Promise<boolean> {
+    const result = await this.ecosystemRepository.findOneBy({ name });
+
+    return !result;
   }
 }

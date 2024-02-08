@@ -21,7 +21,9 @@ export class DeleteProjectService implements IApplicationServiceCommand<DeletePr
       throw new ProjectNotFoundException();
     }
 
-    const result = await this.projectRepository.softDeleteBy(id);
+    project.disable();
+
+    const result = await this.projectRepository.softDeleteBy(project);
 
     return result;
   }

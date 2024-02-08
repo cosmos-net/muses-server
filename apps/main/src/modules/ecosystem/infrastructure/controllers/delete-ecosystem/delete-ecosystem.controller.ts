@@ -7,7 +7,7 @@ import {
   IDeleteEcosystemOutputDto,
 } from '@app-main/modules/ecosystem/infrastructure/controllers/delete-ecosystem/presentation/delete-ecosystem-output.dto';
 
-@Controller('management-ecosystem/')
+@Controller('ecosystem/')
 export class DeleteEcosystemController {
   private readonly logger = new Logger(DeleteEcosystemController.name);
   constructor(private readonly deleteEcosystemService: DeleteEcosystemService) {}

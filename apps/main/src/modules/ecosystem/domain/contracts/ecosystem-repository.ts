@@ -6,6 +6,7 @@ export interface IEcosystemRepository {
   persist(model: Ecosystem): Promise<void>;
   byNameOrFail(name: string): Promise<Ecosystem>;
   byIdOrFail(id: string): Promise<Ecosystem>;
+  isNameAvailable(name: string): Promise<boolean>;
   list(): Promise<ListEcosystem>;
   list(options: IPaginationOrder): Promise<ListEcosystem>;
   softDeleteBy(id: string): Promise<number | undefined>;

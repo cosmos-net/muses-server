@@ -25,7 +25,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipeWithExceptionFactory(), new ValidationPipe({ forbidUnknownValues: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter(configService));
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1/muses-management/');
 
   app.enableCors({
     origin: `${client.protocol}://${client.host}:${client.port}`,
