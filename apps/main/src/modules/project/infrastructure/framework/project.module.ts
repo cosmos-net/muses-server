@@ -9,6 +9,14 @@ import { PROJECT_REPOSITORY, ECOSYSTEM_MODULE_FACADE } from '@module-project/app
 import { TypeOrmProjectRepository } from '@module-project/infrastructure/repositories/typeorm-project.repository';
 import { EcosystemModuleFacadeService } from '@module-project/infrastructure/domain/services/ecosystem-module-facade.service';
 import { MainEcosystemServerModule } from '@module-eco/infrastructure';
+import { DeleteProjectController } from '@module-project/infrastructure/controllers/delete-project/delete-project.controller';
+import { GetProjectController } from '@module-project/infrastructure/controllers/get-project/get-project.controller';
+import { ListProjectController } from '@module-project/infrastructure/controllers/list-project/list-project.controller';
+import { UpdateProjectController } from '@module-project/infrastructure/controllers/update-project/update-project.controller';
+import { DeleteProjectService } from '@module-project/application/use-cases/delete-project/delete-project.service';
+import { GetProjectService } from '@module-project/application/use-cases/get-project/get-project.service';
+import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
+import { UpdateProjectService } from '@module-project/application/use-cases/update-project/update-project.service';
 
 @Module({
   imports: [
@@ -16,8 +24,19 @@ import { MainEcosystemServerModule } from '@module-eco/infrastructure';
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forFeature([ProjectEntity]),
   ],
-  controllers: [CreateProjectController],
+  controllers: [
+    CreateProjectController,
+    DeleteProjectController,
+    ListProjectController,
+    UpdateProjectController,
+    GetProjectController,
+  ],
   providers: [
+    CreateProjectService,
+    DeleteProjectService,
+    ListProjectService,
+    UpdateProjectService,
+    GetProjectService,
     {
       provide: ECOSYSTEM_MODULE_FACADE,
       useClass: EcosystemModuleFacadeService,
@@ -26,7 +45,6 @@ import { MainEcosystemServerModule } from '@module-eco/infrastructure';
       provide: PROJECT_REPOSITORY,
       useClass: TypeOrmProjectRepository,
     },
-    CreateProjectService,
   ],
 })
 export class MainProjectServerModule {}

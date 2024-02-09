@@ -7,12 +7,12 @@ import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { ListProjectQuery } from '@app-main/modules/project/application/use-cases/list-project/list-project.query';
 
-@Controller('management-project/')
+@Controller('project/')
 export class ListProjectController {
   private readonly logger = new Logger(ListProjectController.name);
   constructor(private readonly listProjectService: ListProjectService) {}
 
-  @Get('list')
+  @Get('list/')
   async list(@Query() dto: ListProjectInputDto): Promise<ListProjectOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;

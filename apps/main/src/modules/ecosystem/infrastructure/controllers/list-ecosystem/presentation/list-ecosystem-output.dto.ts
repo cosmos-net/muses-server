@@ -7,9 +7,8 @@ interface IUpdateEcosystemOutputDto {
   isEnabled: boolean;
   createdAt: Date | string;
   updatedAt: Date | string;
-  deletedAt: Date | string;
+  deletedAt?: Date | string;
 }
-
 interface IUpdateEcosystemOutputDtoResponse {
   list: IUpdateEcosystemOutputDto[];
   total: number;

@@ -8,7 +8,7 @@ import {
 import { UpdateProjectService } from '@app-main/modules/project/application/use-cases/update-project/update-project.service';
 import { UpdateProjectCommand } from '@app-main/modules/project/application/use-cases/update-project/update-project.command';
 
-@Controller('management-project/')
+@Controller('project/')
 export class UpdateProjectController {
   private readonly logger = new Logger(UpdateProjectController.name);
   constructor(private readonly updateProjectService: UpdateProjectService) {}

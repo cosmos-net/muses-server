@@ -3,6 +3,7 @@
     "eslint",
     "ecosystem-module",
     "main-module-muses",
-    "auth-module"
+    "auth-module",
+    "project-module"
   ]
 }

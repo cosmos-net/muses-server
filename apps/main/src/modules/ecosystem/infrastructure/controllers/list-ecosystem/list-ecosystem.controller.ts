@@ -5,7 +5,7 @@ import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 
-@Controller('management-ecosystem/')
+@Controller('ecosystem/')
 export class ListEcosystemController {
   private logger = new Logger(ListEcosystemController.name);
 

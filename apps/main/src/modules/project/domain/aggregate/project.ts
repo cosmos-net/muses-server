@@ -6,7 +6,7 @@ import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
-import { IEcosystemSchema } from '@module-eco/domain/ecosystem.schema';
+import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem.schema';
 
 export interface IProjectAggregate {
   id: Id;
@@ -42,36 +42,36 @@ export class Project {
   }
 
   get id(): string {
-    return this._entityRoot.id.getValue();
+    return this._entityRoot.id.value;
   }
 
   get name(): string {
-    return this._entityRoot.name.getValue();
+    return this._entityRoot.name.value;
   }
 
   get description(): string {
-    return this._entityRoot.description.getValue();
+    return this._entityRoot.description.value;
   }
 
   get ecosystemId(): string | undefined {
-    const ecosystem = this._entityRoot.ecosystem?.getValue();
+    const ecosystem = this._entityRoot.ecosystem?.value;
     return ecosystem?.id;
   }
 
   get isEnabled(): boolean {
-    return this._entityRoot.isEnabled.getValue();
+    return this._entityRoot.isEnabled.value;
   }
 
   get createdAt(): Date {
-    return this._entityRoot.createdAt.getValue();
+    return this._entityRoot.createdAt.value;
   }
 
   get updatedAt(): Date {
-    return this._entityRoot.updatedAt.getValue();
+    return this._entityRoot.updatedAt.value;
   }
 
   get deletedAt(): Date | undefined {
-    return this._entityRoot?.deletedAt?.getValue();
+    return this._entityRoot?.deletedAt?.value;
   }
 
   enable(): void {
@@ -80,6 +80,7 @@ export class Project {
 
   disable(): void {
     this._entityRoot.isEnabled = new IsEnabled(false);
+    this._entityRoot.deletedAt = new DeletedAt(new Date());
   }
 
   public hydrate(schema: IProjectSchema): void {
@@ -122,14 +123,14 @@ export class Project {
 
   public toPrimitives(): IProjectSchema {
     return {
-      id: this._entityRoot.id.getValue(),
-      name: this._entityRoot.name.getValue(),
-      description: this._entityRoot.description.getValue(),
-      ecosystem: this._entityRoot.ecosystem?.getValue(),
-      isEnabled: this._entityRoot.isEnabled.getValue(),
-      createdAt: this._entityRoot.createdAt.getValue(),
-      updatedAt: this._entityRoot.updatedAt.getValue(),
-      deletedAt: this._entityRoot.deletedAt?.getValue(),
+      id: this._entityRoot.id.value,
+      name: this._entityRoot.name.value,
+      description: this._entityRoot.description.value,
+      ecosystem: this._entityRoot.ecosystem?.value,
+      isEnabled: this._entityRoot.isEnabled.value,
+      createdAt: this._entityRoot.createdAt.value,
+      updatedAt: this._entityRoot.updatedAt.value,
+      deletedAt: this._entityRoot.deletedAt?.value,
     };
   }
 

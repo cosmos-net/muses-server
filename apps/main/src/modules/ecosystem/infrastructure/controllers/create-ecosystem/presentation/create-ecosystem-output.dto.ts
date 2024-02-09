@@ -5,7 +5,7 @@ interface ICreateEcosystemOutputDto {
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
-  deletedAt: string | Date;
+  deletedAt?: string | Date;
 }
 
 export class CreateEcosystemOutputDto implements ICreateEcosystemOutputDto {
@@ -15,7 +15,7 @@ export class CreateEcosystemOutputDto implements ICreateEcosystemOutputDto {
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 
   constructor(root: ICreateEcosystemOutputDto) {
     this.id = root.id;
