@@ -3,7 +3,7 @@ import { UpdateEcosystemService, UpdateEcosystemCommand } from '@module-eco/appl
 import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@module-eco/infrastructure';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-@Controller('management-ecosystem/')
+@Controller('ecosystem/')
 export class UpdateEcosystemController {
   private readonly logger = new Logger(UpdateEcosystemController.name);
   constructor(private readonly updateEcosystemService: UpdateEcosystemService) {}

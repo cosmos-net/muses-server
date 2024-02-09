@@ -2,7 +2,7 @@ import { IApplicationServiceQuery } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
 import { GetProjectQuery } from '@app-main/modules/project/application/use-cases/get-project/get-project.query';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
-import { Project } from '@module-project/domain/aggregate/project.aggregate';
+import { Project } from '@app-main/modules/project/domain/aggregate/project';
 import { PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
 

@@ -1,6 +1,6 @@
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { EcosystemModuleFacade } from '@module-eco/infrastructure/api-facade/ecosystem-module.facade';
-import { Ecosystem } from '@module-eco/domain/ecosystem';
+import { Ecosystem } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

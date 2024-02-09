@@ -8,12 +8,12 @@ import {
   IGetProjectOutputDto,
 } from '@module-project/infrastructure/controllers/get-project/presentation/get-project-output.dto';
 
-@Controller('management-project/')
+@Controller('project/')
 export class GetProjectController {
   private readonly logger = new Logger(GetProjectController.name);
   constructor(private readonly getProjectService: GetProjectService) {}
 
-  @Get()
+  @Get('/:id')
   async Get(@Param() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
     try {
       const query = new GetProjectQuery({
