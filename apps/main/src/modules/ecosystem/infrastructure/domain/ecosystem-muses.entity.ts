@@ -1,7 +1,9 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ObjectIdColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '@lib-commons/infrastructure';
 import { ObjectId } from 'mongodb';
-import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem.schema';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { ProjectEntity } from '@app-main/modules/project/infrastructure/domain/project-muses.entity';
+import { IProjectSchema } from '@app-main/modules/project/domain/aggregate/project';
 
 @Entity({ name: 'ecosystem' })
 export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
@@ -28,4 +30,7 @@ export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {
     nullable: false,
   })
   isEnabled: boolean;
+
+  @OneToMany(() => ProjectEntity, (project) => project.ecosystem)
+  project: ProjectEntity[] | ObjectId[];
 }

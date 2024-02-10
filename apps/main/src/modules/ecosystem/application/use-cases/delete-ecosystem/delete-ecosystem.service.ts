@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, DeleteEcosystemCommand } from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, DeleteEcosystemCommand } from '@module-eco/application/';
 import { IApplicationServiceCommand } from '@lib-commons/application';
-import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
+import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
 
 @Injectable()
 export class DeleteEcosystemService implements IApplicationServiceCommand<DeleteEcosystemCommand> {
