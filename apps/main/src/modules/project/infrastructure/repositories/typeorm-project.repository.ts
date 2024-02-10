@@ -3,7 +3,7 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { MongoRepository } from 'typeorm';
-import { Project } from '@app-main/modules/project/domain/aggregate/project';
+import { IProjectSchema, Project } from '@app-main/modules/project/domain/aggregate/project';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
@@ -19,11 +19,34 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
   }
 
   async persist(model: Project): Promise<Project> {
-    const schemaPartial = model.entityRootPartial();
-    const project = await this.projectRepository.save(schemaPartial);
+    let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
+
+    if (partialSchema.id) {
+      const { id, ...restParams } = partialSchema;
+      const objectId = new ObjectId(id);
+
+      partialSchema = {
+        ...restParams,
+        _id: objectId,
+        id: objectId,
+      };
+    }
+
+    if (partialSchema.ecosystem) {
+      const { ecosystem } = partialSchema;
+      const objectId = new ObjectId(ecosystem.id);
+
+      partialSchema = {
+        ...partialSchema,
+        ecosystem: objectId,
+      };
+    }
+
+    const project = await this.projectRepository.save(partialSchema);
 
     model.fromPrimitives({
       ...project,
+      ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
       id: project._id.toHexString(),
     });
 
@@ -47,7 +70,11 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
       return null;
     }
 
-    const project = new Project(projectFound);
+    const project = new Project({
+      ...projectFound,
+      ...(projectFound.ecosystem && { ecosystem: projectFound.ecosystem.toHexString() }),
+      id: projectFound._id.toHexString(),
+    });
 
     return project;
   }
@@ -57,13 +84,21 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
 
     const [projects, total] = await this.projectRepository.findAndCount(query);
 
-    const list = new ListProject(projects, total);
+    const projectsClean = projects.map((project) => ({
+      ...project,
+      ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
+      id: project._id.toHexString(),
+    }));
+
+    const list = new ListProject(projectsClean, total);
 
     return list;
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const result = await this.projectRepository.findOneBy({ name });
+    const result = await this.projectRepository.findOne({
+      where: { name },
+    });
 
     return !result;
   }

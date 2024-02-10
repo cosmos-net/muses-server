@@ -1,6 +1,6 @@
-import { EcosystemNotFoundException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-not-found.exception';
-import { EcosystemAlreadyDeletedException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-already-deleted.exception';
-import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem.schema';
+import { EcosystemNotFoundException } from '@module-eco/domain/exceptions/ecosystem-not-found.exception';
+import { EcosystemAlreadyDeletedException } from '@module-eco/domain/exceptions/ecosystem-already-deleted.exception';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 import { IEcosystemSchemaValueObject } from '@module-eco/domain/aggregate/ecosystem.schema.vo';
 import Id from '@module-eco/domain/aggregate/value-objects/id.vo';
 import Name from '@module-eco/domain/aggregate/value-objects/name.vo';
