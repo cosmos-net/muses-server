@@ -6,7 +6,7 @@ import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
-import { IEcosystemSchema } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem.schema';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 
 export interface IProjectAggregate {
   id: Id;
@@ -20,10 +20,10 @@ export interface IProjectAggregate {
 }
 
 export interface IProjectSchema {
-  id: string;
+  id: string | any;
   name: string;
   description: string;
-  ecosystem?: IEcosystemSchema;
+  ecosystem?: IEcosystemSchema | any;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -42,7 +42,7 @@ export class Project {
   }
 
   get id(): string {
-    return this._entityRoot.id.value;
+    return this._entityRoot.id?.value;
   }
 
   get name(): string {
@@ -54,8 +54,7 @@ export class Project {
   }
 
   get ecosystemId(): string | undefined {
-    const ecosystem = this._entityRoot.ecosystem?.value;
-    return ecosystem?.id;
+    return this._entityRoot.ecosystem?.id;
   }
 
   get isEnabled(): boolean {
@@ -91,8 +90,15 @@ export class Project {
       isEnabled: new IsEnabled(schema.isEnabled),
       createdAt: new CreatedAt(schema.createdAt),
       updatedAt: new UpdatedAt(schema.updatedAt),
-      ecosystem: schema.ecosystem ? new Ecosystem(schema.ecosystem) : undefined,
     };
+
+    if (schema.deletedAt) {
+      this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
+    }
+
+    if (schema.ecosystem) {
+      this._entityRoot.ecosystem = new Ecosystem(schema.ecosystem);
+    }
   }
 
   public describe(name: string, description?: string): void {
@@ -123,10 +129,10 @@ export class Project {
 
   public toPrimitives(): IProjectSchema {
     return {
-      id: this._entityRoot.id.value,
+      id: this._entityRoot.id?.value,
       name: this._entityRoot.name.value,
       description: this._entityRoot.description.value,
-      ecosystem: this._entityRoot.ecosystem?.value,
+      ecosystem: this._entityRoot.ecosystem?.id,
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
@@ -144,6 +150,10 @@ export class Project {
       if (value instanceof Object) {
         partialSchema[key] = value.value;
       }
+    }
+
+    if (this._entityRoot.ecosystem) {
+      partialSchema.ecosystem = this._entityRoot.ecosystem.id;
     }
 
     return partialSchema;

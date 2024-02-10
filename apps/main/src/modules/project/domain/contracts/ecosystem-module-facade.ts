@@ -1,6 +1,5 @@
-//TODO: Refactor import
-import { Ecosystem } from '@app-main/modules/ecosystem/domain/aggregate/ecosystem';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 
 export interface IEcosystemModuleFacade {
-  getEcosystemById(id: string): Promise<Ecosystem>;
+  getEcosystemById(id: string): Promise<IEcosystemSchema>;
 }

@@ -1,14 +1,15 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
-import { Ecosystem, ListEcosystem } from '@app-main/modules/ecosystem/domain';
+import { Ecosystem, ListEcosystem } from '@module-eco/domain';
 import { IPaginationOrder } from '@lib-commons/domain';
 import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
-import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
-import { EcosystemEntity } from '@app-main/modules/ecosystem/infrastructure/domain/ecosystem-muses.entity';
+import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
+import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 
 @Injectable()
 export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntity> implements IEcosystemRepository {
@@ -20,12 +21,17 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    const partialSchema = model.partialEcosystemSchema();
+    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialEcosystemSchema();
 
     if (partialSchema.id) {
-      const id = new ObjectId(partialSchema.id);
-      delete partialSchema.id;
-      partialSchema.id = id;
+      const { id, ...restParams } = partialSchema;
+      const objectId = new ObjectId(id);
+
+      partialSchema = {
+        ...restParams,
+        _id: objectId,
+        id: objectId,
+      };
     }
 
     const ecosystem = await this.ecosystemRepository.save(partialSchema);

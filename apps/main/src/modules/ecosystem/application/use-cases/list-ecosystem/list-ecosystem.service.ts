@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, ListEcosystemQuery } from '@app-main/modules/ecosystem/application/';
+import { ECOSYSTEM_REPOSITORY, ListEcosystemQuery } from '@module-eco/application/';
 import { IApplicationServiceQuery } from '@lib-commons/application';
 import { ListEcosystem } from '@module-eco/domain';
-import { IEcosystemRepository } from '@app-main/modules/ecosystem/domain/contracts/ecosystem-repository';
+import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
 import { Filters } from '@lib-commons/domain/criteria/filters';
 import { Order } from '@lib-commons/domain/criteria/order';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
