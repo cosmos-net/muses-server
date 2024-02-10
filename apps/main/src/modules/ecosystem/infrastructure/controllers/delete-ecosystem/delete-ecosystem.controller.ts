@@ -5,7 +5,7 @@ import { Controller, Delete, Logger, Param } from '@nestjs/common';
 import {
   DeleteEcosystemOutputDto,
   IDeleteEcosystemOutputDto,
-} from '@app-main/modules/ecosystem/infrastructure/controllers/delete-ecosystem/presentation/delete-ecosystem-output.dto';
+} from '@module-eco/infrastructure/controllers/delete-ecosystem/presentation/delete-ecosystem-output.dto';
 
 @Controller('ecosystem/')
 export class DeleteEcosystemController {

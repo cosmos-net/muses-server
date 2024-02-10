@@ -1,10 +1,10 @@
 import { IPagination, PageDto, PaginationMetadataDto } from '@lib-commons/infrastructure';
 
 interface IListProjectOutputDto {
-  id: string;
+  id?: string;
   name: string;
   description: string;
-  ecosystem?: string;
+  ecosystemId?: string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -27,7 +27,7 @@ export class ListProjectOutputDto {
         name: item.name,
         description: item.description,
         isEnabled: item.isEnabled,
-        ecosystem: item.ecosystem,
+        ecosystemId: item.ecosystemId,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         deletedAt: item.deletedAt,
