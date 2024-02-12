@@ -3,7 +3,7 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { MongoRepository } from 'typeorm';
-import { IProjectSchema, Project } from '@app-main/modules/project/domain/aggregate/project';
+import { IProjectSchema, Project } from '@module-project/domain/aggregate/project';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
@@ -21,25 +21,27 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
   async persist(model: Project): Promise<Project> {
     let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
 
-    if (partialSchema.id) {
-      const { id, ...restParams } = partialSchema;
+    if (partialSchema?.ecosystem?.id) {
+      const { id } = partialSchema.ecosystem;
       const objectId = new ObjectId(id);
-
-      partialSchema = {
-        ...restParams,
-        _id: objectId,
-        id: objectId,
-      };
-    }
-
-    if (partialSchema.ecosystem) {
-      const { ecosystem } = partialSchema;
-      const objectId = new ObjectId(ecosystem.id);
 
       partialSchema = {
         ...partialSchema,
         ecosystem: objectId,
       };
+    }
+
+    if (partialSchema.id) {
+      const objectId = new ObjectId(partialSchema.id);
+
+      partialSchema = {
+        ...partialSchema,
+        _id: objectId,
+      };
+
+      await this.projectRepository.update(objectId);
+
+      return model;
     }
 
     const project = await this.projectRepository.save(partialSchema);
@@ -101,5 +103,9 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     });
 
     return !result;
+  }
+
+  async removeEcosystem(ecosystemId: string): Promise<void> {
+    await this.projectRepository.remove({ ecosystem: new ObjectId(ecosystemId) });
   }
 }
