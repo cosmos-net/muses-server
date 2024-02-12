@@ -1,5 +1,5 @@
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { Project } from '@app-main/modules/project/domain/aggregate/project';
+import { Project } from '@module-project/domain/aggregate/project';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 
 export interface IProjectRepository {
@@ -8,4 +8,5 @@ export interface IProjectRepository {
   searchOneBy(id: string): Promise<Project | null>;
   searchListBy(criteria: Criteria): Promise<ListProject>;
   isNameAvailable(name: string): Promise<boolean>;
+  removeEcosystem(ecosystemId: string): Promise<void>;
 }

@@ -2,10 +2,11 @@ import { IApplicationServiceCommand } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateProjectCommand } from '@module-project/application/use-cases/update-project/update-project.command';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
-import { Project } from '@app-main/modules/project/domain/aggregate/project';
+import { Project } from '@module-project/domain/aggregate/project';
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
+import { ProjectAlreadyRelatedWithEcosystem } from '@module-project/domain/exceptions/project-already-related-with-ecosystem.exception';
 
 @Injectable()
 export class UpdateProjectService implements IApplicationServiceCommand<UpdateProjectCommand> {
@@ -26,8 +27,14 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     }
 
     if (ecosystem) {
+      if (project.ecosystemId === ecosystem) {
+        throw new ProjectAlreadyRelatedWithEcosystem();
+      }
+
       const ecosystemModel = await this.ecosystemModuleFacade.getEcosystemById(ecosystem);
       project.useEcosystem(ecosystemModel);
+    } else if (ecosystem === null && project.ecosystemId) {
+      await this.projectRepository.removeEcosystem(project.ecosystemId);
     }
 
     // TODO: Remove project from ecosystem only if project has a ecosystem related

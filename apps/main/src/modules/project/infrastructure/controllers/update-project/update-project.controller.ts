@@ -5,8 +5,8 @@ import {
   UpdateProjectOutputDto,
   IUpdateProjectOutputDto,
 } from '@module-project/infrastructure/controllers/update-project/presentation/update-project-output.dto';
-import { UpdateProjectService } from '@app-main/modules/project/application/use-cases/update-project/update-project.service';
-import { UpdateProjectCommand } from '@app-main/modules/project/application/use-cases/update-project/update-project.command';
+import { UpdateProjectService } from '@module-project/application/use-cases/update-project/update-project.service';
+import { UpdateProjectCommand } from '@module-project/application/use-cases/update-project/update-project.command';
 
 @Controller('project/')
 export class UpdateProjectController {

@@ -1,9 +1,9 @@
 import { Controller, Delete, Logger, Param } from '@nestjs/common';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
-import { DeleteProjectService } from '@app-main/modules/project/application/use-cases/delete-project/delete-project.service';
+import { DeleteProjectService } from '@module-project/application/use-cases/delete-project/delete-project.service';
 import { DeleteProjectInputDto } from './presentation/delete-project-input.dto';
 import { DeleteProjectOutputDto, IDeleteProjectOutputDto } from './presentation/delete-project-output.dto';
-import { DeleteProjectCommand } from '@app-main/modules/project/application/use-cases/delete-project/delete-project.command';
+import { DeleteProjectCommand } from '@module-project/application/use-cases/delete-project/delete-project.command';
 
 @Controller('project/')
 export class DeleteProjectController {
