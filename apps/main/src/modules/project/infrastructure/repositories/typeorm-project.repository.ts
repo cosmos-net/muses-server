@@ -39,7 +39,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
         _id: objectId,
       };
 
-      await this.projectRepository.update(objectId);
+      await this.projectRepository.updateOne({ _id: objectId }, { $set: partialSchema });
 
       return model;
     }
@@ -55,18 +55,37 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     return model;
   }
 
-  async softDeleteBy(project: Project): Promise<number | undefined> {
-    const result = await this.projectRepository.update(new ObjectId(project.id), project.entityRootPartial());
+  async softDeleteBy(model: Project): Promise<number | undefined> {
+    model.disable();
 
-    if (result.affected === 0) {
+    let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
+
+    if (partialSchema?.ecosystem?.id) {
+      const { id } = partialSchema.ecosystem;
+      const objectId = new ObjectId(id);
+
+      partialSchema = {
+        ...partialSchema,
+        ecosystem: objectId,
+      };
+    }
+
+    const { id, ...partialParams } = partialSchema;
+
+    const result = await this.projectRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
+
+    if (result.modifiedCount === 0) {
       throw new InternalServerErrorException('The ecosystem could not be deleted');
     }
 
-    return result.affected;
+    return result.modifiedCount;
   }
 
-  async searchOneBy(id: string): Promise<Project | null> {
-    const projectFound = await this.projectRepository.findOneBy({ _id: new ObjectId(id) });
+  async searchOneBy(id: string, options: { withDeleted: false }): Promise<Project | null> {
+    const projectFound = await this.projectRepository.findOne({
+      where: { _id: new ObjectId(id) },
+      withDeleted: options.withDeleted,
+    });
 
     if (!projectFound) {
       return null;
@@ -105,7 +124,14 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     return !result;
   }
 
-  async removeEcosystem(ecosystemId: string): Promise<void> {
-    await this.projectRepository.remove({ ecosystem: new ObjectId(ecosystemId) });
+  async removeEcosystem(projectId: string, ecosystem: string): Promise<void> {
+    const updateResult = await this.projectRepository.updateOne(
+      { _id: new ObjectId(projectId) },
+      { $unset: { ecosystem: new ObjectId(ecosystem) } },
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      throw new InternalServerErrorException('The ecosystem could not be removed');
+    }
   }
 }

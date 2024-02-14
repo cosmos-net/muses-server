@@ -6,6 +6,8 @@ import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
+import { ProjectPropertyWithSameValue } from '@module-project/domain/exceptions/project-property-with-same-value.exception';
+import { ProjectIsAlreadyDisabledException } from '@module-project/domain/exceptions/project-is-already-disabled.exception';
 export interface IProjectAggregate {
   id: Id;
   name: Name;
@@ -80,6 +82,10 @@ export class Project {
   }
 
   disable(): void {
+    if (this._entityRoot.isEnabled.value === false) {
+      throw new ProjectIsAlreadyDisabledException();
+    }
+
     this._entityRoot.isEnabled = new IsEnabled(false);
     this._entityRoot.deletedAt = new DeletedAt(new Date());
   }
@@ -115,11 +121,29 @@ export class Project {
 
   public redescribe(name?: string, description?: string): void {
     if (name) {
+      if (this._entityRoot.name.value === name) {
+        throw new ProjectPropertyWithSameValue('name', name);
+      }
+
       this._entityRoot.name = new Name(name);
     }
 
     if (description) {
+      if (this._entityRoot.description.value === description) {
+        throw new ProjectPropertyWithSameValue('description', description);
+      }
+
       this._entityRoot.description = new Description(description);
+    }
+  }
+
+  public changeStatus(isEnabled?: boolean): void {
+    if (isEnabled !== undefined) {
+      if (this._entityRoot.isEnabled.value === isEnabled) {
+        throw new ProjectPropertyWithSameValue('isEnabled', isEnabled);
+      }
+
+      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
     }
   }
 
@@ -128,7 +152,7 @@ export class Project {
   }
 
   public removeEcosystem(): void {
-    this._entityRoot.ecosystem = undefined;
+    delete this._entityRoot.ecosystem;
   }
 
   public entityRoot(): IProjectAggregate {
@@ -156,7 +180,9 @@ export class Project {
     const partialSchema: Partial<IProjectSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
-        partialSchema[key] = value.value;
+        if (value.value !== null) {
+          partialSchema[key] = value.value;
+        }
       }
     }
 

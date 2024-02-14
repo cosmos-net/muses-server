@@ -34,7 +34,8 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
       const ecosystemModel = await this.ecosystemModuleFacade.getEcosystemById(ecosystem);
       project.useEcosystem(ecosystemModel);
     } else if (ecosystem === null && project.ecosystemId) {
-      await this.projectRepository.removeEcosystem(project.ecosystemId);
+      await this.projectRepository.removeEcosystem(project.id, project.ecosystemId);
+      project.removeEcosystem();
     }
 
     // TODO: Remove project from ecosystem only if project has a ecosystem related
@@ -45,7 +46,7 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     }
 
     if (enabled !== undefined) {
-      enabled ? project.enable() : project.disable();
+      project.changeStatus(enabled);
     }
 
     await this.projectRepository.persist(project);
