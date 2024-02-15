@@ -1,14 +1,13 @@
-import { Optional } from '@nestjs/common';
 import { Length, IsString, IsOptional, IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class UpdateProjectInputDto {
   @IsString()
   @IsNotEmpty()
-  id: string;
+  readonly id: string;
 
   @Length(3, 50)
   @IsString()
-  @Optional()
+  @IsOptional()
   readonly name?: string;
 
   @Length(8, 200)
@@ -17,7 +16,7 @@ export class UpdateProjectInputDto {
   readonly description?: string;
 
   @IsBoolean()
-  @Optional()
+  @IsOptional()
   readonly enabled?: boolean;
 
   @IsString()

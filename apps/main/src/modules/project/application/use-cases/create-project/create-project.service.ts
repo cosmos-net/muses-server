@@ -2,10 +2,10 @@ import { IApplicationServiceCommand } from '@lib-commons/application';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateProjectCommand } from '@module-project/application/use-cases/create-project/create-project.command';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
-import { Project } from '@app-main/modules/project/domain/aggregate/project';
+import { Project } from '@module-project/domain/aggregate/project';
 import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosystem-module-facade';
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
-import { ProjectNameAlreadyUsedException } from '@app-main/modules/project/domain/exceptions/project-name-already-used.exception';
+import { ProjectNameAlreadyUsedException } from '@module-project/domain/exceptions/project-name-already-used.exception';
 
 @Injectable()
 export class CreateProjectService implements IApplicationServiceCommand<CreateProjectCommand> {
@@ -35,7 +35,15 @@ export class CreateProjectService implements IApplicationServiceCommand<CreatePr
 
     if (ecosystem) {
       const ecosystemModel = await this.ecosystemModuleFacade.getEcosystemById(ecosystem);
-      project.useEcosystem(ecosystemModel);
+      project.useEcosystem({
+        id: ecosystemModel.id,
+        name: ecosystemModel.name,
+        description: ecosystemModel.description,
+        isEnabled: ecosystemModel.isEnabled,
+        createdAt: ecosystemModel.createdAt,
+        updatedAt: ecosystemModel.updatedAt,
+        deletedAt: ecosystemModel.deletedAt,
+      });
     }
 
     await this.projectRepository.persist(project);

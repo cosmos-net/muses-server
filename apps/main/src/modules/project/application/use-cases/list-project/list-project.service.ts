@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ListProjectQuery } from '@module-project/application/use-cases/list-project/list-project.query';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
 import { PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
-import { ListProject } from '@app-main/modules/project/domain/aggregate/list-project';
+import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { Filters } from '@lib-commons/domain/criteria/filters';
 import { Order } from '@lib-commons/domain/criteria/order';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';

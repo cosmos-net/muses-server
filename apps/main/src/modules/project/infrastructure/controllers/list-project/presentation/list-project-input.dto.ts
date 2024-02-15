@@ -44,13 +44,13 @@ export class ListProjectInputDto extends PaginationOptionsQuery {
   @IsNotEmpty()
   readonly orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'createdAt';
 
-  @Length(3, 50)
+  @Length(1, 50)
   @IsString()
   @IsOptional()
   @IsNotEmpty()
   readonly name?: string;
 
-  @Length(8, 200)
+  @Length(1, 200)
   @IsString()
   @IsOptional()
   @IsNotEmpty()

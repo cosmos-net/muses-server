@@ -1,5 +1,5 @@
-import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
 
 export interface IEcosystemModuleFacade {
-  getEcosystemById(id: string): Promise<IEcosystemSchema>;
+  getEcosystemById(id: string): Promise<Ecosystem>;
 }

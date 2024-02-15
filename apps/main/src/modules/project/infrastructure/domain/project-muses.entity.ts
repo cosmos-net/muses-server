@@ -1,10 +1,7 @@
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, ObjectIdColumn, OneToMany } from 'typeorm';
-import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId } from 'typeorm';
 import { BaseEntity } from '@lib-commons/infrastructure';
-import { ObjectId } from 'mongodb';
-import { IProjectSchema } from '@app-main/modules/project/domain/aggregate/project';
+import { IProjectSchema } from '@module-project/domain/aggregate/project';
 import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
-
 @Entity({ name: 'project' })
 export class ProjectEntity extends BaseEntity implements IProjectSchema {
   @ObjectIdColumn()
@@ -36,8 +33,8 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   // @ObjectIdColumn()
   // ecosystem: EcosystemEntity | ObjectId;
 
-  @ManyToOne(() => EcosystemEntity, (ecosystem) => ecosystem.project)
-  @ObjectIdColumn()
+  @ManyToOne(() => EcosystemEntity, (ecosystem) => ecosystem.projects)
+  @Column()
   ecosystem: ObjectId;
 
   // This field gets created automatically by TypeORM

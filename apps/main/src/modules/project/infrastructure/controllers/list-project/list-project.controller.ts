@@ -1,11 +1,11 @@
 import { Controller, Get, Logger, Query } from '@nestjs/common';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
-import { ListProjectService } from '@app-main/modules/project/application/use-cases/list-project/list-project.service';
+import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
 import { ListProjectInputDto } from './presentation/list-project-input.dto';
 import { ListProjectOutputDto } from './presentation/list-project-output.dto';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
-import { ListProjectQuery } from '@app-main/modules/project/application/use-cases/list-project/list-project.query';
+import { ListProjectQuery } from '@module-project/application/use-cases/list-project/list-project.query';
 
 @Controller('project/')
 export class ListProjectController {
