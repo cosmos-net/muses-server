@@ -2,7 +2,7 @@ import { GetProjectService } from '@module-project/application/use-cases/get-pro
 import { Controller, Get, Logger, Param } from '@nestjs/common';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { GetProjectInputDto } from './presentation/get-project-input.dto';
-import { GetProjectQuery } from '@app-main/modules/project/application/use-cases/get-project/get-project.query';
+import { GetProjectQuery } from '@module-project/application/use-cases/get-project/get-project.query';
 import {
   GetProjectOutputDto,
   IGetProjectOutputDto,

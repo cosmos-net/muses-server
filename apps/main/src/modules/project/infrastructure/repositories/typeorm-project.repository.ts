@@ -3,7 +3,7 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { MongoRepository } from 'typeorm';
-import { IProjectSchema, Project } from '@app-main/modules/project/domain/aggregate/project';
+import { IProjectSchema, Project } from '@module-project/domain/aggregate/project';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
@@ -21,25 +21,27 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
   async persist(model: Project): Promise<Project> {
     let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
 
-    if (partialSchema.id) {
-      const { id, ...restParams } = partialSchema;
+    if (partialSchema?.ecosystem?.id) {
+      const { id } = partialSchema.ecosystem;
       const objectId = new ObjectId(id);
-
-      partialSchema = {
-        ...restParams,
-        _id: objectId,
-        id: objectId,
-      };
-    }
-
-    if (partialSchema.ecosystem) {
-      const { ecosystem } = partialSchema;
-      const objectId = new ObjectId(ecosystem.id);
 
       partialSchema = {
         ...partialSchema,
         ecosystem: objectId,
       };
+    }
+
+    if (partialSchema.id) {
+      const objectId = new ObjectId(partialSchema.id);
+
+      partialSchema = {
+        ...partialSchema,
+        _id: objectId,
+      };
+
+      await this.projectRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+
+      return model;
     }
 
     const project = await this.projectRepository.save(partialSchema);
@@ -53,18 +55,37 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     return model;
   }
 
-  async softDeleteBy(project: Project): Promise<number | undefined> {
-    const result = await this.projectRepository.update(new ObjectId(project.id), project.entityRootPartial());
+  async softDeleteBy(model: Project): Promise<number | undefined> {
+    model.disable();
 
-    if (result.affected === 0) {
+    let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
+
+    if (partialSchema?.ecosystem?.id) {
+      const { id } = partialSchema.ecosystem;
+      const objectId = new ObjectId(id);
+
+      partialSchema = {
+        ...partialSchema,
+        ecosystem: objectId,
+      };
+    }
+
+    const { id, ...partialParams } = partialSchema;
+
+    const result = await this.projectRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
+
+    if (result.modifiedCount === 0) {
       throw new InternalServerErrorException('The ecosystem could not be deleted');
     }
 
-    return result.affected;
+    return result.modifiedCount;
   }
 
-  async searchOneBy(id: string): Promise<Project | null> {
-    const projectFound = await this.projectRepository.findOneBy({ _id: new ObjectId(id) });
+  async searchOneBy(id: string, options: { withDeleted: false }): Promise<Project | null> {
+    const projectFound = await this.projectRepository.findOne({
+      where: { _id: new ObjectId(id) },
+      withDeleted: options.withDeleted,
+    });
 
     if (!projectFound) {
       return null;
@@ -101,5 +122,16 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     });
 
     return !result;
+  }
+
+  async removeEcosystem(projectId: string, ecosystem: string): Promise<void> {
+    const updateResult = await this.projectRepository.updateOne(
+      { _id: new ObjectId(projectId) },
+      { $unset: { ecosystem: new ObjectId(ecosystem) } },
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      throw new InternalServerErrorException('The ecosystem could not be removed');
+    }
   }
 }

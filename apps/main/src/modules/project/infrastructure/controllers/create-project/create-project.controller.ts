@@ -21,7 +21,9 @@ export class CreateProjectController {
       });
 
       const project = await this.createProjectService.process(command);
+
       const mapper = new CreateProjectOutputDto(project);
+
       return mapper;
     } catch (error) {
       this.logger.error(error);
