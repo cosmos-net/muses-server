@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId, OneToMany } from 'typeorm';
-import { BaseEntity } from '@lib-commons/infrastructure';
+import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { IProjectSchema } from '@module-project/domain/aggregate/project';
 import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
@@ -19,12 +19,14 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   name: string;
 
   @Column({
+    type: 'string',
     name: 'description',
     nullable: false,
   })
   description: string;
 
   @Column({
+    type: 'boolean',
     name: 'isEnabled',
     nullable: false,
   })
@@ -34,8 +36,11 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   // @ObjectIdColumn()
   // ecosystem: EcosystemEntity | ObjectId;
 
-  @ManyToOne(() => EcosystemEntity, (ecosystem) => ecosystem.projects)
-  @Column()
+  @Column({
+    type: 'string',
+    name: 'ecosystem',
+    nullable: false,
+  })
   ecosystem: ObjectId;
 
   @OneToMany(() => ModuleEntity, (module) => module.project)

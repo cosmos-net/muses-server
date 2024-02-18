@@ -1,4 +1,5 @@
-import { IExternalSystem, Health } from '@app-main/modules/health/domain';
+import { Health } from '@app-main/modules/health/domain/health';
+import { IExternalSystem } from '@app-main/modules/health/domain/contracts/external-system';
 import { Injectable } from '@nestjs/common';
 import { HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
