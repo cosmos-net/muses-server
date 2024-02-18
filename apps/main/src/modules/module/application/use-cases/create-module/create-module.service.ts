@@ -29,8 +29,10 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
 
     module.describe(name, description);
 
-    if (!enabled) {
+    if (enabled !== false) {
       module.enable();
+    } else {
+      module.disable();
     }
 
     if (project) {

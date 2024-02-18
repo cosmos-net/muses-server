@@ -7,31 +7,11 @@ import UpdatedAt from '@module-module/domain/aggregate/value-objects/updated-at.
 import IsEnabled from '@module-module/domain/aggregate/value-objects/is-enabled.vo';
 import Project, { IProject } from '@module-module/domain/aggregate/value-objects/project.vo';
 import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exceptions/module-is-already-disabled.exception';
-
-export interface IModuleAggregate {
-  id: Id;
-  name: Name;
-  description: Description;
-  project: Project;
-  isEnabled: IsEnabled;
-  createdAt: CreatedAt;
-  updatedAt: UpdatedAt;
-  deletedAt?: DeletedAt;
-}
-
-export interface IModuleSchema {
-  id: string | any;
-  name: string;
-  description: string;
-  project: IProject | any;
-  isEnabled: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-}
+import { IModuleSchemaValueObject } from '@module-module/domain/aggregate/module.schema.vo';
+import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 
 export class Module {
-  private _entityRoot = {} as IModuleAggregate;
+  private _entityRoot = {} as IModuleSchemaValueObject;
 
   constructor(schema?: IModuleSchema | null) {
     if (schema instanceof Object) {
@@ -146,6 +126,7 @@ export class Module {
         }
       }
     }
+
     return partialSchema;
   }
 }
