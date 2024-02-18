@@ -43,8 +43,8 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   })
   ecosystem: ObjectId;
 
-  @OneToMany(() => ModuleEntity, (module) => module.project)
-  modules: ModuleEntity[];
+  @Column()
+  modules: ObjectId[];
 
   // This field gets created automatically by TypeORM
   // in the document. We need to add it here in order to
