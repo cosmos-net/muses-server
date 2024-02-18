@@ -1,8 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY, UpdateEcosystemCommand } from '@module-eco/application/';
+import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
+import { UpdateEcosystemCommand } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.command';
 import { ConfigService } from '@nestjs/config';
-import { IApplicationServiceCommand } from '@lib-commons/application';
-import { Ecosystem } from '@module-eco/domain';
+import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
 import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
 
 @Injectable()

@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { LoginCommand } from '@app-auth/modules/authentication/application';
+import { LoginCommand } from '@module-auth/application/use-cases/login/login.command';
 import {
   AUTH_MODULE_FACADE_SERVICE,
   JSON_WEB_TOKEN_SERVICE,
-} from '@app-auth/modules/authentication/application/use-cases/constants/injection-tokens';
-import { IAuthModuleFacadeService } from '@app-auth/modules/authentication/domain/contracts/auth-module-facade-service.contract';
+} from '@module-auth/application/use-cases/constants/injection-tokens';
+import { IAuthModuleFacadeService } from '@module-auth/domain/contracts/auth-module-facade-service.contract';
 import { IJsonWebTokenService } from '@app-auth/modules/common/domain/contracts/json-web-token.service.contract';
-import { InvalidCredentialsException } from '@app-auth/modules/authentication/domain/exceptions/invalid-credentials.exception';
+import { InvalidCredentialsException } from '@module-auth/domain/exceptions/invalid-credentials.exception';
 @Injectable()
 export class LogInService {
   constructor(

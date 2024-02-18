@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { IUserRepository } from '@app-auth/modules/user/domain/contracts/user-repository';
-import { UserEntity } from '@app-auth/modules/user/infrastructure/domain/user-hades.entity';
-import { User } from '@app-auth/modules/user/domain/user';
-import { RolesEnum } from '@module-user/domain';
+import { IUserRepository } from '@module-user/domain/contracts/user-repository';
+import { UserEntity } from '@module-user/infrastructure/domain/user-hades.entity';
+import { User } from '@module-user/domain/user';
+import { RolesEnum } from '@module-user/domain/roles.enum';
 
 @Injectable()
 export class TypeOrmUserRepository implements IUserRepository {

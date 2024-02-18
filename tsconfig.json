@@ -36,11 +36,11 @@
       "@module-eco/*": [
         "apps/main/src/modules/ecosystem/*"
       ],
-      "@module-user": [
-        "apps/auth/src/modules/user"
+      "@module-project": [
+        "apps/main/src/modules/project"
       ],
-      "@module-user/*": [
-        "apps/auth/src/modules/user/*"
+      "@module-project/*": [
+        "apps/main/src/modules/project/*"
       ],
       "@app-auth": [
         "apps/auth/src"
@@ -48,11 +48,17 @@
       "@app-auth/*": [
         "apps/auth/src/*"
       ],
-      "@module-project": [
-        "apps/main/src/modules/project"
+      "@module-user": [
+        "apps/auth/src/modules/user"
       ],
-      "@module-project/*": [
-        "apps/main/src/modules/project/*"
+      "@module-user/*": [
+        "apps/auth/src/modules/user/*"
+      ],
+      "@module-auth": [
+        "apps/auth/src/modules/authentication"
+      ],
+      "@module-auth/*": [
+        "apps/auth/src/modules/authentication/*"
       ],
     }
   }

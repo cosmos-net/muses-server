@@ -1,6 +1,8 @@
 import { Body, Controller, Logger, Post } from '@nestjs/common';
-import { CreateEcosystemCommand, CreateEcosystemService } from '@module-eco/application';
-import { CreateEcosystemInputDto, CreateEcosystemOutputDto } from '@module-eco/infrastructure';
+import { CreateEcosystemService } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.service';
+import { CreateEcosystemCommand } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.command';
+import { CreateEcosystemInputDto } from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
+import { CreateEcosystemOutputDto } from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('ecosystem/')

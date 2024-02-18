@@ -1,8 +1,8 @@
-import { IApplicationServiceQuery } from '@lib-commons/application';
+import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
 import { Inject } from '@nestjs/common';
 import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
-import { Ecosystem } from '@module-eco/domain';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
 import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
 
 export class RetrieveEcosystemService implements IApplicationServiceQuery<RetrieveEcosystemQuery> {

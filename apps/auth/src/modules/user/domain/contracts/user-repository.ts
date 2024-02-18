@@ -1,4 +1,4 @@
-import { User } from '@app-auth/modules/user/domain';
+import { User } from '@module-user/domain/user';
 
 export interface IUserRepository {
   getByEmailOrUsernameOrFail(email: string): Promise<User>;
