@@ -1,4 +1,4 @@
-import { RolesEnum } from '@app-auth/modules/user/domain';
+import { RolesEnum } from '@module-user/domain/roles.enum';
 
 export interface IUserSchema {
   id: number;

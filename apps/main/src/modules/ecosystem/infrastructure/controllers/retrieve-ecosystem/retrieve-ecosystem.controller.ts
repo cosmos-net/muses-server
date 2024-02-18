@@ -1,5 +1,5 @@
 import { Controller, Get, Logger, Param } from '@nestjs/common';
-import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure';
+import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';

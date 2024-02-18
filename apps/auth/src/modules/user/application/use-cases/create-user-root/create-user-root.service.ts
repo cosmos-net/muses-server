@@ -1,11 +1,14 @@
 import { Inject, Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
-import { ENCRYPTER_SERVICE, USER_REPOSITORY } from '@app-auth/modules/user/application/constants/injection-tokens';
-import { UserRootType, ServerAuthType } from '@lib-commons/domain';
+import { ENCRYPTER_SERVICE, USER_REPOSITORY } from '@module-user/application/constants/injection-tokens';
 import { ConfigService } from '@nestjs/config';
-import { RolesEnum, User, IUserRepository } from '@app-auth/modules/user/domain';
 import { UserRootNotDefinedException } from '@module-user/domain/exceptions/user-root-not-defined.exception';
 import { IEncrypterService } from '@module-user/domain/contracts/encrypter-service';
 import { UserRootAlreadyDefinedException } from '@module-user/domain/exceptions/user-root-not-already-defined.exception';
+import { ServerAuthType } from '@lib-commons/domain/contracts/types/var-environment-map/servers/server-auth.type';
+import { UserRootType } from '@lib-commons/domain/contracts/types/var-environment-map/user-root/user-root.type';
+import { IUserRepository } from '@module-user/domain/contracts/user-repository';
+import { RolesEnum } from '@module-user/domain/roles.enum';
+import { User } from '@module-user/domain/user';
 
 @Injectable()
 export class CreateUserRootService implements OnApplicationBootstrap {

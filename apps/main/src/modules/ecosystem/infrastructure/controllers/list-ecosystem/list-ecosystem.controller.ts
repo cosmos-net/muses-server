@@ -1,6 +1,8 @@
 import { Controller, Get, Logger, Query, ValidationPipe } from '@nestjs/common';
-import { ListEcosystemQuery, ListEcosystemService } from '@module-eco/application';
-import { ListEcosystemInputDto, ListEcosystemOutputDto } from '@module-eco/infrastructure';
+import { ListEcosystemQuery } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.query';
+import { ListEcosystemService } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.service';
+import { ListEcosystemInputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-input.dto';
+import { ListEcosystemOutputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';

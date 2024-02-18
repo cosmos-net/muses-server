@@ -1,4 +1,4 @@
-import { IQuery } from '@lib-commons/domain';
+import { IQuery } from '@lib-commons/domain/contracts/presentation/query';
 
 export class GetUserQuery implements IQuery {
   emailOrUsername: string;

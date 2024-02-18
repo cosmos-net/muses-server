@@ -1,6 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
-import { SortEnum } from '@lib-commons/domain';
+import { SortEnum } from '@lib-commons/domain/list/order/sort.enum';
 
 export class PaginationOptionsQuery {
   @Transform(({ value }) => value.toUpperCase())

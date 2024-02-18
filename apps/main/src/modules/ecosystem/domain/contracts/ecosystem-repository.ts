@@ -1,6 +1,7 @@
-import { IPaginationOrder } from '@lib-commons/domain';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { Ecosystem, ListEcosystem } from '@module-eco/domain';
+import { ListEcosystem } from '@module-eco/domain/list-ecosystem';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { IPaginationOrder } from '@lib-commons/domain/list/pagination-order-filter';
 
 export interface IEcosystemRepository {
   persist(model: Ecosystem): Promise<void>;
