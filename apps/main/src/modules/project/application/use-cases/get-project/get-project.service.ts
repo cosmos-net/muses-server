@@ -16,7 +16,9 @@ export class GetProjectService implements IApplicationServiceQuery<GetProjectQue
   async process<T extends GetProjectQuery>(query: T): Promise<Project> {
     const { id } = query;
 
-    const project = await this.projectRepository.searchOneBy(id);
+    const project = await this.projectRepository.searchOneBy(id, {
+      withDeleted: true,
+    });
 
     if (!project) {
       throw new ProjectNotFoundException();

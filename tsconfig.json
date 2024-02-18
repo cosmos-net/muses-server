@@ -54,6 +54,12 @@
       "@module-project/*": [
         "apps/main/src/modules/project/*"
       ],
+      "@module-module": [
+        "apps/main/src/modules/module"
+      ],
+      "@module-module/*": [
+        "apps/main/src/modules/module/*"
+      ],
     }
   }
 }
