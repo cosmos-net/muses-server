@@ -1,4 +1,4 @@
-import { EnvironmentEnum } from '@lib-commons/domain';
+import { EnvironmentEnum } from '@lib-commons/domain/contracts/enums/environment.enum';
 import * as Joi from 'joi';
 
 export const ConfigSchema = Joi.object({

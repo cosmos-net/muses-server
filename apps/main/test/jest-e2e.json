@@ -1,0 +1,30 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "./",
+  "roots": [
+    "<rootDir>/src/",
+    "<rootDir>/test/"
+  ],
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^@lib-commons(.*)": "<rootDir>/../../../../libs/commons/$1",
+    "^@app-main(.*)": "<rootDir>/../../$1",
+    "^@module-eco(.*)": "<rootDir>/../ecosystem/src/$1",
+    "^@module-project(.*)": "<rootDir>/../project/src/$1"
+  },
+  "collectCoverageFrom": [
+    "**/*.(t|j)s"
+  ],
+  "testRegex": "(.integration.spec.ts|.e2e.spec.ts)$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "globalSetup": "./scripts/jest-global-setup.ts",
+  "reporters": [
+    "default",
+    ["./node_modules/jest-html-reporter", {
+      "pageTitle": "Test Report",
+      "outputPath": "test-report.e2e.html" 
+    }]
+  ]
+}

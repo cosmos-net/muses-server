@@ -1,4 +1,4 @@
-import { IAuthModuleFacadeService } from '@app-auth/modules/authentication/domain/contracts/auth-module-facade-service.contract';
+import { IAuthModuleFacadeService } from '@module-auth/domain/contracts/auth-module-facade-service.contract';
 import { AuthModuleFacade } from '@app-auth/modules/main/infrastructure/api-facade/auth-module.facade';
 import { Injectable } from '@nestjs/common';
 

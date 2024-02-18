@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { MainModule } from '@app-main/modules/main/infrastructure';
-import { ClientType, ServerMainType } from '@lib-commons/domain';
+import { MainModule } from '@app-main/modules/main/infrastructure/framework/main.module';
+import { ClientType } from '@lib-commons/domain/contracts/types/var-environment-map/client/client.type';
+import { ServerMainType } from '@lib-commons/domain/contracts/types/var-environment-map/servers/server-main.type';
 import { TransformInterceptor } from '@lib-commons/infrastructure/framework/transform.interceptor';
-import { HttpExceptionFilter } from '@lib-commons/infrastructure';
 import { ValidationPipeWithExceptionFactory } from '@lib-commons/infrastructure/framework/global-validation.pipe';
+import { HttpExceptionFilter } from '@lib-commons/infrastructure/framework/http-exception.filter';
+// import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);

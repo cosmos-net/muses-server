@@ -1,9 +1,11 @@
 import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { LoginInputDto, LoginOutputDto } from '@app-auth/modules/authentication/infrastructure';
-import { LogInService, LoginCommand } from '@app-auth/modules/authentication/application';
-import { JwtType } from '@lib-commons/domain';
+import { JwtType } from '@lib-commons/domain/contracts/types/var-environment-map/jwt/jwt.type';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
+import { LoginCommand } from '@module-auth/application/use-cases/login/login.command';
+import { LogInService } from '@module-auth/application/use-cases/login/login.service';
+import { LoginInputDto } from '@module-auth/infrastructure/controllers/login/presentation/login-input.dto';
+import { LoginOutputDto } from '@module-auth/infrastructure/controllers/login/presentation/login-output.dto';
 
 @Controller('authentication/')
 export class LogInController {
