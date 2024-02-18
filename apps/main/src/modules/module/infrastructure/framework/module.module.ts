@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@lib-commons/infrastructure';
-import { MainConfigOptions } from '@app-main/modules/main/infrastructure';
+import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
+import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
 import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
 import { CreateModuleController } from '@module-module/infrastructure/controllers/create-module/create-module.controller';

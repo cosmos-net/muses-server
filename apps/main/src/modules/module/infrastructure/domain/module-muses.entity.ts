@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId } from 'typeorm';
-import { BaseEntity } from '@lib-commons/infrastructure';
+import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { IModuleSchema } from '@module-module/domain/aggregate/module';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 

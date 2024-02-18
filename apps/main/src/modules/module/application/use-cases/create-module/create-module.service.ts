@@ -1,4 +1,4 @@
-import { IApplicationServiceCommand } from '@lib-commons/application';
+import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateModuleCommand } from '@module-module/application/use-cases/create-module/create-module.command';
 import { IProjectModuleFacade } from '@module-module/domain/contracts/project-module-facade';
