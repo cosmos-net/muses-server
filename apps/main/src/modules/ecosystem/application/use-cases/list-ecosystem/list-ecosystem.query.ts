@@ -1,4 +1,4 @@
-import { IQuery } from '@lib-commons/domain';
+import { IQuery } from '@lib-commons/domain/contracts/presentation/query';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 
 export class ListEcosystemQuery implements IQuery {

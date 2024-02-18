@@ -1,5 +1,5 @@
-import { PaginationOptionsQuery } from '@lib-commons/infrastructure';
 import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
+import { PaginationOptionsQuery } from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,

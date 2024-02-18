@@ -1,4 +1,4 @@
-import { ICommand } from '@lib-commons/domain';
+import { ICommand } from '@lib-commons/domain/contracts/presentation/command';
 
 export class DeleteProjectCommand implements ICommand {
   readonly id: string;

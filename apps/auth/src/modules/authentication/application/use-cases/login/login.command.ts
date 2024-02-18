@@ -1,4 +1,4 @@
-import { ICommand } from '@lib-commons/domain';
+import { ICommand } from '@lib-commons/domain/contracts/presentation/command';
 
 export class LoginCommand implements ICommand {
   readonly email: string;

@@ -1,4 +1,6 @@
-import { IPagination, PageDto, PaginationMetadataDto } from '@lib-commons/infrastructure';
+import { IPagination } from '@lib-commons/domain/list/pagination/pagination';
+import { PageDto } from '@lib-commons/infrastructure/presentation/output-pagination/page.dto';
+import { PaginationMetadataDto } from '@lib-commons/infrastructure/presentation/output-pagination/pagination-metadata.dto';
 
 interface IListProjectOutputDto {
   id?: string;
