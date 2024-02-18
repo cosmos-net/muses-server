@@ -1,4 +1,4 @@
-import { PaginationMetadataDto } from '@lib-commons/infrastructure';
+import { PaginationMetadataDto } from '@lib-commons/infrastructure/presentation/output-pagination/pagination-metadata.dto';
 
 export class PageDto<T> {
   readonly items: T[];

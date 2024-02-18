@@ -1,6 +1,7 @@
 import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
+import { RolesEnum } from '@module-user/domain/roles.enum';
+import { IUserSchema } from '@module-user/domain/user';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-import { IUserSchema, RolesEnum } from '@app-auth/modules/user/domain';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUserSchema {

@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
-import { Ecosystem, ListEcosystem } from '@module-eco/domain';
-import { IPaginationOrder } from '@lib-commons/domain';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { ListEcosystem } from '@module-eco/domain/list-ecosystem';
 import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
@@ -10,6 +10,7 @@ import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-mus
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { IPaginationOrder } from '@lib-commons/domain/list/pagination-order-filter';
 
 @Injectable()
 export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntity> implements IEcosystemRepository {

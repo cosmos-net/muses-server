@@ -1,4 +1,4 @@
-import { IApplicationServiceQuery } from '@lib-commons/application';
+import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { Inject, Injectable } from '@nestjs/common';
 import { ListProjectQuery } from '@module-project/application/use-cases/list-project/list-project.query';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';

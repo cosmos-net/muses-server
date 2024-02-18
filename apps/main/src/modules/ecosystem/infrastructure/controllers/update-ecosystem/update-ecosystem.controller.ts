@@ -1,6 +1,8 @@
 import { Body, Controller, Logger, Patch } from '@nestjs/common';
-import { UpdateEcosystemService, UpdateEcosystemCommand } from '@module-eco/application';
-import { UpdateEcosystemInputDto, UpdateEcosystemOutputDto } from '@module-eco/infrastructure';
+import { UpdateEcosystemCommand } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.command';
+import { UpdateEcosystemService } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.service';
+import { UpdateEcosystemInputDto } from '@module-eco/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
+import { UpdateEcosystemOutputDto } from '@module-eco/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('ecosystem/')

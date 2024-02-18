@@ -1,8 +1,8 @@
-import { GetHealthService } from '@app-main/modules/health/application';
+import { GetHealthService } from '@app-main/modules/health/application/use-cases/check-health/get-health.service';
 import { Controller, Get, Logger, Query } from '@nestjs/common';
-import { GetHealthInputDto } from '@app-main/modules/health/infrastructure';
-import { GetHealthQuery } from '@app-main/modules//health/application';
-import { GetHealthOutput } from '@app-main/modules//health/infrastructure';
+import { GetHealthInputDto } from '@app-main/modules/health/infrastructure/controllers/get-health/presentation/get-health-input.dto';
+import { GetHealthQuery } from '@app-main/modules/health/application/use-cases/check-health/get-health.query';
+import { GetHealthOutput } from '@app-main/modules/health/infrastructure/controllers/get-health/presentation/get-health-output.dto';
 import { HealthCheck } from '@nestjs/terminus';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 

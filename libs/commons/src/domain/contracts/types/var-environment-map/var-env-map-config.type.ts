@@ -1,4 +1,8 @@
-import { DatabaseType, ClientType, JwtType, ServersType, UserRootType } from '@lib-commons/domain';
+import { ClientType } from '@lib-commons/domain/contracts/types/var-environment-map/client/client.type';
+import { DatabaseType } from '@lib-commons/domain/contracts/types/var-environment-map/db/database.type';
+import { JwtType } from '@lib-commons/domain/contracts/types/var-environment-map/jwt/jwt.type';
+import { ServersType } from '@lib-commons/domain/contracts/types/var-environment-map/servers/servers.type';
+import { UserRootType } from '@lib-commons/domain/contracts/types/var-environment-map/user-root/user-root.type';
 
 export type VarEnvMapConfigType = {
   readonly client: ClientType;
