@@ -17,6 +17,7 @@ import { DeleteProjectService } from '@module-project/application/use-cases/dele
 import { GetProjectService } from '@module-project/application/use-cases/get-project/get-project.service';
 import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
 import { UpdateProjectService } from '@module-project/application/use-cases/update-project/update-project.service';
+import { ProjectModuleFacade } from '@module-project/infrastructure/api-facade/project-module.facade';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { UpdateProjectService } from '@module-project/application/use-cases/upda
       provide: PROJECT_REPOSITORY,
       useClass: TypeOrmProjectRepository,
     },
+    ProjectModuleFacade,
   ],
+  exports: [GetProjectService, ProjectModuleFacade],
 })
 export class MainProjectServerModule {}
