@@ -7,7 +7,7 @@ import UpdatedAt from '@module-module/domain/aggregate/value-objects/updated-at.
 import IsEnabled from '@module-module/domain/aggregate/value-objects/is-enabled.vo';
 import Project from '@module-module/domain/aggregate/value-objects/project.vo';
 
-export interface IModuleSchemaValueObject {
+export interface IModuleSchemaAggregate {
   id: Id;
   name: Name;
   description: Description;
