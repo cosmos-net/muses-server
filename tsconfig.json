@@ -60,6 +60,12 @@
       "@module-auth/*": [
         "apps/auth/src/modules/authentication/*"
       ],
+      "@module-module": [
+        "apps/main/src/modules/module"
+      ],
+      "@module-module/*": [
+        "apps/main/src/modules/module/*"
+      ],
     }
   }
 }
