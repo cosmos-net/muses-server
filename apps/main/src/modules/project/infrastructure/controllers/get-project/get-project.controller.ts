@@ -16,8 +16,11 @@ export class GetProjectController {
   @Get('/:id')
   async Get(@Param() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
     try {
+      const { id, withDisabled } = dto;
+
       const query = new GetProjectQuery({
-        id: dto.id,
+        id,
+        withDisabled,
       });
 
       const project = await this.getProjectService.process(query);
