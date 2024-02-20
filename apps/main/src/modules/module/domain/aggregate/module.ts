@@ -7,11 +7,11 @@ import UpdatedAt from '@module-module/domain/aggregate/value-objects/updated-at.
 import IsEnabled from '@module-module/domain/aggregate/value-objects/is-enabled.vo';
 import Project, { IProject } from '@module-module/domain/aggregate/value-objects/project.vo';
 import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exceptions/module-is-already-disabled.exception';
-import { IModuleSchemaValueObject } from '@module-module/domain/aggregate/module.schema.vo';
+import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.schema.vo';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 
 export class Module {
-  private _entityRoot = {} as IModuleSchemaValueObject;
+  private _entityRoot = {} as IModuleSchemaAggregate;
 
   constructor(schema?: IModuleSchema | null) {
     if (schema instanceof Object) {

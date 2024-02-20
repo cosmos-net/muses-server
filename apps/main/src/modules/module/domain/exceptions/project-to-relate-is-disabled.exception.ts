@@ -1,8 +1,8 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-export class ModuleIsAlreadyDisabledUsedException extends ExceptionManager {
+export class ProjectToRelateIsDisabledException extends ExceptionManager {
   constructor() {
-    const message = 'Module name already used';
+    const message = 'Project to relate is disabled';
     super(message, 'BAD_REQUEST');
   }
 }

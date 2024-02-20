@@ -7,7 +7,7 @@ export class ProjectModuleFacadeService implements IProjectModuleFacade {
   constructor(private readonly projectModuleFacade: ProjectModuleFacade) {}
 
   async getProjectById(id: string) {
-    const project = await this.projectModuleFacade.retrieveProject({ id });
+    const project = await this.projectModuleFacade.retrieveProject({ id, withDisabled: true });
 
     return project;
   }
