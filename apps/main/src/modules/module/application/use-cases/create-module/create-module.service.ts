@@ -6,6 +6,7 @@ import { IModuleRepository } from '@module-module/domain/contracts/module-reposi
 import { Module } from '@module-module/domain/aggregate/module';
 import { MODULE_REPOSITORY, PROJECT_MODULE_FACADE } from '@module-module/application/constants/injection-tokens';
 import { ModuleNameAlreadyUsedException } from '@module-module/domain/exceptions/module-name-already-used.exception';
+import { ProjectToRelateIsDisabledException } from '@app-main/modules/module/domain/exceptions/project-to-relate-is-disabled.exception';
 
 @Injectable()
 export class CreateModuleService implements IApplicationServiceCommand<CreateModuleCommand> {
@@ -29,14 +30,17 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
 
     module.describe(name, description);
 
-    if (enabled !== false) {
-      module.enable();
-    } else {
+    if (enabled === false) {
       module.disable();
     }
 
     if (project) {
       const projectModel = await this.projectModuleFacade.getProjectById(project);
+
+      if (!projectModel.isEnabled) {
+        throw new ProjectToRelateIsDisabledException();
+      }
+
       module.useProject({
         id: projectModel.id,
         name: projectModel.name,
