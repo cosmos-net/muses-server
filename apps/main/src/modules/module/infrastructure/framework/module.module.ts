@@ -9,12 +9,15 @@ import { CreateModuleService } from '@module-module/application/use-cases/create
 import { MODULE_REPOSITORY, PROJECT_MODULE_FACADE } from '@module-module/application/constants/injection-tokens';
 import { ProjectModuleFacadeService } from '@module-module/infrastructure/domain/services/project-module-facade.service';
 import { TypeOrmModuleRepository } from '@module-module/infrastructure/repositories/typeorm-module.repository';
+import { UpdateModuleService } from '@module-module/application/use-cases/update-module/update-module.service';
+import { UpdateModuleController } from '@module-module/infrastructure/controllers/update-module/update-module.controller';
 
 @Module({
   imports: [MainProjectServerModule, ConfigModule.forRoot(MainConfigOptions), TypeOrmModule.forFeature([ModuleEntity])],
-  controllers: [CreateModuleController],
+  controllers: [CreateModuleController, UpdateModuleController],
   providers: [
     CreateModuleService,
+    UpdateModuleService,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
