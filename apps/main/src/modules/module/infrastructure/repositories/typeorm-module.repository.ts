@@ -5,7 +5,8 @@ import { MongoRepository } from 'typeorm';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
-import { IModuleSchema, Module } from '@module-module/domain/aggregate/module';
+import { Module } from '@module-module/domain/aggregate/module';
+import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 @Injectable()
 export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> implements IModuleRepository {
   constructor(
@@ -56,5 +57,24 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const module = await this.moduleRepository.findOne({ where: { name } });
 
     return !module;
+  }
+
+  async searchOneBy(id: string, options: { withDeleted: false }): Promise<Module | null> {
+    const moduleFound = await this.moduleRepository.findOne({
+      where: { _id: new ObjectId(id) },
+      withDeleted: options.withDeleted,
+    });
+
+    if (!moduleFound) {
+      return null;
+    }
+
+    const module = new Module({
+      ...moduleFound,
+      ...(moduleFound.project && { project: moduleFound.project.toHexString() }),
+      id: moduleFound._id.toHexString(),
+    });
+
+    return module;
   }
 }
