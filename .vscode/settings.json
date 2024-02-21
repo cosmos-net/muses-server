@@ -4,6 +4,7 @@
     "ecosystem-module",
     "main-module-muses",
     "auth-module",
-    "project-module"
+    "project-module",
+    "module-management"
   ]
 }

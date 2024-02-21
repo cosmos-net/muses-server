@@ -3,11 +3,12 @@ import { IProjectRepository } from '@module-project/domain/contracts/project-rep
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { MongoRepository } from 'typeorm';
-import { IProjectSchema, Project } from '@module-project/domain/aggregate/project';
+import { Project } from '@module-project/domain/aggregate/project';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListProject } from '@module-project/domain/aggregate/list-project';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 import { ObjectId } from 'mongodb';
+import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
 
 @Injectable()
 export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> implements IProjectRepository {
@@ -28,6 +29,15 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
       partialSchema = {
         ...partialSchema,
         ecosystem: objectId,
+      };
+    }
+
+    if (partialSchema?.modules?.length && partialSchema?.modules.length > 0) {
+      const modules = partialSchema.modules.map((module) => new ObjectId(module.id));
+
+      partialSchema = {
+        ...partialSchema,
+        modules,
       };
     }
 

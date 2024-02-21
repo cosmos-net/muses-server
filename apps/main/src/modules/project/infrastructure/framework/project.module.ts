@@ -17,7 +17,6 @@ import { GetProjectService } from '@module-project/application/use-cases/get-pro
 import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
 import { UpdateProjectService } from '@module-project/application/use-cases/update-project/update-project.service';
 import { ProjectModuleFacade } from '@module-project/infrastructure/api-facade/project-module.facade';
-import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 
 @Module({
   imports: [MainEcosystemServerModule, TypeOrmModule.forFeature([ProjectEntity])],

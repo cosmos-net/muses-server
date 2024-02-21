@@ -1,34 +1,16 @@
 import Id from '@module-project/domain/aggregate/value-objects/id.vo';
 import Name from '@module-project/domain/aggregate/value-objects/name.vo';
 import Description from '@module-project/domain/aggregate/value-objects/description.vo';
-import Ecosystem, { IEcosystem } from '@module-project/domain/aggregate/value-objects/ecosystem.vo';
+import { Ecosystem, IEcosystem } from '@module-project/domain/aggregate/value-objects/ecosystem.vo';
 import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled.vo';
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
 import { ProjectPropertyWithSameValue } from '@module-project/domain/exceptions/project-property-with-same-value.exception';
 import { ProjectIsAlreadyDisabledException } from '@module-project/domain/exceptions/project-is-already-disabled.exception';
-export interface IProjectAggregate {
-  id: Id;
-  name: Name;
-  description: Description;
-  ecosystem?: Ecosystem;
-  isEnabled: IsEnabled;
-  createdAt: CreatedAt;
-  updatedAt: UpdatedAt;
-  deletedAt?: DeletedAt;
-}
-
-export interface IProjectSchema {
-  id: string | any;
-  name: string;
-  description: string;
-  ecosystem?: IEcosystem | any;
-  isEnabled: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-}
+import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
+import { IProjectAggregate } from '@module-project/domain/aggregate/project.aggregate';
+import { Module } from '@app-main/modules/module/domain/aggregate/module';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;
@@ -153,6 +135,22 @@ export class Project {
 
   public removeEcosystem(): void {
     delete this._entityRoot.ecosystem;
+  }
+
+  public addModule(module: Module): void {
+    if (this._entityRoot.modules.length > 0) {
+      const moduleAlreadyAdded = this._entityRoot.modules.find((m) => m.id === module.id);
+
+      if (moduleAlreadyAdded) {
+        throw new Error('Module already added');
+      }
+
+      this._entityRoot.modules.push(module);
+
+      return;
+    }
+
+    this._entityRoot.modules = [module];
   }
 
   public entityRoot(): IProjectAggregate {
