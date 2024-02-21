@@ -8,7 +8,7 @@ export interface IEcosystem {
   deletedAt?: Date;
 }
 
-export default class Ecosystem {
+export class Ecosystem {
   private value = {} as IEcosystem;
 
   constructor(id: string);

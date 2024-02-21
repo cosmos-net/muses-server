@@ -1,10 +1,13 @@
-import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId } from 'typeorm';
+import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId, Index } from 'typeorm';
 import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 
 @Entity({ name: 'module' })
 export class ModuleEntity extends BaseEntity implements IModuleSchema {
+  @Column({ generated: 'uuid', unique: true, name: 'uuid' })
+  uuid: string;
+
   @ObjectIdColumn()
   _id: ObjectId;
 
