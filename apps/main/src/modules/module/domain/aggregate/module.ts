@@ -9,6 +9,7 @@ import Project, { IProject } from '@module-module/domain/aggregate/value-objects
 import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exceptions/module-is-already-disabled.exception';
 import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.schema.vo';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
+import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -128,5 +129,33 @@ export class Module {
     }
 
     return partialSchema;
+  }
+
+  public redescribe(name?: string, description?: string): void {
+    if (name) {
+      if (this._entityRoot.description.value === name) {
+        throw new ModulePropertyWithSameValue('name', name);
+      }
+
+      this._entityRoot.name = new Name(name);
+    }
+
+    if (description) {
+      if (this._entityRoot.description.value === description) {
+        throw new ModulePropertyWithSameValue('description', description);
+      }
+
+      this._entityRoot.description = new Description(description);
+    }
+  }
+
+  public changeStatus(isEnabled: boolean): void {
+    if (isEnabled !== undefined) {
+      if (this._entityRoot.isEnabled.value === isEnabled) {
+        throw new ModulePropertyWithSameValue('isEnabled', isEnabled);
+      }
+
+      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
+    }
   }
 }
