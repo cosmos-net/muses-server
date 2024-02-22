@@ -77,4 +77,8 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
 
     return module;
   }
+
+  async delete(id: string): Promise<void> {
+    await this.moduleRepository.delete({ _id: new ObjectId(id) });
+  }
 }

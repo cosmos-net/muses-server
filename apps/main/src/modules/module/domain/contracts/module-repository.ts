@@ -3,4 +3,5 @@ export interface IModuleRepository {
   persist(model: Module);
   isNameAvailable(name: string): Promise<boolean>;
   searchOneBy(id: string, options: { withDeleted: boolean }): Promise<Module | null>;
+  delete(id: string): Promise<void>;
 }
