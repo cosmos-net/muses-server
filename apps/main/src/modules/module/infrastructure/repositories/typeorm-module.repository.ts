@@ -7,6 +7,8 @@ import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
 import { Module } from '@module-module/domain/aggregate/module';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
+import { ListModule } from '@module-module/domain/list-module';
 @Injectable()
 export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> implements IModuleRepository {
   constructor(
@@ -80,5 +82,21 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
 
   async delete(id: string): Promise<void> {
     await this.moduleRepository.delete({ _id: new ObjectId(id) });
+  }
+
+  async searchListBy(criteria: Criteria): Promise<ListModule> {
+    const query = this.getQueryByCriteria(criteria);
+
+    const [modules, total] = await this.moduleRepository.findAndCount(query);
+
+    const modulesClean = modules.map((module) => ({
+      ...module,
+      ...(module.project && { project: module.project.toHexString() }),
+      id: module._id.toHexString(),
+    }));
+
+    const list = new ListModule(modulesClean, total);
+
+    return list;
   }
 }

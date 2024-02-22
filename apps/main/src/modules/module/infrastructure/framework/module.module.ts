@@ -14,6 +14,8 @@ import { UpdateModuleController } from '@module-module/infrastructure/controller
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
 import { GetModuleService } from '@module-module/application/use-cases/get-module/get-module.service';
+import { ListModuleController } from '@module-module/infrastructure/controllers/list-module/list-module.controller';
+import { ListModuleService } from '@module-module/application/use-cases/list-module/list-module.service';
 
 @Module({
   imports: [
@@ -21,13 +23,14 @@ import { GetModuleService } from '@module-module/application/use-cases/get-modul
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forFeature([ModuleEntity]),
   ],
-  controllers: [CreateModuleController, UpdateModuleController],
+  controllers: [CreateModuleController, UpdateModuleController, ListModuleController],
   providers: [
     EventStoreService,
     CreateModuleService,
     UpdateModuleService,
     GetModuleService,
     ModuleModuleFacade,
+    ListModuleService,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
