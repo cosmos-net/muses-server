@@ -12,6 +12,7 @@ import { IProjectSchema } from '@module-project/domain/aggregate/project.schema'
 import { IProjectAggregate } from '@module-project/domain/aggregate/project.aggregate';
 import { Module } from '@module-module/domain/aggregate/module';
 import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain/exceptions/module-already-related-with-project.exception';
+import { ModuleNotFoundException } from '@module-project/domain/exceptions/module-not-found.exception';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;
@@ -140,9 +141,9 @@ export class Project {
 
   public addModule(module: Module): void {
     if (this._entityRoot.modules && this._entityRoot.modules.length > 0) {
-      const moduleAlreadyAdded = this._entityRoot.modules.find((m) => m.id === module.id);
+      const isModuleAlreadyAdded = this._entityRoot.modules.find((m) => m.id === module.id);
 
-      if (moduleAlreadyAdded) {
+      if (isModuleAlreadyAdded) {
         throw new ModuleAlreadyRelatedWithProjectException();
       }
 
@@ -152,6 +153,18 @@ export class Project {
     }
 
     this._entityRoot.modules = [module];
+  }
+
+  public removeModule(module: Module): void {
+    if (this._entityRoot.modules && this._entityRoot.modules.length > 0) {
+      const moduleIndex = this._entityRoot.modules.findIndex((m) => m.id === module.id);
+
+      if (moduleIndex === -1) {
+        throw new ModuleNotFoundException();
+      }
+
+      this._entityRoot.modules.splice(moduleIndex, 1);
+    }
   }
 
   public entityRoot(): IProjectAggregate {
