@@ -16,6 +16,7 @@ import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/mod
 import { GetModuleService } from '@module-module/application/use-cases/get-module/get-module.service';
 import { ListModuleController } from '@module-module/infrastructure/controllers/list-module/list-module.controller';
 import { ListModuleService } from '@module-module/application/use-cases/list-module/list-module.service';
+import { GetModuleController } from '@module-module/infrastructure/controllers/get-module/get-module.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { ListModuleService } from '@module-module/application/use-cases/list-mod
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forFeature([ModuleEntity]),
   ],
-  controllers: [CreateModuleController, UpdateModuleController, ListModuleController],
+  controllers: [CreateModuleController, UpdateModuleController, ListModuleController, GetModuleController],
   providers: [
     EventStoreService,
     CreateModuleService,
