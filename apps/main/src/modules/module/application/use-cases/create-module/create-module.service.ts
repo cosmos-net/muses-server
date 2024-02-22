@@ -69,7 +69,11 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
   }
 
   private async tryToEmitEvent(relateModuleWithProjectEventBody: RelateModuleWithProjectEventBody): Promise<void> {
-    const event = new RelateModuleWithProjectEvent(relateModuleWithProjectEventBody);
-    await this.eventStoreService.emit(event);
+    try {
+      const event = new RelateModuleWithProjectEvent(relateModuleWithProjectEventBody);
+      await this.eventStoreService.emit(event);
+    } catch (err) {
+      await this.moduleRepository.delete(relateModuleWithProjectEventBody.moduleId);
+    }
   }
 }
