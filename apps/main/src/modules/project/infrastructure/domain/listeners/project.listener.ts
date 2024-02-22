@@ -2,7 +2,7 @@ import { RelateModuleWithProjectEvent } from '@module-module/domain/events/relat
 import { EventTopicEnum } from '@lib-commons/domain/contracts/event/event-topic-enum';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { RelateModuleWithProjectEventHandler } from '@app-main/modules/project/application/event-handlers/relate-module-with-project-event.handler';
+import { RelateModuleWithProjectEventHandler } from '@module-project/application/event-handlers/relate-module-with-project-event.handler';
 
 @Injectable()
 export class ProjectListener {

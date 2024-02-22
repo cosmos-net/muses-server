@@ -10,7 +10,8 @@ import { ProjectPropertyWithSameValue } from '@module-project/domain/exceptions/
 import { ProjectIsAlreadyDisabledException } from '@module-project/domain/exceptions/project-is-already-disabled.exception';
 import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
 import { IProjectAggregate } from '@module-project/domain/aggregate/project.aggregate';
-import { Module } from '@app-main/modules/module/domain/aggregate/module';
+import { Module } from '@module-module/domain/aggregate/module';
+import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain/exceptions/module-already-related-with-project.exception';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;
@@ -138,11 +139,11 @@ export class Project {
   }
 
   public addModule(module: Module): void {
-    if (this._entityRoot.modules.length > 0) {
+    if (this._entityRoot.modules && this._entityRoot.modules.length > 0) {
       const moduleAlreadyAdded = this._entityRoot.modules.find((m) => m.id === module.id);
 
       if (moduleAlreadyAdded) {
-        throw new Error('Module already added');
+        throw new ModuleAlreadyRelatedWithProjectException();
       }
 
       this._entityRoot.modules.push(module);
@@ -179,6 +180,11 @@ export class Project {
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         if (value.value !== null) {
+          if (key === 'modules') {
+            partialSchema[key] = value.map((module) => module.id);
+            continue;
+          }
+
           partialSchema[key] = value.value;
         }
       }

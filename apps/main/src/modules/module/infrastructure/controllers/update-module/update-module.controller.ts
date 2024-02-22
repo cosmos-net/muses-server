@@ -6,7 +6,7 @@ import {
   UpdateModuleOutputDto,
 } from '@module-module/infrastructure/controllers/update-module/presentation/update-module-output.dto';
 import { UpdateModuleService } from '@module-module/application/use-cases/update-module/update-module.service';
-import { UpdateModuleCommand } from '@app-main/modules/module/application/use-cases/update-module/update-module.command';
+import { UpdateModuleCommand } from '@module-module/application/use-cases/update-module/update-module.command';
 
 @Controller('module/')
 export class UpdateModuleController {

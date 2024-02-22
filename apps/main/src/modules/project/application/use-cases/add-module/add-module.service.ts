@@ -2,8 +2,10 @@ import { IApplicationServiceCommand } from '@lib-commons/application/application
 import { Inject, Injectable } from '@nestjs/common';
 import { IProjectRepository } from '@module-project/domain/contracts/project-repository';
 import { MODULE_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
-import { AddModuleCommand } from './add-module.command';
-import { IModuleModuleFacadeService } from '@app-main/modules/project/domain/contracts/module-module-facade';
+import { AddModuleCommand } from '@module-project/application/use-cases/add-module/add-module.command';
+import { IModuleModuleFacadeService } from '@module-project/domain/contracts/module-module-facade';
+import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
+import { ProjectDisabledException } from '@module-project/domain/exceptions/project-disabled-exception';
 
 @Injectable()
 export class AddModuleService implements IApplicationServiceCommand<AddModuleCommand> {
@@ -24,11 +26,11 @@ export class AddModuleService implements IApplicationServiceCommand<AddModuleCom
     });
 
     if (project === null) {
-      throw new Error('Project not found');
+      throw new ProjectNotFoundException();
     }
 
     if (!project.isEnabled) {
-      throw new Error('Project is disabled');
+      throw new ProjectDisabledException();
     }
 
     project.addModule(module);

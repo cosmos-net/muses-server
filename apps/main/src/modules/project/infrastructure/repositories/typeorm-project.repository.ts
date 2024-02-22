@@ -33,7 +33,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     }
 
     if (partialSchema?.modules?.length && partialSchema?.modules.length > 0) {
-      const modules = partialSchema.modules.map((module) => new ObjectId(module.id));
+      const modules = partialSchema.modules.map((module) => new ObjectId(module));
 
       partialSchema = {
         ...partialSchema,

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
@@ -11,13 +11,23 @@ import { ProjectModuleFacadeService } from '@module-module/infrastructure/domain
 import { TypeOrmModuleRepository } from '@module-module/infrastructure/repositories/typeorm-module.repository';
 import { UpdateModuleService } from '@module-module/application/use-cases/update-module/update-module.service';
 import { UpdateModuleController } from '@module-module/infrastructure/controllers/update-module/update-module.controller';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
+import { GetModuleService } from '@module-module/application/use-cases/get-module/get-module.service';
 
 @Module({
-  imports: [MainProjectServerModule, ConfigModule.forRoot(MainConfigOptions), TypeOrmModule.forFeature([ModuleEntity])],
+  imports: [
+    forwardRef(() => MainProjectServerModule),
+    ConfigModule.forRoot(MainConfigOptions),
+    TypeOrmModule.forFeature([ModuleEntity]),
+  ],
   controllers: [CreateModuleController, UpdateModuleController],
   providers: [
+    EventStoreService,
     CreateModuleService,
     UpdateModuleService,
+    GetModuleService,
+    ModuleModuleFacade,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
@@ -27,5 +37,6 @@ import { UpdateModuleController } from '@module-module/infrastructure/controller
       useClass: TypeOrmModuleRepository,
     },
   ],
+  exports: [CreateModuleService, UpdateModuleService, GetModuleService, ModuleModuleFacade],
 })
 export class MainModuleServerModule {}

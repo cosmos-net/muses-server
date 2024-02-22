@@ -10,9 +10,11 @@ import { MainModuleServerModule } from '@module-module/infrastructure/framework/
 import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/database.loader';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     MainHealthServerModule,
     MainEcosystemServerModule,
     MainProjectServerModule,
