@@ -6,7 +6,10 @@ import { IModuleRepository } from '@module-module/domain/contracts/module-reposi
 import { Module } from '@module-module/domain/aggregate/module';
 import { MODULE_REPOSITORY, PROJECT_MODULE_FACADE } from '@module-module/application/constants/injection-tokens';
 import { ModuleNameAlreadyUsedException } from '@module-module/domain/exceptions/module-name-already-used.exception';
-import { ProjectToRelateIsDisabledException } from '@app-main/modules/module/domain/exceptions/project-to-relate-is-disabled.exception';
+import { ProjectToRelateIsDisabledException } from '@module-module/domain/exceptions/project-to-relate-is-disabled.exception';
+import { RelateModuleWithProjectEventBody } from '@module-module/domain/events/relate-module-with-project-event/relate-module-with-project-event-body';
+import { RelateModuleWithProjectEvent } from '@module-module/domain/events/relate-module-with-project-event/relate-module-with-project.event';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 
 @Injectable()
 export class CreateModuleService implements IApplicationServiceCommand<CreateModuleCommand> {
@@ -15,6 +18,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
     private projectModuleFacade: IProjectModuleFacade,
     @Inject(MODULE_REPOSITORY)
     private moduleRepository: IModuleRepository,
+    private readonly eventStoreService: EventStoreService,
   ) {}
 
   async process<T extends CreateModuleCommand>(command: T): Promise<Module> {
@@ -53,6 +57,23 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
     }
 
     await this.moduleRepository.persist(module);
+
+    await this.tryToEmitEvent(
+      new RelateModuleWithProjectEventBody({
+        moduleId: module.id,
+        projectId: project,
+      }),
+    );
+
     return module;
+  }
+
+  private async tryToEmitEvent(relateModuleWithProjectEventBody: RelateModuleWithProjectEventBody): Promise<void> {
+    try {
+      const event = new RelateModuleWithProjectEvent(relateModuleWithProjectEventBody);
+      await this.eventStoreService.emit(event);
+    } catch (err) {
+      await this.moduleRepository.delete(relateModuleWithProjectEventBody.moduleId);
+    }
   }
 }

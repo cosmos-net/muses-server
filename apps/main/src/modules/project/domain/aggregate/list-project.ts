@@ -1,4 +1,5 @@
-import { Project, IProjectSchema } from '@module-project/domain/aggregate/project';
+import { Project } from '@module-project/domain/aggregate/project';
+import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
 
 export class ListProject {
   private projects: Project[];

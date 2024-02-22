@@ -6,13 +6,15 @@ import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain/contracts/types/var-environment-map/db/mongo.type';
 import { DefaultNamingStrategy } from 'typeorm';
 import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
-import { MainModuleServerModule } from '@app-main/modules/module/infrastructure/framework/module.module';
+import { MainModuleServerModule } from '@module-module/infrastructure/framework/module.module';
 import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/database.loader';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     MainHealthServerModule,
     MainEcosystemServerModule,
     MainProjectServerModule,
