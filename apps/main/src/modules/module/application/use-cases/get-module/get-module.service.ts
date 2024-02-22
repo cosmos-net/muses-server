@@ -4,6 +4,7 @@ import { GetModuleQuery } from './get-module.query';
 import { Module } from '@module-module/domain/aggregate/module';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
 import { MODULE_REPOSITORY } from '@module-module/application/constants/injection-tokens';
+import { ModuleNotFoundException } from '@module-module/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class GetModuleService implements IApplicationServiceQuery<GetModuleQuery> {
@@ -19,7 +20,7 @@ export class GetModuleService implements IApplicationServiceQuery<GetModuleQuery
     });
 
     if (module === null) {
-      throw new Error('Module not found');
+      throw new ModuleNotFoundException();
     }
 
     return module;

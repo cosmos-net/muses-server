@@ -1,3 +1,4 @@
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { type DynamicModule, Module } from '@nestjs/common';
 
 import {
@@ -6,8 +7,12 @@ import {
   type ConfigFactory,
   type ConfigModuleOptions,
 } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
-@Module({})
+@Module({
+  imports: [EventEmitterModule.forRoot()],
+  providers: [EventStoreService],
+})
 export class ConfigModule {
   static forFeature(config: ConfigFactory): DynamicModule {
     return {

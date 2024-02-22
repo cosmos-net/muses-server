@@ -5,9 +5,6 @@ import { ProjectEntity } from '@module-project/infrastructure/domain/project-mus
 
 @Entity({ name: 'module' })
 export class ModuleEntity extends BaseEntity implements IModuleSchema {
-  @Column({ generated: 'uuid', unique: true, name: 'uuid' })
-  uuid: string;
-
   @ObjectIdColumn()
   _id: ObjectId;
 
