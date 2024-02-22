@@ -1,0 +1,20 @@
+import { IQuery } from '@lib-commons/domain/contracts/presentation/query';
+import { Primitives } from '@lib-commons/domain/value-object/value-object';
+
+export class ListModuleQuery implements IQuery {
+  readonly filters: Array<Map<string, Primitives>>;
+
+  readonly orderBy?: string;
+
+  readonly orderType?: string;
+
+  readonly limit?: number;
+
+  readonly offset?: number;
+
+  constructor(props: Partial<ListModuleQuery>) {
+    if (props) {
+      Object.assign(this, props);
+    }
+  }
+}
