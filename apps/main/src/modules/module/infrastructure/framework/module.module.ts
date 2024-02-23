@@ -1,7 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
-import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
 import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
 import { CreateModuleController } from '@module-module/infrastructure/controllers/create-module/create-module.controller';
@@ -21,11 +19,7 @@ import { DeleteModuleController } from '@module-module/infrastructure/controller
 import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
 
 @Module({
-  imports: [
-    forwardRef(() => MainProjectServerModule),
-    ConfigModule.forRoot(MainConfigOptions),
-    TypeOrmModule.forFeature([ModuleEntity]),
-  ],
+  imports: [forwardRef(() => MainProjectServerModule), TypeOrmModule.forFeature([ModuleEntity])],
   controllers: [
     CreateModuleController,
     UpdateModuleController,

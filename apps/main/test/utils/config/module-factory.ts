@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { DefaultNamingStrategy } from 'typeorm';
-import { entities } from './entities';
+import { entities } from '../entities';
 import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
 import { MainEcosystemServerModule } from '@module-eco/infrastructure/framework/ecosystem.module';
 import { MainHealthServerModule } from '@app-main/modules/health/infrastructure/framework/main.module';
@@ -21,6 +21,9 @@ export class ModuleFactory {
         MainEcosystemServerModule,
         MainProjectServerModule,
         ConfigModule.forRoot(MongoTestConfigOptions),
+        ConfigModule.forRoot({
+          envFilePath: '.test-local.env',
+        }),
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule.forFeature(mongo_test_loader)],
           inject: [ConfigService],
@@ -30,8 +33,6 @@ export class ModuleFactory {
             if (db === undefined) throw new Error(`MongoType ${db} is not available`);
 
             const namingStrategy = new DefaultNamingStrategy();
-
-            console.log(db);
 
             return {
               type: db.type,

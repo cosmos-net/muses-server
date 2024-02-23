@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { CreateEcosystemController } from '@module-eco/infrastructure/controllers/create-ecosystem/create-ecosystem.controller';
 import { DeleteEcosystemController } from '@module-eco/infrastructure/controllers/delete-ecosystem/delete-ecosystem.controller';
 import { ListEcosystemController } from '@module-eco/infrastructure/controllers/list-ecosystem/list-ecosystem.controller';
@@ -15,7 +14,6 @@ import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retr
 import { EcosystemModuleFacade } from '@module-eco/infrastructure/api-facade/ecosystem-module.facade';
 import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 import { TypeOrmEcosystemRepository } from '@module-eco/infrastructure/repositories/typeorm-ecosystem.repository';
-import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EcosystemEntity])],

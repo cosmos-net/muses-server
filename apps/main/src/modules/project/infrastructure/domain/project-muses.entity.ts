@@ -1,8 +1,6 @@
-import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId, OneToMany } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
-import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
-import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
 @Entity({ name: 'project' })
 export class ProjectEntity extends BaseEntity implements IProjectSchema {
   @ObjectIdColumn()
@@ -48,7 +46,7 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
     name: 'modules',
     nullable: true,
   })
-  modules: ObjectId[];
+  modules?: ObjectId[] | null;
 
   // This field gets created automatically by TypeORM
   // in the document. We need to add it here in order to
