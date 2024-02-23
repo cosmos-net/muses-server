@@ -1,7 +1,6 @@
-import { Column, Entity, ManyToOne, ObjectIdColumn, ObjectId, Index } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
-import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 
 @Entity({ name: 'module' })
 export class ModuleEntity extends BaseEntity implements IModuleSchema {
@@ -15,22 +14,28 @@ export class ModuleEntity extends BaseEntity implements IModuleSchema {
     unique: true,
     name: 'name',
     nullable: false,
+    type: 'varchar',
   })
   name: string;
 
   @Column({
     name: 'description',
     nullable: false,
+    type: 'varchar',
   })
   description: string;
 
   @Column({
     name: 'isEnabled',
     nullable: false,
+    type: 'boolean',
   })
   isEnabled: boolean;
 
-  @ManyToOne(() => ProjectEntity, (project) => project.modules)
-  @Column()
+  @Column({
+    name: 'project',
+    nullable: false,
+    type: 'varchar',
+  })
   project: ObjectId;
 }

@@ -12,5 +12,5 @@ export const MongoTestConfigOptions: ConfigModuleOptions = {
     allowUnknown: true,
     abortEarly: true,
   },
-  envFilePath: '.local.env',
+  envFilePath: ['.test-local.env'],
 };
