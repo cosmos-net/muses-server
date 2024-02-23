@@ -17,6 +17,8 @@ import { GetModuleService } from '@module-module/application/use-cases/get-modul
 import { ListModuleController } from '@module-module/infrastructure/controllers/list-module/list-module.controller';
 import { ListModuleService } from '@module-module/application/use-cases/list-module/list-module.service';
 import { GetModuleController } from '@module-module/infrastructure/controllers/get-module/get-module.controller';
+import { DeleteModuleController } from '@module-module/infrastructure/controllers/delete-module/delete-module.controller';
+import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
 
 @Module({
   imports: [
@@ -24,7 +26,13 @@ import { GetModuleController } from '@module-module/infrastructure/controllers/g
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forFeature([ModuleEntity]),
   ],
-  controllers: [CreateModuleController, UpdateModuleController, ListModuleController, GetModuleController],
+  controllers: [
+    CreateModuleController,
+    UpdateModuleController,
+    ListModuleController,
+    GetModuleController,
+    DeleteModuleController,
+  ],
   providers: [
     EventStoreService,
     CreateModuleService,
@@ -32,6 +40,7 @@ import { GetModuleController } from '@module-module/infrastructure/controllers/g
     GetModuleService,
     ModuleModuleFacade,
     ListModuleService,
+    DeleteModuleService,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
