@@ -25,8 +25,9 @@ import { ProjectListener } from '@module-project/infrastructure/domain/listeners
 import { RelateModuleWithProjectEventHandler } from '@module-project/application/event-handlers/relate-module-with-project-event.handler';
 import { AddModuleService } from '@module-project/application/use-cases/add-module/add-module.service';
 import { ModuleModuleFacadeService } from '@module-project/infrastructure/domain/services/module-module-facade.service';
-import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
 import { MainModuleServerModule } from '@module-module/infrastructure/framework/module.module';
+import { OverwriteModuleOnProjectEventHandler } from '@module-project/application/event-handlers/overwrite-module-on-project-event.handler';
+import { ExchangeModuleProjectsService } from '@module-project/application/use-cases/exchange-module-projects/exchange-module-projects.service';
 
 @Module({
   imports: [
@@ -63,6 +64,8 @@ import { MainModuleServerModule } from '@module-module/infrastructure/framework/
     ProjectListener,
     RelateModuleWithProjectEventHandler,
     AddModuleService,
+    OverwriteModuleOnProjectEventHandler,
+    ExchangeModuleProjectsService,
   ],
   exports: [GetProjectService, ProjectModuleFacade],
 })
