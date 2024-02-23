@@ -2,7 +2,7 @@ import { ConflictException } from '@nestjs/common';
 import { FilterField } from '@lib-commons/domain/criteria/filter-field';
 import { FilterOperator } from '@lib-commons/domain/criteria/filter-operator';
 import { FilterValue } from '@lib-commons/domain/criteria/filter-value';
-import { Primitives } from '../value-object/value-object';
+import { Primitives } from '@lib-commons/domain/value-object/value-object';
 
 export class Filter {
   readonly field: FilterField;
