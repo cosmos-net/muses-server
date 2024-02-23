@@ -1,5 +1,5 @@
 import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateModuleCommand } from '@module-module/application/use-cases/create-module/create-module.command';
 import { IProjectModuleFacade } from '@module-module/domain/contracts/project-module-facade';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
@@ -74,6 +74,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
       await this.eventStoreService.emit(event);
     } catch (err) {
       await this.moduleRepository.delete(relateModuleWithProjectEventBody.moduleId);
+      throw new InternalServerErrorException();
     }
   }
 }

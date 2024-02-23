@@ -158,4 +158,8 @@ export class Module {
       this._entityRoot.isEnabled = new IsEnabled(isEnabled);
     }
   }
+
+  public clone(): Module {
+    return new Module(this.toPrimitives());
+  }
 }
