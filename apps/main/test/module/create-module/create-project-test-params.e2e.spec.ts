@@ -1,7 +1,7 @@
 /* eslint-disable hexagonal-architecture/enforce */
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
-import { ModuleFactory } from '../../utils/config/module-factory';
+import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import * as request from 'supertest';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
