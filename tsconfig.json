@@ -66,6 +66,12 @@
       "@module-module/*": [
         "apps/main/src/modules/module/*"
       ],
+      "@test-muses": [
+        "apps/main/test"
+      ],
+      "@test-muses/*": [
+        "apps/main/test/*"
+      ],
     }
   }
 }

@@ -1,6 +1,8 @@
+import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class UpdateModuleInputDto {
+  @IsObjectIdHex()
   @IsString()
   @IsNotEmpty()
   readonly id: string;
@@ -19,6 +21,7 @@ export class UpdateModuleInputDto {
   @IsOptional()
   readonly enabled?: boolean;
 
+  @IsObjectIdHex()
   @IsString()
   @IsOptional()
   readonly project?: string;

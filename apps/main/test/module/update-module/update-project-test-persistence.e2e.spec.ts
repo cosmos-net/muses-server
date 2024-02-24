@@ -9,8 +9,9 @@ import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { createProjectGenerator } from '@test-muses/utils/generators/project.generator';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { createModuleGenerator } from '@test-muses/utils/generators/module.generator';
 
-describe('Create module test persistence (e2e)', () => {
+describe('Update module test persistence (e2e)', () => {
   let moduleFixture: TestingModule;
   let app: INestApplication;
 
@@ -46,23 +47,31 @@ describe('Create module test persistence (e2e)', () => {
 
   jest.setTimeout(99999999);
 
-  describe('Given we want to create a module', () => {
+  describe('Given we want to update a module', () => {
     describe('When send a project validate', () => {
       test('Then expect a module created', async () => {
         const project = await createProjectGenerator(projectRepository);
+        const module = await createModuleGenerator(modelRepository, {
+          project: project._id,
+        });
+
+        const project2 = await createProjectGenerator(projectRepository);
 
         const params = {
+          id: module._id.toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(10),
           enabled: true,
-          project: project._id.toHexString(),
+          project: project2._id.toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/module/').send(params);
+        const response = await request(app.getHttpServer())
+          .patch('/module/')
+          .send({ id: params.id, project: params.project });
 
-        expect(response.status).toBe(201);
-        expect(response.body.name).toBe(params.name);
-        expect(response.body.description).toBe(params.description);
+        expect(response.status).toBe(200);
+        expect(response.body.name).toBe(module.name);
+        expect(response.body.description).toBe(module.description);
         expect(response.body.project.id).toBe(params.project);
       });
     });
