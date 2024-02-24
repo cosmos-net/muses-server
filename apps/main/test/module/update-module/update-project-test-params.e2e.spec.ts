@@ -1,60 +1,64 @@
 /* eslint-disable hexagonal-architecture/enforce */
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
-import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
-import { MongoRepository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import * as request from 'supertest';
-import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
-import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 
-describe('Create project test (e2e)', () => {
+describe('Update module test params (e2e)', () => {
   let moduleFixture: TestingModule;
   let app: INestApplication;
 
-  let projectRepository: MongoRepository<ProjectEntity>;
-  let ecosystemRepository: MongoRepository<EcosystemEntity>;
-
   beforeAll(async () => {
     moduleFixture = await ModuleFactory.createModule();
-
-    projectRepository = moduleFixture.get<MongoRepository<ProjectEntity>>(getRepositoryToken(ProjectEntity));
-    ecosystemRepository = moduleFixture.get<MongoRepository<EcosystemEntity>>(getRepositoryToken(EcosystemEntity));
 
     app = moduleFixture.createNestApplication();
 
     app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
 
     await app.init();
-
-    await projectRepository.delete({});
-    await ecosystemRepository.delete({});
   });
 
   afterAll(async () => {
-    await projectRepository.delete({});
     if (app) await app.close();
-  });
-
-  beforeEach(async () => {
-    await projectRepository.delete({});
-    await ecosystemRepository.delete({});
   });
 
   jest.setTimeout(99999999);
 
-  describe('Given we want to create a project', () => {
+  describe('Given we want to update a module', () => {
+    describe('When send id with invalid', () => {
+      test('Then expect a throw Bad Request exception', async () => {
+        const params = {
+          id: 'invalid-id',
+          name: faker.string.alpha(10),
+          description: faker.string.alpha(10),
+          enabled: true,
+          project: new ObjectId().toHexString(),
+        };
+
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({
+          statusCode: 400,
+          message: ['The property id must be a valid ObjectIdHex'],
+          error: 'Bad Request',
+        });
+      });
+    });
+
     describe('When send name with length less than 3', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(2),
           description: faker.string.alpha(10),
           enabled: true,
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
@@ -68,12 +72,14 @@ describe('Create project test (e2e)', () => {
     describe('When send name with length greater than 50', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(51),
           description: faker.string.alpha(10),
           enabled: true,
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
@@ -87,12 +93,14 @@ describe('Create project test (e2e)', () => {
     describe('When send description with length less than 8', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(7),
           enabled: true,
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
@@ -106,12 +114,14 @@ describe('Create project test (e2e)', () => {
     describe('When send description with length greater than 200', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(201),
           enabled: true,
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
@@ -125,12 +135,14 @@ describe('Create project test (e2e)', () => {
     describe('When send enabled with invalid value', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(10),
           enabled: 'invalid',
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
@@ -144,37 +156,43 @@ describe('Create project test (e2e)', () => {
     describe('When send ecosystem invalid type object id hex', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(10),
           enabled: true,
-          ecosystem: 'invalid-type-object-id-hex',
+          project: 'invalid-type-object-id-hex',
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
           statusCode: 400,
-          message: ['The property ecosystem must be a valid ObjectIdHex'],
+          message: ['The property project must be a valid ObjectIdHex'],
           error: 'Bad Request',
         });
       });
     });
 
-    describe('When send ecosystem but the db is empty', () => {
+    describe('When send module to update but the db is empty', () => {
       test('Then expect a throw Bad Request exception', async () => {
         const params = {
+          id: new ObjectId().toHexString(),
           name: faker.string.alpha(10),
           description: faker.string.alpha(10),
           enabled: true,
-          ecosystem: new ObjectId().toHexString(),
+          project: new ObjectId().toHexString(),
         };
 
-        const response = await request(app.getHttpServer()).post('/project/').send(params);
+        const response = await request(app.getHttpServer()).patch('/module/').send(params);
 
-        expect(response.status).toBe(400);
-        expect(response.body.response.message).toEqual('The ecosystem does not exist');
-        expect(response.body.response.error).toEqual('Bad Request');
+        expect(response.status).toBe(404);
+        expect(response.body).toEqual({
+          response: 'Module not found',
+          status: 404,
+          message: 'Module not found',
+          name: 'ModuleNotFoundException',
+        });
       });
     });
   });

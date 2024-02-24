@@ -89,6 +89,8 @@ export class Module {
       } else if (this._entityRoot.project === undefined) {
         this._entityRoot.project = new Project(schema.project);
       }
+    } else if (this._entityRoot.project === undefined && schema.project instanceof Object) {
+      this._entityRoot.project = new Project(schema.project);
     }
   }
 

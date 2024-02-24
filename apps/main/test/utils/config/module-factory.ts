@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { DefaultNamingStrategy } from 'typeorm';
-import { entities } from '../entities';
+import { entities } from '@test-muses/utils/entities';
 import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
 import { MainEcosystemServerModule } from '@module-eco/infrastructure/framework/ecosystem.module';
 import { MainHealthServerModule } from '@app-main/modules/health/infrastructure/framework/main.module';

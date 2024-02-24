@@ -1,5 +1,5 @@
 import { Filter } from '@lib-commons/domain/criteria/filter';
-import { Primitives } from '../value-object/value-object';
+import { Primitives } from '@lib-commons/domain/value-object/value-object';
 
 export class Filters {
   readonly filters: Filter[];

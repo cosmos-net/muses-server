@@ -128,7 +128,8 @@
       "^@app-auth(|/.*)$": "<rootDir>/apps/auth/src/$1",
       "^@module-eco(|/.*)$": "<rootDir>/apps/main/src/modules/ecosystem/$1",
       "^@module-project(|/.*)$": "<rootDir>/apps/main/src/modules/project/$1",
-      "^@module-module(|/.*)$": "<rootDir>/apps/main/src/modules/module/$1"      
+      "^@module-module(|/.*)$": "<rootDir>/apps/main/src/modules/module/$1",
+      "^@test-muses(|/.*)$": "<rootDir>/apps/main/test/$1"
     }
   }
 }
