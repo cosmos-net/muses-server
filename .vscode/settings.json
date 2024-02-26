@@ -5,6 +5,7 @@
     "main-module-muses",
     "auth-module",
     "project-module",
-    "module-management"
+    "module-management",
+    "sub-module-management"
   ]
 }

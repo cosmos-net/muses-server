@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "type": "commonjs",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -129,6 +130,7 @@
       "^@module-eco(|/.*)$": "<rootDir>/apps/main/src/modules/ecosystem/$1",
       "^@module-project(|/.*)$": "<rootDir>/apps/main/src/modules/project/$1",
       "^@module-module(|/.*)$": "<rootDir>/apps/main/src/modules/module/$1",
+      "^@module-sub-module(|/.*)$": "<rootDir>/apps/main/src/modules/sub-module/$1",
       "^@test-muses(|/.*)$": "<rootDir>/apps/main/test/$1"
     }
   }

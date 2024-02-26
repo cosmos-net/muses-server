@@ -38,4 +38,4 @@ import { TypeOrmEcosystemRepository } from '@module-eco/infrastructure/repositor
   ],
   exports: [RetrieveEcosystemService, EcosystemModuleFacade],
 })
-export class MainEcosystemServerModule {}
+export class MainEcosystemModule {}
