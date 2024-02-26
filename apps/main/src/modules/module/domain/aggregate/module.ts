@@ -14,9 +14,11 @@ import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/mo
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
-  constructor(schema?: IModuleSchema | null) {
+  constructor(schema?: IModuleSchema | string | null) {
     if (schema instanceof Object) {
       this.hydrate(schema);
+    } else if (typeof schema === 'string') {
+      this._entityRoot.isEnabled = new IsEnabled(true);
     } else {
       this._entityRoot.isEnabled = new IsEnabled(true);
     }
@@ -56,6 +58,10 @@ export class Module {
 
   get project(): IProject {
     return this._entityRoot.project.toPrimitives();
+  }
+
+  set id(id: string) {
+    this._entityRoot.id = new Id(id);
   }
 
   enable(): void {

@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
-import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
-import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 import { HealthController } from '@app-main/modules/health/infrastructure/controllers/get-health/get-health.controller';
 import { GetHealthService } from '@app-main/modules/health/application/use-cases/check-health/get-health.service';
 import { ExternalSystemService } from '@app-main/modules/health/infrastructure/domain/external-system.service';
@@ -20,4 +18,4 @@ import { EXTERNAL_SYSTEM } from '@app-main/modules/health/application/constants/
     },
   ],
 })
-export class MainHealthServerModule {}
+export class MainHealthModule {}

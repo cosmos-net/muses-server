@@ -1,0 +1,1 @@
+export const SUB_MODULE_REPOSITORY = Symbol('SUB_MODULE_REPOSITORY');
