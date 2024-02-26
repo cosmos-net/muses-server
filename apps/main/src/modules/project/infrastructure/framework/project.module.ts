@@ -1,5 +1,4 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { CreateProjectController } from '@module-project/infrastructure/controllers/create-project/create-project.controller';
 import { CreateProjectService } from '@module-project/application/use-cases/create-project/create-project.service';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
@@ -11,7 +10,7 @@ import {
 } from '@module-project/application/constants/injection-token';
 import { TypeOrmProjectRepository } from '@module-project/infrastructure/repositories/typeorm-project.repository';
 import { EcosystemModuleFacadeService } from '@module-project/infrastructure/domain/services/ecosystem-module-facade.service';
-import { MainEcosystemServerModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
 import { DeleteProjectController } from '@module-project/infrastructure/controllers/delete-project/delete-project.controller';
 import { GetProjectController } from '@module-project/infrastructure/controllers/get-project/get-project.controller';
 import { ListProjectController } from '@module-project/infrastructure/controllers/list-project/list-project.controller';
@@ -25,16 +24,12 @@ import { ProjectListener } from '@module-project/infrastructure/domain/listeners
 import { RelateModuleWithProjectEventHandler } from '@module-project/application/event-handlers/relate-module-with-project-event.handler';
 import { AddModuleService } from '@module-project/application/use-cases/add-module/add-module.service';
 import { ModuleModuleFacadeService } from '@module-project/infrastructure/domain/services/module-module-facade.service';
-import { MainModuleServerModule } from '@module-module/infrastructure/framework/module.module';
+import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { OverwriteModuleOnProjectEventHandler } from '@module-project/application/event-handlers/overwrite-module-on-project-event.handler';
 import { ExchangeModuleProjectsService } from '@module-project/application/use-cases/exchange-module-projects/exchange-module-projects.service';
 
 @Module({
-  imports: [
-    MainEcosystemServerModule,
-    forwardRef(() => MainModuleServerModule),
-    TypeOrmModule.forFeature([ProjectEntity]),
-  ],
+  imports: [MainEcosystemModule, forwardRef(() => MainModuleModule), TypeOrmModule.forFeature([ProjectEntity])],
   controllers: [
     CreateProjectController,
     DeleteProjectController,
@@ -69,4 +64,4 @@ import { ExchangeModuleProjectsService } from '@module-project/application/use-c
   ],
   exports: [GetProjectService, ProjectModuleFacade],
 })
-export class MainProjectServerModule {}
+export class MainProjectModule {}

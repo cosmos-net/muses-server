@@ -1,24 +1,27 @@
 import { Module } from '@nestjs/common';
-import { MainHealthServerModule } from '@app-main/modules/health/infrastructure/framework/main.module';
-import { MainEcosystemServerModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { MainHealthModule } from '@app-main/modules/health/infrastructure/framework/main.module';
+import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@lib-commons/domain/contracts/types/var-environment-map/db/mongo.type';
 import { DefaultNamingStrategy } from 'typeorm';
-import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
-import { MainModuleServerModule } from '@module-module/infrastructure/framework/module.module';
+import { MainProjectModule } from '@module-project/infrastructure/framework/project.module';
+import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { MainConfigOptions } from '@app-main/modules/main/infrastructure/config/options/config.options';
 import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.module';
 import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/database.loader';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
+import { join } from 'path';
 
 @Module({
   imports: [
+    MainHealthModule,
+    MainEcosystemModule,
+    MainProjectModule,
+    MainModuleModule,
+    MainSubModuleModule,
     EventEmitterModule.forRoot(),
-    MainHealthServerModule,
-    MainEcosystemServerModule,
-    MainProjectServerModule,
-    MainModuleServerModule,
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(DatabasesLoader.mongo)],
@@ -40,7 +43,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
           logging: true,
           legacySpatialSupport: false,
           ssl: false,
-          entities: [process.cwd() + '/apps/main/src/modules/**/*-hades.entity.ts'],
+          entities: [join(__dirname, '**', '*-muses.entity.{ts,js}')],
           namingStrategy,
         } as TypeOrmModuleAsyncOptions;
       },
