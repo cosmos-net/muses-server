@@ -1,5 +1,5 @@
 /* eslint-disable hexagonal-architecture/enforce */
-import { ProjectEntity } from '@app-main/modules/project/infrastructure/domain/project-muses.entity';
+import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
 
