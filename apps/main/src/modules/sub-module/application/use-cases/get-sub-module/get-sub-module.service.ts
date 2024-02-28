@@ -4,7 +4,7 @@ import { SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { GetSubModuleQuery } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.query';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
-import { SunModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
+import { SubModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
 
 @Injectable()
 export class GetSubModuleService implements IApplicationServiceQuery<GetSubModuleQuery> {
@@ -16,14 +16,14 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
   async process<T extends GetSubModuleQuery>(query: T): Promise<SubModule> {
     const { id, withDisabled } = query;
 
-    const module = await this.subModuleRepository.searchOneBy(id, {
+    const subModule = await this.subModuleRepository.searchOneBy(id, {
       withDeleted: withDisabled,
     });
 
-    if (module === null) {
-      throw new SunModuleNotFoundException();
+    if (subModule === null) {
+      throw new SubModuleNotFoundException();
     }
 
-    return module;
+    return subModule;
   }
 }
