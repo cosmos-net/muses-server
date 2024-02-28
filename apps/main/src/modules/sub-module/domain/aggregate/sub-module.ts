@@ -108,6 +108,7 @@ export class SubModule {
   public entityRootPartial(): Partial<ISubModuleSchema> {
     const partialSchema: Partial<IModuleSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
+      console.log(value)
       if (value instanceof Object) {
         if (value.value !== null) {
           partialSchema[key] = value.value;

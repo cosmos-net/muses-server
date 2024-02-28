@@ -7,6 +7,8 @@ import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { ISubModuleSchema } from '../../domain/aggregate/sub-module.schema';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
+import { ListSubModule } from '@module-sub-module/domain/list-sub-module';
 
 @Injectable()
 export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntity> implements ISubModuleRepository {
@@ -82,4 +84,20 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
   async delete(id: string): Promise<void> {
     await this.subModuleRepository.delete({ _id: new ObjectId(id) });
   }
+  async searchListBy(criteria: Criteria): Promise<ListSubModule> {
+    const query = this.getQueryByCriteria(criteria);
+
+    const [subModules, total] = await this.subModuleRepository.findAndCount(query);
+
+    const subModulesClean = subModules.map((subModule) => ({
+      ...subModule,
+      ...(subModule.module && { module: subModule.module.toHexString() }),
+      id: subModule._id.toHexString(),
+    }));
+
+    const list = new ListSubModule(subModulesClean, total);
+
+    return list;
+  }
+
 }
