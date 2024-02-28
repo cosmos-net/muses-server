@@ -18,6 +18,7 @@ export class Module {
     if (schema instanceof Object) {
       this.hydrate(schema);
     } else if (typeof schema === 'string') {
+      this._entityRoot.id = new Id(schema);
       this._entityRoot.isEnabled = new IsEnabled(true);
     } else {
       this._entityRoot.isEnabled = new IsEnabled(true);
