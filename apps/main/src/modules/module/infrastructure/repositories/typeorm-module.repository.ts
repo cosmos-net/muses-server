@@ -115,9 +115,9 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
       };
     }
 
-    const { id, ...partilParams } = partialSchema;
+    const { id, ...partialParams } = partialSchema;
 
-    const result = await this.moduleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partilParams });
+    const result = await this.moduleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
 
     if (result.modifiedCount === 0) {
       throw new InternalServerErrorException('The project could not be deleted');

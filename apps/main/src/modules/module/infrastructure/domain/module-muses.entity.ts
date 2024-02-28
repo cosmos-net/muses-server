@@ -38,4 +38,11 @@ export class ModuleEntity extends BaseEntity implements IModuleSchema {
     type: 'varchar',
   })
   project: ObjectId;
+
+  @Column({
+    name: 'subModules',
+    nullable: true,
+    type: 'array',
+  })
+  subModules: ObjectId[];
 }

@@ -1,9 +1,9 @@
-import { ISubModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { IModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
 import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class SubModuleModuleFacadeService implements ISubModuleModuleFacade {
+export class SubModuleModuleFacadeService implements IModuleModuleFacade {
   constructor(private readonly subModuleModuleFacade: ModuleModuleFacade) {}
 
   async getModuleById(id: string) {

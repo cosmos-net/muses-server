@@ -1,12 +1,12 @@
 import { SubModuleEntity } from '@module-sub-module/infrastructure/domain/sub-module-muses.entity';
 import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
-import { ISubModuleSchema } from '../../domain/aggregate/sub-module.schema';
+import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
 import { ListSubModule } from '@module-sub-module/domain/list-sub-module';
 
@@ -100,4 +100,29 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
     return list;
   }
 
+  async softDeleteBy(model: SubModule): Promise<number | undefined> {
+    model.disable();
+
+    let partialSchema: Partial<ISubModuleSchema & SubModuleEntity> = model.entityRootPartial();
+
+    if (partialSchema?.module?.id) {
+      const { id } = partialSchema.module;
+      const objectId = new ObjectId(id);
+
+      partialSchema = {
+        ...partialSchema,
+        module: objectId,
+      };
+    }
+
+    const { id, ...partialParams } = partialSchema;
+
+    const result = await this.subModuleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
+
+    if (result.modifiedCount === 0) {
+      throw new InternalServerErrorException('The project could not be deleted');
+    }
+
+    return result.modifiedCount;
+  }
 }

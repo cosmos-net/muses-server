@@ -10,6 +10,7 @@ import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exce
 import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.schema.vo';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -99,6 +100,12 @@ export class Module {
     } else if (this._entityRoot.project === undefined && schema.project instanceof Object) {
       this._entityRoot.project = new Project(schema.project);
     }
+
+    if (schema.subModules) {
+      for (const module of schema.subModules) {
+        this._entityRoot.subModules.push(new SubModule(module));
+      }
+    }
   }
 
   public describe(name: string, description: string): void {
@@ -116,6 +123,7 @@ export class Module {
       name: this._entityRoot.name.value,
       description: this._entityRoot.description.value,
       project: this._entityRoot.project.toPrimitives(),
+      subModules: this._entityRoot.subModules,
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
@@ -170,5 +178,9 @@ export class Module {
 
   public clone(): Module {
     return new Module(this.toPrimitives());
+  }
+
+  public removeSubModule(subModuleId: string): void {
+    this._entityRoot.subModules = this._entityRoot.subModules.filter((subModule) => subModule.id !== subModuleId);
   }
 }

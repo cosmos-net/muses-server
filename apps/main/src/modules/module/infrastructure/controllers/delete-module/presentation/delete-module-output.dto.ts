@@ -4,7 +4,7 @@ export interface IDeleteModuleOutputDto {
   readonly id?: string;
 }
 
-export class DeleteModuleOuputDto implements IDeleteModuleOutputDto {
+export class DeleteModuleOutputDto implements IDeleteModuleOutputDto {
   readonly success: boolean;
   readonly message: string;
 
