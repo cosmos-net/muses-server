@@ -9,6 +9,7 @@ import CreatedAt from '@module-sub-module/domain/aggregate/value-objects/created
 import DeletedAt from '@module-sub-module/domain/aggregate/value-objects/deleted-at.vo';
 import UpdatedAt from '@module-sub-module/domain/aggregate/value-objects/updated-at.vo';
 import { Module } from '@module-module/domain/aggregate/module';
+import { SubModuleIsAlreadyDisabledUsedException } from '@module-sub-module/domain/exceptions/sub-module-is-already-disabled.exception';
 
 export class SubModule {
   private _entityRoot = {} as ISubModuleSchemaAggregate;
@@ -61,6 +62,15 @@ export class SubModule {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
+  disable(): void {
+    if (this._entityRoot.isEnabled.value === false) {
+      throw new SubModuleIsAlreadyDisabledUsedException();
+    }
+
+    this._entityRoot.isEnabled = new IsEnabled(false);
+    this._entityRoot.deletedAt = new DeletedAt(new Date());
+  }
+
   public hydrate(schema: ISubModuleSchema): void {
     this._entityRoot.id = new Id(schema.id);
     this._entityRoot.name = new Name(schema.name);
@@ -108,7 +118,6 @@ export class SubModule {
   public entityRootPartial(): Partial<ISubModuleSchema> {
     const partialSchema: Partial<IModuleSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
-      console.log(value)
       if (value instanceof Object) {
         if (value.value !== null) {
           partialSchema[key] = value.value;
@@ -122,14 +131,5 @@ export class SubModule {
   public describe(name: string, description: string): void {
     this._entityRoot.name = new Name(name);
     this._entityRoot.description = new Description(description);
-  }
-
-  public disable(): void {
-    if (this._entityRoot.isEnabled.value === false) {
-      throw new Error('SubModule already disabled');
-    }
-
-    this._entityRoot.isEnabled = new IsEnabled(false);
-    this._entityRoot.deletedAt = new DeletedAt(new Date());
   }
 }

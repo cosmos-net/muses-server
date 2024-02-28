@@ -15,15 +15,17 @@ import { EventStoreService } from '@lib-commons/application/event-store.service'
 import { MainModuleModule } from '@app-main/modules/module/infrastructure/framework/module.module';
 import { ListSubModuleController } from '@module-sub-module/infrastructure/controllers/list-sub-module/list-sub-module.controller';
 import { ListSubModuleService } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.service';
-
+import { DeleteSubModuleController } from '@module-sub-module/infrastructure/controllers/delete-sub-module/delete-sub-module.controller';
+import { DeleteSubModuleService } from '@module-sub-module/application/use-cases/delete-sub-module/delete-sub-module.service';
 @Module({
   imports: [forwardRef(() => MainModuleModule), TypeOrmModule.forFeature([SubModuleEntity])],
-  controllers: [ListSubModuleController, GetSubModuleController, CreateSubModuleController],
+  controllers: [ListSubModuleController, GetSubModuleController, CreateSubModuleController, DeleteSubModuleController],
   providers: [
     EventStoreService,
     ListSubModuleService,
     GetSubModuleService,
     CreateSubModuleService,
+    DeleteSubModuleService,
     {
       provide: SUB_MODULE_MODULE_FACADE,
       useClass: SubModuleModuleFacadeService,

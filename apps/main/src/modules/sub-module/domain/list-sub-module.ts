@@ -34,4 +34,8 @@ export class ListSubModule {
   public get items(): SubModule[] {
     return this.subModules;
   }
+
+  public set items(items: SubModule[]) {
+    this.subModules = items;
+  }
 }
