@@ -5,11 +5,14 @@ import { SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/
 import { TypeOrmSubModuleRepository } from '@module-sub-module/infrastructure/repositories/typeorm-sub-module.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubModuleEntity } from '@module-sub-module/infrastructure/domain/sub-module-muses.entity';
+import { ListSubModuleController } from '@module-sub-module/infrastructure/controllers/list-sub-module/list-sub-module.controller';
+import { ListSubModuleService } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([SubModuleEntity])],
-  controllers: [GetSubModuleController],
+  controllers: [ListSubModuleController, GetSubModuleController],
   providers: [
+    ListSubModuleService,
     GetSubModuleService,
     {
       provide: SUB_MODULE_REPOSITORY,

@@ -1,8 +1,8 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-export class SunModuleNotFoundException extends ExceptionManager {
+export class SubModuleNotFoundException extends ExceptionManager {
   constructor() {
-    const message = 'Module not found';
+    const message = 'Sub Module not found';
 
     super(message, 'NOT_FOUND');
   }
