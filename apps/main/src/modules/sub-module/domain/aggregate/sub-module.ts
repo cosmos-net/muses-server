@@ -118,4 +118,18 @@ export class SubModule {
 
     return partialSchema;
   }
+
+  public describe(name: string, description: string): void {
+    this._entityRoot.name = new Name(name);
+    this._entityRoot.description = new Description(description);
+  }
+
+  public disable(): void {
+    if (this._entityRoot.isEnabled.value === false) {
+      throw new Error('SubModule already disabled');
+    }
+
+    this._entityRoot.isEnabled = new IsEnabled(false);
+    this._entityRoot.deletedAt = new DeletedAt(new Date());
+  }
 }
