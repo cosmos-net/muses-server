@@ -11,6 +11,8 @@ import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.s
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
+import { SubModuleNotFoundException } from '@module-module/domain/exceptions/sub-module-not-found.exception';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -180,7 +182,43 @@ export class Module {
     return new Module(this.toPrimitives());
   }
 
+  public addSubModule(subModule: SubModule): void {
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const isSubmoduleAlreadyAdded = this._entityRoot.subModules.find((s) => s.id === subModule.id);
+
+      if (isSubmoduleAlreadyAdded) {
+        throw new SubModuleAlreadyRelatedWithModuleException();
+      }
+
+      this._entityRoot.subModules.push(subModule);
+
+      return;
+    }
+
+    this._entityRoot.subModules = [subModule];
+  }
+
   public removeSubModule(subModuleId: string): void {
-    this._entityRoot.subModules = this._entityRoot.subModules.filter((subModule) => subModule.id !== subModuleId);
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const subModuleIndex = this._entityRoot.subModules.findIndex((m) => m.id === subModuleId);
+
+      if (subModuleIndex === -1) {
+        throw new SubModuleNotFoundException();
+      }
+
+      this._entityRoot.subModules.splice(subModuleIndex, 1);
+    }
+  }
+
+  public exchangeSubmodules(previousSubModuleId: string, newSubModule: SubModule): void {
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const previousSubModuleIndex = this._entityRoot.subModules.findIndex((m) => m.id === previousSubModuleId);
+
+      if (previousSubModuleIndex === -1) {
+        throw new SubModuleNotFoundException();
+      }
+
+      this._entityRoot.subModules[previousSubModuleIndex] = newSubModule;
+    }
   }
 }

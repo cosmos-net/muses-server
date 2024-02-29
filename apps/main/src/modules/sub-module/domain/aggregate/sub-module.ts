@@ -10,6 +10,7 @@ import DeletedAt from '@module-sub-module/domain/aggregate/value-objects/deleted
 import UpdatedAt from '@module-sub-module/domain/aggregate/value-objects/updated-at.vo';
 import { Module } from '@module-module/domain/aggregate/module';
 import { SubModuleIsAlreadyDisabledUsedException } from '@module-sub-module/domain/exceptions/sub-module-is-already-disabled.exception';
+import { SubModulePropertyWithSameValueException } from '@module-sub-module/domain/exceptions/sub-module-property-with-same-value.exception';
 
 export class SubModule {
   private _entityRoot = {} as ISubModuleSchemaAggregate;
@@ -58,17 +59,36 @@ export class SubModule {
     return this._entityRoot.module.toPrimitives();
   }
 
-  enable(): void {
+  public describe(name: string, description: string): void {
+    this._entityRoot.name = new Name(name);
+    this._entityRoot.description = new Description(description);
+  }
+
+  public enable(): void {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
-  disable(): void {
+  public disable(): void {
     if (this._entityRoot.isEnabled.value === false) {
       throw new SubModuleIsAlreadyDisabledUsedException();
     }
 
     this._entityRoot.isEnabled = new IsEnabled(false);
     this._entityRoot.deletedAt = new DeletedAt(new Date());
+  }
+
+  public restore(): void {
+    const isCurrentlyDeleted =
+      this._entityRoot.deletedAt instanceof DeletedAt && this._entityRoot.isEnabled.value === false;
+
+    if (isCurrentlyDeleted) {
+      delete this._entityRoot.deletedAt;
+      this._entityRoot.isEnabled = new IsEnabled(true);
+    }
+  }
+
+  public clone(): SubModule {
+    return new SubModule(this.toPrimitives());
   }
 
   public hydrate(schema: ISubModuleSchema): void {
@@ -128,8 +148,31 @@ export class SubModule {
     return partialSchema;
   }
 
-  public describe(name: string, description: string): void {
-    this._entityRoot.name = new Name(name);
-    this._entityRoot.description = new Description(description);
+  public redescribe(name?: string, description?: string): void {
+    if (name) {
+      if (this._entityRoot.description.value === name) {
+        throw new SubModulePropertyWithSameValueException('name', name);
+      }
+
+      this._entityRoot.name = new Name(name);
+    }
+
+    if (description) {
+      if (this._entityRoot.description.value === description) {
+        throw new SubModulePropertyWithSameValueException('description', description);
+      }
+
+      this._entityRoot.description = new Description(description);
+    }
+  }
+
+  public changeStatus(isEnabled: boolean): void {
+    if (isEnabled !== undefined) {
+      if (this._entityRoot.isEnabled.value === isEnabled) {
+        throw new SubModulePropertyWithSameValueException('isEnabled', isEnabled);
+      }
+
+      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
+    }
   }
 }

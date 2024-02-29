@@ -1,20 +1,17 @@
 import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  SUB_MODULE_MODULE_FACADE,
-  SUB_MODULE_REPOSITORY,
-} from '@module-sub-module/application/constants/injection-token';
+import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/injection-token';
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { GetSubModuleQuery } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.query';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
-import { IModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
 
 @Injectable()
 export class GetSubModuleService implements IApplicationServiceQuery<GetSubModuleQuery> {
   constructor(
-    @Inject(SUB_MODULE_MODULE_FACADE)
-    private moduleModuleFacade: IModuleModuleFacade,
+    @Inject(MODULE_FACADE)
+    private moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_REPOSITORY)
     private subModuleRepository: ISubModuleRepository,
   ) {}
@@ -30,7 +27,7 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
       throw new SubModuleNotFoundException();
     }
 
-    const moduleModel = await this.moduleModuleFacade.getModuleById(subModule.moduleId);
+    const moduleModel = await this.moduleFacade.getModuleById(subModule.moduleId);
 
     if (!moduleModel.isEnabled) {
       // TODO: create a exception
@@ -46,6 +43,7 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
       createdAt: moduleModel.createdAt,
       updatedAt: moduleModel.updatedAt,
       deletedAt: moduleModel.deletedAt,
+      subModules: subModule,
     });
 
     return subModule;

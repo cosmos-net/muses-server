@@ -1,8 +1,8 @@
 import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateSubModuleCommand } from './create-sub-module.command';
-import { SUB_MODULE_MODULE_FACADE, SUB_MODULE_REPOSITORY } from '../../constants/injection-token';
-import { IModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '../../constants/injection-token';
+import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
 import { ISubModuleRepository } from '@app-main/modules/sub-module/domain/contracts/sub-module-repository';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { SubModule } from '@app-main/modules/sub-module/domain/aggregate/sub-module';
@@ -13,8 +13,8 @@ import { ModuleToRelateIsDisabledException } from '@module-sub-module/domain/exc
 @Injectable()
 export class CreateSubModuleService implements IApplicationServiceCommand<CreateSubModuleCommand> {
   constructor(
-    @Inject(SUB_MODULE_MODULE_FACADE)
-    private subModuleModuleFacade: IModuleModuleFacade,
+    @Inject(MODULE_FACADE)
+    private moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_REPOSITORY)
     private subModuleRepository: ISubModuleRepository,
     private readonly eventStoreService: EventStoreService,
@@ -37,7 +37,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       subModule.disable();
     }
 
-    const moduleModel = await this.subModuleModuleFacade.getModuleById(module);
+    const moduleModel = await this.moduleFacade.getModuleById(module);
 
     if (!moduleModel.isEnabled) {
       throw new ModuleToRelateIsDisabledException();
@@ -52,6 +52,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       createdAt: moduleModel.createdAt,
       updatedAt: moduleModel.updatedAt,
       deletedAt: moduleModel.deletedAt,
+      subModules: subModule,
     });
 
     await this.subModuleRepository.persist(subModule);
