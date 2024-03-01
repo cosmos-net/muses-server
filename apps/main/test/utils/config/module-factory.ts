@@ -6,20 +6,24 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { DefaultNamingStrategy } from 'typeorm';
 import { entities } from '@test-muses/utils/entities';
-import { MainProjectServerModule } from '@module-project/infrastructure/framework/project.module';
-import { MainEcosystemServerModule } from '@module-eco/infrastructure/framework/ecosystem.module';
-import { MainHealthServerModule } from '@app-main/modules/health/infrastructure/framework/main.module';
+import { MainProjectModule } from '@module-project/infrastructure/framework/project.module';
+import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { MainHealthModule } from '@app-main/modules/health/infrastructure/framework/main.module';
 import { MongoTestConfigOptions } from './mongo-test-config-options';
 import { MongoTestType } from './mongo-test.type';
 import { mongo_test_loader } from './mongo-test.loader';
+import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
+import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 
 export class ModuleFactory {
   public static async createModule(): Promise<TestingModule> {
     return Test.createTestingModule({
       imports: [
-        MainHealthServerModule,
-        MainEcosystemServerModule,
-        MainProjectServerModule,
+        MainHealthModule,
+        MainEcosystemModule,
+        MainProjectModule,
+        MainModuleModule,
+        MainSubModuleModule,
         ConfigModule.forRoot(MongoTestConfigOptions),
         ConfigModule.forRoot({
           envFilePath: '.test-local.env',

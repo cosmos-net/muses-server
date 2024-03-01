@@ -30,12 +30,12 @@ export class DeleteSubModuleService implements IApplicationServiceCommand<Delete
 
     const result = await this.subModuleRepository.softDeleteBy(subModule);
 
-    if (typeof result === 'number' && result > 0) {
-      await this.tryToEmitEvent(subModule, {
-        subModuleId: subModule.id,
-        moduleId: subModule.moduleId,
-      });
-    }
+    // if (typeof result === 'number' && result > 0) {
+    const res = await this.tryToEmitEvent(subModule, {
+      subModuleId: subModule.id,
+      moduleId: subModule.moduleId,
+    });
+    // }
 
     return result;
   }
@@ -43,14 +43,14 @@ export class DeleteSubModuleService implements IApplicationServiceCommand<Delete
   private async tryToEmitEvent(
     subModule: SubModule,
     removeDisabledSubModuleFromModuleEventBody: RemoveDisabledSubModuleFromModuleEventBody,
-  ): Promise<void> {
+  ): Promise<any[]> {
     try {
       const event = new RemoveDisabledSubModuleFromModuleEvent(removeDisabledSubModuleFromModuleEventBody);
-      await this.eventStoreService.emit(event);
+      return await this.eventStoreService.emit(event);
     } catch (err) {
       subModule.restore();
       await this.subModuleRepository.persist(subModule);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(err);
     }
   }
 }
