@@ -13,6 +13,7 @@ import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/mo
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
 import { SubModuleNotFoundException } from '@module-module/domain/exceptions/sub-module-not-found.exception';
+import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -64,6 +65,10 @@ export class Module {
     return this._entityRoot.project.toPrimitives();
   }
 
+  get subModules(): ISubModuleSchema[] {
+    return this._entityRoot.subModules;
+  }
+
   set id(id: string) {
     this._entityRoot.id = new Id(id);
   }
@@ -104,8 +109,10 @@ export class Module {
     }
 
     if (schema.subModules) {
-      for (const module of schema.subModules) {
-        this._entityRoot.subModules.push(new SubModule(module));
+      const isLengthGreaterThanZero = this._entityRoot.subModules?.length > 0;
+      for (const subModule of schema.subModules) {
+        if (!isLengthGreaterThanZero) this._entityRoot.subModules = [new SubModule(subModule)]
+        this._entityRoot.subModules.push(new SubModule(subModule));
       }
     }
   }
@@ -120,6 +127,7 @@ export class Module {
   }
 
   public toPrimitives(): IModuleSchema {
+    console.log("jajaj", this._entityRoot)
     return {
       id: this._entityRoot.id.value,
       name: this._entityRoot.name.value,

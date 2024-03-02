@@ -44,7 +44,7 @@ export class ListSubModuleService implements IApplicationServiceQuery<ListSubMod
         createdAt: moduleModel.createdAt,
         updatedAt: moduleModel.updatedAt,
         deletedAt: moduleModel.deletedAt,
-        subModules: subModule,
+        subModules: moduleModel.subModules,
       });
 
       populatedSubModules.push(subModule);

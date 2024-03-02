@@ -1,3 +1,4 @@
+import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { IPagination } from '@lib-commons/domain/list/pagination/pagination';
 import { PageDto } from '@lib-commons/infrastructure/presentation/output-pagination/page.dto';
 import { PaginationMetadataDto } from '@lib-commons/infrastructure/presentation/output-pagination/pagination-metadata.dto';
@@ -6,7 +7,7 @@ interface IListSubModuleOutputDto {
   id?: string;
   name: string;
   description: string;
-  ecosystemId?: string;
+  module: IModuleSchema;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -29,7 +30,7 @@ export class ListSubModuleOutputDto {
         name: item.name,
         description: item.description,
         isEnabled: item.isEnabled,
-        ecosystemId: item.ecosystemId,
+        module: item.module,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         deletedAt: item.deletedAt,
