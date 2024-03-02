@@ -92,6 +92,7 @@ export class SubModule {
   }
 
   public hydrate(schema: ISubModuleSchema): void {
+    console.log(schema)
     this._entityRoot.id = new Id(schema.id);
     this._entityRoot.name = new Name(schema.name);
     this._entityRoot.description = new Description(schema.description);

@@ -28,7 +28,7 @@ describe('Get sub module test params (e2e)', () => {
 
   describe('Given a one item sub module', () => {
     describe('When send a request with numeric id', () => {
-      test('Then expect to return a 400 status code', async () => {
+      test('Then expect to return a 500 status code', async () => {
         const numericId = faker.number.int();
 
         const response = await request(app.getHttpServer()).get(`sub-module/${numericId}`);
