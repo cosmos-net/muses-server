@@ -127,7 +127,6 @@ export class Module {
   }
 
   public toPrimitives(): IModuleSchema {
-    console.log("jajaj", this._entityRoot)
     return {
       id: this._entityRoot.id.value,
       name: this._entityRoot.name.value,
