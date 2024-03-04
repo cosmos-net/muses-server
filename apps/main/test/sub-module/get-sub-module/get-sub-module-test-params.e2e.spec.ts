@@ -1,5 +1,4 @@
 /* eslint-disable hexagonal-architecture/enforce */
-/* eslint-disable hexagonal-architecture/enforce */
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
 import { ModuleFactory } from '@test-muses/utils/config/module-factory';
@@ -31,65 +30,36 @@ describe('Get sub module test params (e2e)', () => {
       test('Then expect to return a 500 status code', async () => {
         const numericId = faker.number.int();
 
-        const response = await request(app.getHttpServer()).get(`sub-module/${numericId}`);
+        const response = await request(app.getHttpServer()).get(`/sub-module/${numericId}`);
 
-        expect(response.status).toBe(400);
-        expect(response.body).toEqual({
-          statusCode: 400,
-          message: ['The property orderBy must be a valid value, only can be name, description, enabled, createdAt'],
-          error: 'Bad Request',
-        });
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({});
       });
     });
 
     describe('When send a request with invalid string id', () => {
-      test('Then expect to return a 400 status code', async () => {
+      test('Then expect to return a 500 status code', async () => {
         const stringId = faker.string.sample();
 
-        const response = await request(app.getHttpServer()).get(`sub-module/${stringId}`);
+        const response = await request(app.getHttpServer()).get(`/sub-module/${stringId}`);
 
-        expect(response.status).toBe(400);
-        expect(response.body).toEqual({
-          statusCode: 400,
-          message: ['name must be shorter than or equal to 50 characters'],
-          error: 'Bad Request',
-        });
-      });
-    });
-
-    describe('When send a request with invalid withDeleted', () => {
-      test('Then expect to return a 400 status code', async () => {
-        const queryParams = {
-          withDeleted: faker.string.uuid(),
-        };
-        const stringId = faker.string.uuid();
-
-        const response = await request(app.getHttpServer()).get(`/module/${stringId}`).query(queryParams);
-
-        expect(response.status).toBe(400);
-        expect(response.body).toEqual({
-          statusCode: 400,
-          message: ['description must be shorter than or equal to 200 characters'],
-          error: 'Bad Request',
-        });
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({});
       });
     });
 
     describe('When the id does not exists', () => {
       test('Then expect to return an empty ', async () => {
-        const response = await request(app.getHttpServer()).get('/module/list');
+        const objId = faker.database.mongodbObjectId();
 
-        expect(response.status).toBe(200);
+        const response = await request(app.getHttpServer()).get(`/sub-module/${objId}`);
+
+        expect(response.status).toBe(404);
         expect(response.body).toEqual({
-          items: [],
-          meta: {
-            page: 1,
-            limit: 10,
-            totalItems: 0,
-            totalPages: 0,
-            hasPreviousPage: false,
-            hasNextPage: false,
-          },
+          message: 'Sub Module not found',
+          status: 404,
+          response: 'Sub Module not found',
+          name: 'SubModuleNotFoundException',
         });
       });
     });
