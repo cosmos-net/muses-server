@@ -3,13 +3,12 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
 import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import * as request from 'supertest';
-import { ObjectId } from 'mongodb';
 import { SubModuleEntity } from '@module-sub-module/infrastructure/domain/sub-module-muses.entity';
 import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
-import { faker } from '@faker-js/faker';
 import { createSubModuleGenerator } from '@test-muses/utils/generators/sub-module.generator';
+import { createModuleGenerator } from '@test-muses/utils/generators/module.generator';
 
 describe('Delete sub module test persistence', () => {
   let moduleFixture: TestingModule;
@@ -42,16 +41,29 @@ describe('Delete sub module test persistence', () => {
 
   jest.setTimeout(99999999);
 
-  // si deshabilito el modulo entonces deberia tener una fecha de eliminacion y con un estado deshabilitado y el modulo que tenia relacionado ya no lo debe de tener
-
   describe('Given we want to delete a submodule', () => {
     describe('When send a submodule id validate but module is not valid', () => {
       test('Then expect a not found exception', async () => {
-        const subModule = await createSubModuleGenerator(subModuleRepository);
+        const moduleGenerator = await createModuleGenerator(moduleRepository);
+        const subModule = await createSubModuleGenerator(subModuleRepository, {
+          module: moduleGenerator._id,
+        });
 
         const response = await request(app.getHttpServer()).delete(`/sub-module/${subModule._id.toHexString()}`);
 
-        expect(response.status).toBe(404);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({
+          success: true,
+          message: `SubModule with id ${subModule._id.toHexString()} has been deleted`,
+        });
+
+        const subModuleFound = await subModuleRepository.findOne({
+          where: { _id: subModule._id },
+          withDeleted: true,
+        });
+
+        expect(subModuleFound).toHaveProperty('deletedAt');
+        expect(subModuleFound).toHaveProperty('isEnabled', false);
       });
     });
   });
