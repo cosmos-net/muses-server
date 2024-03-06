@@ -111,7 +111,7 @@ export class Module {
     if (schema.subModules) {
       const isLengthGreaterThanZero = this._entityRoot.subModules?.length > 0;
       for (const subModule of schema.subModules) {
-        if (!isLengthGreaterThanZero) this._entityRoot.subModules = [new SubModule(subModule)]
+        if (!isLengthGreaterThanZero) this._entityRoot.subModules = [new SubModule(subModule)];
         this._entityRoot.subModules.push(new SubModule(subModule));
       }
     }
@@ -149,6 +149,11 @@ export class Module {
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         if (value.value !== null) {
+          if (key === 'subModules') {
+            partialSchema[key] = value.map((subModule) => subModule.id);
+            continue;
+          }
+
           partialSchema[key] = value.value;
         }
       }

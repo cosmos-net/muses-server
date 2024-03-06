@@ -31,6 +31,15 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
       };
     }
 
+    if (partialSchema?.subModules?.length && partialSchema?.subModules.length > 0) {
+      const subModules = partialSchema.subModules.map((subModule) => new ObjectId(subModule));
+
+      partialSchema = {
+        ...partialSchema,
+        subModules,
+      };
+    }
+
     if (partialSchema.id) {
       const objectId = new ObjectId(partialSchema.id);
 
