@@ -4,7 +4,7 @@ export interface IGetSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: IModuleSchema;
+  module: Partial<IModuleSchema>;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -15,7 +15,7 @@ export class GetSubModuleOutputDto implements IGetSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: IModuleSchema;
+  module: Partial<IModuleSchema>;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;

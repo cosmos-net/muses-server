@@ -58,6 +58,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     model.fromPrimitives({
       ...module,
       ...(module.project && { project: { id: module.project.toHexString() } }),
+      ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
       id: module._id.toHexString(),
     });
 
@@ -83,6 +84,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const module = new Module({
       ...moduleFound,
       ...(moduleFound.project && { project: moduleFound.project.toHexString() }),
+      ...(moduleFound.subModules && { subModules: moduleFound.subModules.map((subModule) => subModule.toHexString()) }),
       id: moduleFound._id.toHexString(),
     });
 
@@ -101,6 +103,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const modulesClean = modules.map((module) => ({
       ...module,
       ...(module.project && { project: module.project.toHexString() }),
+      ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
       id: module._id.toHexString(),
     }));
 

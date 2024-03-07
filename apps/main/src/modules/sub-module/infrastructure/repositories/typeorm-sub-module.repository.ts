@@ -90,13 +90,13 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
 
     const [subModules, total] = await this.subModuleRepository.findAndCount(query);
 
-    const subModulesClean = subModules.map((subModule) => ({
+    const subModulesMapped = subModules.map((subModule) => ({
       ...subModule,
       ...(subModule.module && { module: subModule.module.toHexString() }),
       id: subModule._id.toHexString(),
     }));
 
-    const list = new ListSubModule(subModulesClean, total);
+    const list = new ListSubModule(subModulesMapped, total);
 
     return list;
   }

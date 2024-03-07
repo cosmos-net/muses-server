@@ -10,8 +10,8 @@ export function IsObjectIdHex(validationOptions?: ValidationOptions) {
       constraints: [],
       validator: {
         validate(value: any) {
-          const regex = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$', 'i');
-          const regex2 = new RegExp('^[0-9a-f]{24}$', 'i');
+          const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+          const regex2 = /^[0-9a-f]{24}$/i;
 
           return regex.test(value) || regex2.test(value);
         },

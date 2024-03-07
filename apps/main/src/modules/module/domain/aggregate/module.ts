@@ -18,24 +18,25 @@ import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
-  constructor(schema?: IModuleSchema | string | null) {
-    const isPartialSchema =
-      schema &&
-      schema instanceof Object &&
-      !schema.id &&
-      !schema.name &&
-      !schema.description &&
-      !schema.project &&
-      !schema.subModules &&
-      !schema.isEnabled &&
-      !schema.createdAt &&
-      !schema.updatedAt;
+  constructor(schema?: IModuleSchema | Partial<IModuleSchema> | string | null) {
+    if (schema) {
+      let isPartialSchema: boolean = false;
 
-    if (!isPartialSchema) {
-      this.hydrate(schema as IModuleSchema);
-    } else if (typeof schema === 'string') {
-      this._entityRoot.id = new Id(schema);
-      this._entityRoot.isEnabled = new IsEnabled(true);
+      if (typeof schema !== 'string' && Object.keys(schema).length === 2) {
+        isPartialSchema = true;
+      }
+
+      if (typeof schema === 'string') {
+        this._entityRoot.id = new Id(schema);
+        this._entityRoot.isEnabled = new IsEnabled(true);
+      } else if (!isPartialSchema) {
+        this.hydrate(schema as IModuleSchema);
+      } else if (isPartialSchema) {
+        if (Object.keys(schema).length === 2) {
+          if (schema.id) this._entityRoot.id = new Id(schema.id);
+          if (schema.isEnabled) this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
+        }
+      }
     } else {
       this._entityRoot.isEnabled = new IsEnabled(true);
     }
