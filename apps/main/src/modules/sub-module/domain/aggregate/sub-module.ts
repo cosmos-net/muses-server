@@ -15,9 +15,12 @@ import { SubModulePropertyWithSameValueException } from '@module-sub-module/doma
 export class SubModule {
   private _entityRoot = {} as ISubModuleSchemaAggregate;
 
-  constructor(schema?: ISubModuleSchema | null) {
+  constructor(schema?: ISubModuleSchema | string | null) {
     if (schema instanceof Object) {
       this.hydrate(schema);
+    } else if (typeof schema === 'string') {
+      this._entityRoot.id = new Id(schema);
+      this._entityRoot.isEnabled = new IsEnabled(true);
     } else {
       this._entityRoot.isEnabled = new IsEnabled(true);
     }
@@ -154,7 +157,7 @@ export class SubModule {
 
   public redescribe(name?: string, description?: string): void {
     if (name) {
-      if (this._entityRoot.description.value === name) {
+      if (this._entityRoot.name.value === name) {
         throw new SubModulePropertyWithSameValueException('name', name);
       }
 

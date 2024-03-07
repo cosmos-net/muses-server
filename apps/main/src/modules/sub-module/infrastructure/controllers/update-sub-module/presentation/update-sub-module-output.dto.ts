@@ -2,7 +2,7 @@ export interface IUpdateSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: {
+  module: Partial<{
     id: string;
     name: string;
     description: string;
@@ -10,7 +10,7 @@ export interface IUpdateSubModuleOutputDto {
     createdAt: string | Date;
     updatedAt: string | Date;
     deletedAt?: string | Date;
-  };
+  }>;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -21,7 +21,7 @@ export class UpdateSubModuleOutputDto implements IUpdateSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: {
+  module: Partial<{
     id: string;
     name: string;
     description: string;
@@ -29,7 +29,7 @@ export class UpdateSubModuleOutputDto implements IUpdateSubModuleOutputDto {
     createdAt: string | Date;
     updatedAt: string | Date;
     deletedAt?: string | Date;
-  };
+  }>;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
