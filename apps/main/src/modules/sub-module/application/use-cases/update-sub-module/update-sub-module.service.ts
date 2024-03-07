@@ -42,6 +42,7 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
       }
 
       const moduleModel = await this.moduleFacade.getModuleById(module);
+
       submodule.useModule({
         id: moduleModel.id,
         name: moduleModel.name,
@@ -51,7 +52,7 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
         createdAt: moduleModel.createdAt,
         updatedAt: moduleModel.updatedAt,
         deletedAt: moduleModel.deletedAt,
-        subModules: submodule,
+        subModules: moduleModel.subModules,
       });
 
       isSubModuleChanged = true;

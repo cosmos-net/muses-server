@@ -55,7 +55,7 @@ export class SubModule {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get module(): IModuleSchema {
+  get module(): IModuleSchema | Partial<IModuleSchema> {
     return this._entityRoot.module.toPrimitives();
   }
 
@@ -141,6 +141,10 @@ export class SubModule {
       if (value instanceof Object) {
         if (value.value !== null) {
           partialSchema[key] = value.value;
+        }
+
+        if (key === 'module') {
+          partialSchema[key] = value;
         }
       }
     }
