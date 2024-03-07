@@ -47,7 +47,7 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
   async persist(model: SubModule): Promise<SubModule> {
     let partialSchema: Partial<ISubModuleSchema & SubModuleEntity> = model.entityRootPartial();
 
-    if (partialSchema.module.id) {
+    if (partialSchema.module) {
       const { id } = partialSchema.module;
       const moduleId = new ObjectId(id);
 
@@ -84,6 +84,7 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
   async delete(id: string): Promise<void> {
     await this.subModuleRepository.delete({ _id: new ObjectId(id) });
   }
+
   async searchListBy(criteria: Criteria): Promise<ListSubModule> {
     const query = this.getQueryByCriteria(criteria);
 

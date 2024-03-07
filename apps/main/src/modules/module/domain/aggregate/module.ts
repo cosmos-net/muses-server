@@ -19,8 +19,20 @@ export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
   constructor(schema?: IModuleSchema | string | null) {
-    if (schema instanceof Object) {
-      this.hydrate(schema);
+    const isPartialSchema =
+      schema &&
+      schema instanceof Object &&
+      !schema.id &&
+      !schema.name &&
+      !schema.description &&
+      !schema.project &&
+      !schema.subModules &&
+      !schema.isEnabled &&
+      !schema.createdAt &&
+      !schema.updatedAt;
+
+    if (!isPartialSchema) {
+      this.hydrate(schema as IModuleSchema);
     } else if (typeof schema === 'string') {
       this._entityRoot.id = new Id(schema);
       this._entityRoot.isEnabled = new IsEnabled(true);
@@ -126,18 +138,22 @@ export class Module {
     this._entityRoot.project = new Project(project);
   }
 
-  public toPrimitives(): IModuleSchema {
-    return {
-      id: this._entityRoot.id.value,
-      name: this._entityRoot.name.value,
-      description: this._entityRoot.description.value,
-      project: this._entityRoot.project.toPrimitives(),
-      subModules: this._entityRoot.subModules,
-      isEnabled: this._entityRoot.isEnabled.value,
-      createdAt: this._entityRoot.createdAt.value,
-      updatedAt: this._entityRoot.updatedAt.value,
-      deletedAt: this._entityRoot.deletedAt?.value,
-    };
+  public toPrimitives(): IModuleSchema | Partial<IModuleSchema> {
+    try {
+      return {
+        id: this._entityRoot.id.value,
+        name: this._entityRoot.name.value,
+        description: this._entityRoot.description.value,
+        project: this._entityRoot.project.toPrimitives(),
+        subModules: this._entityRoot.subModules,
+        isEnabled: this._entityRoot.isEnabled.value,
+        createdAt: this._entityRoot.createdAt.value,
+        updatedAt: this._entityRoot.updatedAt.value,
+        deletedAt: this._entityRoot.deletedAt?.value,
+      };
+    } catch (error) {
+      return this.entityRootPartial();
+    }
   }
 
   public fromPrimitives(schema: IModuleSchema): void {
