@@ -19,6 +19,8 @@ export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
   constructor(schema?: IModuleSchema | Partial<IModuleSchema> | string | null) {
+    if (!this._entityRoot.subModules?.length) this._entityRoot.subModules = [];
+
     if (schema) {
       let isPartialSchema: boolean = false;
 
@@ -122,10 +124,12 @@ export class Module {
     }
 
     if (schema.subModules) {
-      const isLengthGreaterThanZero = this._entityRoot.subModules?.length > 0;
       for (const subModule of schema.subModules) {
-        if (!isLengthGreaterThanZero) this._entityRoot.subModules = [new SubModule(subModule)];
-        this._entityRoot.subModules.push(new SubModule(subModule));
+        if (typeof subModule === 'string') {
+          this._entityRoot.subModules.push(subModule);
+        } else if (subModule instanceof SubModule) {
+          this._entityRoot.subModules.push(new SubModule(subModule));
+        }
       }
     }
   }
@@ -139,22 +143,18 @@ export class Module {
     this._entityRoot.project = new Project(project);
   }
 
-  public toPrimitives(): IModuleSchema | Partial<IModuleSchema> {
-    try {
-      return {
-        id: this._entityRoot.id.value,
-        name: this._entityRoot.name.value,
-        description: this._entityRoot.description.value,
-        project: this._entityRoot.project.toPrimitives(),
-        subModules: this._entityRoot.subModules,
-        isEnabled: this._entityRoot.isEnabled.value,
-        createdAt: this._entityRoot.createdAt.value,
-        updatedAt: this._entityRoot.updatedAt.value,
-        deletedAt: this._entityRoot.deletedAt?.value,
-      };
-    } catch (error) {
-      return this.entityRootPartial();
-    }
+  public toPrimitives(): IModuleSchema {
+    return {
+      id: this._entityRoot.id.value,
+      name: this._entityRoot.name.value,
+      description: this._entityRoot.description.value,
+      project: this._entityRoot.project.toPrimitives(),
+      subModules: this._entityRoot.subModules,
+      isEnabled: this._entityRoot.isEnabled.value,
+      createdAt: this._entityRoot.createdAt.value,
+      updatedAt: this._entityRoot.updatedAt.value,
+      deletedAt: this._entityRoot.deletedAt?.value,
+    };
   }
 
   public fromPrimitives(schema: IModuleSchema): void {
@@ -224,12 +224,18 @@ export class Module {
       return;
     }
 
-    this._entityRoot.subModules = [subModule];
+    this._entityRoot.subModules.push(subModule);
   }
 
   public removeSubModule(subModuleId: string): void {
     if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
-      const subModuleIndex = this._entityRoot.subModules.findIndex((m) => m.id === subModuleId);
+      const subModuleIndex = this._entityRoot.subModules.findIndex((subModule) => {
+        if (typeof subModule === 'string') {
+          return subModule === subModuleId;
+        }
+
+        return subModule.id === subModuleId;
+      });
 
       if (subModuleIndex === -1) {
         throw new SubModuleNotFoundException();
@@ -247,7 +253,8 @@ export class Module {
         throw new SubModuleNotFoundException();
       }
 
-      this._entityRoot.subModules[previousSubModuleIndex] = newSubModule;
+      this._entityRoot.subModules.push(newSubModule);
+      this._entityRoot.subModules.splice(previousSubModuleIndex, 1);
     }
   }
 }
