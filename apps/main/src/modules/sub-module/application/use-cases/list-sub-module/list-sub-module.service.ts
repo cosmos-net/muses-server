@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ListSubModuleQuery } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.query';
 import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/injection-token';
 import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
-import { ListSubModule } from '@module-sub-module/domain/list-sub-module';
+import { ListSubModule } from '@module-sub-module/domain/aggregate/list-sub-module';
 import { Filters } from '@lib-commons/domain/criteria/filters';
 import { Order } from '@lib-commons/domain/criteria/order';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
@@ -20,12 +20,12 @@ export class ListSubModuleService implements IApplicationServiceQuery<ListSubMod
   ) {}
 
   async process<T extends ListSubModuleQuery>(query: T): Promise<ListSubModule> {
-    const { limit, offset } = query;
+    const { limit, offset, withDeleted } = query;
 
     const filters = Filters.fromValues(query.filters);
     const order = Order.fromValues(query.orderBy, query.orderType);
 
-    const criteria = new Criteria(filters, order, limit, offset);
+    const criteria = new Criteria(filters, order, limit, offset, withDeleted);
 
     const subModules = await this.subModuleRepository.searchListBy(criteria);
 

@@ -11,7 +11,7 @@ export interface ISubModuleSchemaAggregate {
   id: Id;
   name: Name;
   description: Description;
-  module: Module;
+  module: Module | string;
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;

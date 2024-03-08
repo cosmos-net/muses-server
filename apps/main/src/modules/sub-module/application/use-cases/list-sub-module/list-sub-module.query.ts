@@ -12,6 +12,8 @@ export class ListSubModuleQuery implements IQuery {
 
   readonly offset?: number;
 
+  readonly withDeleted?: boolean;
+
   constructor(props: Partial<ListSubModuleQuery>) {
     if (props) {
       Object.assign(this, props);

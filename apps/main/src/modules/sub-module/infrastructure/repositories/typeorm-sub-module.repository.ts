@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { ListSubModule } from '@module-sub-module/domain/list-sub-module';
+import { ListSubModule } from '@module-sub-module/domain/aggregate/list-sub-module';
 
 @Injectable()
 export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntity> implements ISubModuleRepository {

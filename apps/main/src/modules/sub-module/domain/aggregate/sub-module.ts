@@ -39,6 +39,10 @@ export class SubModule {
   }
 
   get moduleId(): string {
+    if (typeof this._entityRoot.module === 'string') {
+      return this._entityRoot.module;
+    }
+
     return this._entityRoot.module.id;
   }
 
@@ -58,8 +62,12 @@ export class SubModule {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get module(): IModuleSchema | Partial<IModuleSchema> {
-    return this._entityRoot.module.toPrimitives();
+  get module(): IModuleSchema | string {
+    if (this._entityRoot.module instanceof Module) {
+      return this._entityRoot.module.toPrimitives();
+    }
+
+    return this._entityRoot.module;
   }
 
   public describe(name: string, description: string): void {
@@ -110,7 +118,7 @@ export class SubModule {
       if (this._entityRoot.module instanceof Module) {
         this._entityRoot.module.id = schema.module;
       } else if (this._entityRoot.module === undefined) {
-        this._entityRoot.module = new Module(schema.module);
+        this._entityRoot.module = schema.module;
       }
     } else if (this._entityRoot.module === undefined && schema.module instanceof Object) {
       this._entityRoot.module = new Module(schema.module);

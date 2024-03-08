@@ -30,12 +30,10 @@ export class DeleteSubModuleService implements IApplicationServiceCommand<Delete
 
     const result = await this.subModuleRepository.softDeleteBy(subModule);
 
-    // if (typeof result === 'number' && result > 0) {
-    const res = await this.tryToEmitEvent(subModule, {
+    await this.tryToEmitEvent(subModule, {
       subModuleId: subModule.id,
       moduleId: subModule.moduleId,
     });
-    // }
 
     return result;
   }

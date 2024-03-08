@@ -7,7 +7,7 @@ interface IListSubModuleOutputDto {
   id?: string;
   name: string;
   description: string;
-  module: Partial<IModuleSchema>;
+  module: IModuleSchema | string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
