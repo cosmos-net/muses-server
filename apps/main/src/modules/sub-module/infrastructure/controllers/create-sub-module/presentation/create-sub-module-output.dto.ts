@@ -2,15 +2,17 @@ export interface ICreateSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  module:
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      }
+    | string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -21,15 +23,17 @@ export class CreateSubModuleOutputDto implements ICreateSubModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  module: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  module:
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      }
+    | string;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;

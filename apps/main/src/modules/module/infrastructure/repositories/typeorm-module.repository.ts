@@ -31,6 +31,15 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
       };
     }
 
+    if (partialSchema?.subModules?.length && partialSchema?.subModules.length > 0) {
+      const subModules = partialSchema.subModules.map((subModule) => new ObjectId(subModule));
+
+      partialSchema = {
+        ...partialSchema,
+        subModules,
+      };
+    }
+
     if (partialSchema.id) {
       const objectId = new ObjectId(partialSchema.id);
 
@@ -49,6 +58,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     model.fromPrimitives({
       ...module,
       ...(module.project && { project: { id: module.project.toHexString() } }),
+      ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
       id: module._id.toHexString(),
     });
 
@@ -74,6 +84,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const module = new Module({
       ...moduleFound,
       ...(moduleFound.project && { project: moduleFound.project.toHexString() }),
+      ...(moduleFound.subModules && { subModules: moduleFound.subModules.map((subModule) => subModule.toHexString()) }),
       id: moduleFound._id.toHexString(),
     });
 
@@ -92,6 +103,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const modulesClean = modules.map((module) => ({
       ...module,
       ...(module.project && { project: module.project.toHexString() }),
+      ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
       id: module._id.toHexString(),
     }));
 
@@ -115,9 +127,9 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
       };
     }
 
-    const { id, ...partilParams } = partialSchema;
+    const { id, ...partialParams } = partialSchema;
 
-    const result = await this.moduleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partilParams });
+    const result = await this.moduleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
 
     if (result.modifiedCount === 0) {
       throw new InternalServerErrorException('The project could not be deleted');

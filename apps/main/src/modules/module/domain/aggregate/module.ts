@@ -10,16 +10,35 @@ import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exce
 import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.schema.vo';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
+import { SubModuleNotFoundException } from '@module-module/domain/exceptions/sub-module-not-found.exception';
+import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
-  constructor(schema?: IModuleSchema | string | null) {
-    if (schema instanceof Object) {
-      this.hydrate(schema);
-    } else if (typeof schema === 'string') {
-      this._entityRoot.id = new Id(schema);
-      this._entityRoot.isEnabled = new IsEnabled(true);
+  constructor(schema?: IModuleSchema | Partial<IModuleSchema> | string | null) {
+    if (!this._entityRoot.subModules?.length) this._entityRoot.subModules = [];
+
+    if (schema) {
+      let isPartialSchema: boolean = false;
+
+      if (typeof schema !== 'string' && Object.keys(schema).length === 2) {
+        isPartialSchema = true;
+      }
+
+      if (typeof schema === 'string') {
+        this._entityRoot.id = new Id(schema);
+        this._entityRoot.isEnabled = new IsEnabled(true);
+      } else if (!isPartialSchema) {
+        this.hydrate(schema as IModuleSchema);
+      } else if (isPartialSchema) {
+        if (Object.keys(schema).length === 2) {
+          if (schema.id) this._entityRoot.id = new Id(schema.id);
+          if (schema.isEnabled) this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
+        }
+      }
     } else {
       this._entityRoot.isEnabled = new IsEnabled(true);
     }
@@ -61,6 +80,10 @@ export class Module {
     return this._entityRoot.project.toPrimitives();
   }
 
+  get subModules(): ISubModuleSchema[] {
+    return this._entityRoot.subModules;
+  }
+
   set id(id: string) {
     this._entityRoot.id = new Id(id);
   }
@@ -99,6 +122,16 @@ export class Module {
     } else if (this._entityRoot.project === undefined && schema.project instanceof Object) {
       this._entityRoot.project = new Project(schema.project);
     }
+
+    if (schema.subModules) {
+      for (const subModule of schema.subModules) {
+        if (typeof subModule === 'string') {
+          this._entityRoot.subModules.push(subModule);
+        } else if (subModule instanceof SubModule) {
+          this._entityRoot.subModules.push(new SubModule(subModule));
+        }
+      }
+    }
   }
 
   public describe(name: string, description: string): void {
@@ -116,6 +149,7 @@ export class Module {
       name: this._entityRoot.name.value,
       description: this._entityRoot.description.value,
       project: this._entityRoot.project.toPrimitives(),
+      subModules: this._entityRoot.subModules,
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
@@ -132,6 +166,11 @@ export class Module {
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         if (value.value !== null) {
+          if (key === 'subModules') {
+            partialSchema[key] = value.map((subModule) => subModule.id);
+            continue;
+          }
+
           partialSchema[key] = value.value;
         }
       }
@@ -170,5 +209,52 @@ export class Module {
 
   public clone(): Module {
     return new Module(this.toPrimitives());
+  }
+
+  public addSubModule(subModule: SubModule): void {
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const isSubmoduleAlreadyAdded = this._entityRoot.subModules.find((s) => s.id === subModule.id);
+
+      if (isSubmoduleAlreadyAdded) {
+        throw new SubModuleAlreadyRelatedWithModuleException();
+      }
+
+      this._entityRoot.subModules.push(subModule);
+
+      return;
+    }
+
+    this._entityRoot.subModules.push(subModule);
+  }
+
+  public removeSubModule(subModuleId: string): void {
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const subModuleIndex = this._entityRoot.subModules.findIndex((subModule) => {
+        if (typeof subModule === 'string') {
+          return subModule === subModuleId;
+        }
+
+        return subModule.id === subModuleId;
+      });
+
+      if (subModuleIndex === -1) {
+        throw new SubModuleNotFoundException();
+      }
+
+      this._entityRoot.subModules.splice(subModuleIndex, 1);
+    }
+  }
+
+  public exchangeSubmodules(previousSubModuleId: string, newSubModule: SubModule): void {
+    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
+      const previousSubModuleIndex = this._entityRoot.subModules.findIndex((m) => m.id === previousSubModuleId);
+
+      if (previousSubModuleIndex === -1) {
+        throw new SubModuleNotFoundException();
+      }
+
+      this._entityRoot.subModules.push(newSubModule);
+      this._entityRoot.subModules.splice(previousSubModuleIndex, 1);
+    }
   }
 }

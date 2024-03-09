@@ -3,7 +3,7 @@ import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
 import { DeleteModuleInputDto } from '@module-module/infrastructure/controllers/delete-module/presentation/delete-module-input.dto';
 import {
-  DeleteModuleOuputDto,
+  DeleteModuleOutputDto,
   IDeleteModuleOutputDto,
 } from '@module-module/infrastructure/controllers/delete-module/presentation/delete-module-output.dto';
 import { DeleteModuleCommand } from '@module-module/application/use-cases/delete-module/delete-module.command';
@@ -24,7 +24,7 @@ export class DeleteModuleController {
 
       const success = result ? (result ? true : false) : false;
 
-      const mapper = new DeleteModuleOuputDto({
+      const mapper = new DeleteModuleOutputDto({
         success,
         id: dto.id,
       });
