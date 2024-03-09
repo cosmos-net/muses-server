@@ -1,8 +1,8 @@
-import { CreateSubModuleService } from '@app-main/modules/sub-module/application/use-cases/create-sub-module/create-sub-module.service';
+import { CreateSubModuleService } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.service';
 import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { CreateSubModuleInputDto } from './presentation/create-sub-module-input.dto';
 import { CreateSubModuleOutputDto } from './presentation/create-sub-module-output.dto';
-import { CreateSubModuleCommand } from '@app-main/modules/sub-module/application/use-cases/create-sub-module/create-sub-module.command';
+import { CreateSubModuleCommand } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.command';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('/sub-module')

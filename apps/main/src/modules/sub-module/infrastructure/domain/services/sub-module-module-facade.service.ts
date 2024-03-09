@@ -1,13 +1,13 @@
-import { ISubModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
-import { ModuleModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
+import { ModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class SubModuleModuleFacadeService implements ISubModuleModuleFacade {
-  constructor(private readonly subModuleModuleFacade: ModuleModuleFacade) {}
+export class ModuleFacadeService implements IModuleFacade {
+  constructor(private readonly moduleFacade: ModuleFacade) {}
 
   async getModuleById(id: string) {
-    const module = await this.subModuleModuleFacade.retrieveModule({ id, withDisabled: true });
+    const module = await this.moduleFacade.retrieveModule({ id, withDisabled: true });
 
     return module;
   }

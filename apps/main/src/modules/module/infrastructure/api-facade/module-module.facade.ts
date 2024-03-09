@@ -4,7 +4,7 @@ import { GetModuleQuery } from '@module-module/application/use-cases/get-module/
 import { Module } from '@module-module/domain/aggregate/module';
 
 @Injectable()
-export class ModuleModuleFacade {
+export class ModuleFacade {
   constructor(private readonly getModuleService: GetModuleService) {}
 
   public async retrieveModule(retrieveModuleQuery: GetModuleQuery): Promise<Module> {

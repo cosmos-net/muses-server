@@ -18,6 +18,7 @@ export class ListSubModuleController {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
+      const withDeleted = filtersParams.isEnabled === false;
 
       const query = new ListSubModuleQuery({
         orderBy,
@@ -25,6 +26,7 @@ export class ListSubModuleController {
         limit,
         offset,
         filters,
+        withDeleted,
       });
 
       const projects = await this.listSubModuleService.process(query);

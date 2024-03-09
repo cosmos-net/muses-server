@@ -1,19 +1,20 @@
 import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateSubModuleCommand } from './create-sub-module.command';
-import { SUB_MODULE_MODULE_FACADE, SUB_MODULE_REPOSITORY } from '../../constants/injection-token';
-import { ISubModuleModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
-import { ISubModuleRepository } from '@app-main/modules/sub-module/domain/contracts/sub-module-repository';
+import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '../../constants/injection-token';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
+import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
-import { SubModule } from '@app-main/modules/sub-module/domain/aggregate/sub-module';
-import { RelateSubModuleWithModuleEventBody } from '@app-main/modules/sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module-event-body';
-import { RelateSubModuleWithModuleEvent } from '@app-main/modules/sub-module/domain/events/relate-sub-module-with-module-event/realte-sub-module-with-module.event';
-
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { RelateSubModuleWithModuleEventBody } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module-event-body';
+import { RelateSubModuleWithModuleEvent } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module.event';
+import { SubModuleNameAlreadyUsedException } from '@module-sub-module/domain/exceptions/sub-module-name-already-used.exception';
+import { ModuleToRelateIsDisabledException } from '@module-sub-module/domain/exceptions/module-to-relate-is-disabled.exception';
 @Injectable()
 export class CreateSubModuleService implements IApplicationServiceCommand<CreateSubModuleCommand> {
   constructor(
-    @Inject(SUB_MODULE_MODULE_FACADE)
-    private subModuleModuleFacade: ISubModuleModuleFacade,
+    @Inject(MODULE_FACADE)
+    private moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_REPOSITORY)
     private subModuleRepository: ISubModuleRepository,
     private readonly eventStoreService: EventStoreService,
@@ -25,7 +26,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
     const isNameAvailable = await this.subModuleRepository.isNameAvailable(name);
 
     if (!isNameAvailable) {
-      throw new Error('Name already taken');
+      throw new SubModuleNameAlreadyUsedException();
     }
 
     const subModule = new SubModule();
@@ -36,33 +37,32 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       subModule.disable();
     }
 
-    if (module) {
-      const moduleModel = await this.subModuleModuleFacade.getModuleById(module);
+    const moduleModel = await this.moduleFacade.getModuleById(module);
 
-      if (!moduleModel.isEnabled) {
-        throw new Error('Module is disabled');
-      }
-
-      subModule.useModule({
-        id: moduleModel.id,
-        name: moduleModel.name,
-        description: moduleModel.description,
-        project: moduleModel.project,
-        isEnabled: moduleModel.isEnabled,
-        createdAt: moduleModel.createdAt,
-        updatedAt: moduleModel.updatedAt,
-        deletedAt: moduleModel.deletedAt,
-      });
-
-      await this.subModuleRepository.persist(subModule);
-
-      await this.tryToEmitEvent(
-        new RelateSubModuleWithModuleEventBody({
-          subModuleId: subModule.id,
-          moduleId: module,
-        }),
-      );
+    if (!moduleModel.isEnabled) {
+      throw new ModuleToRelateIsDisabledException();
     }
+
+    subModule.useModule({
+      id: moduleModel.id,
+      name: moduleModel.name,
+      description: moduleModel.description,
+      project: moduleModel.project,
+      isEnabled: moduleModel.isEnabled,
+      createdAt: moduleModel.createdAt,
+      updatedAt: moduleModel.updatedAt,
+      deletedAt: moduleModel.deletedAt,
+      subModules: moduleModel.subModules,
+    });
+
+    await this.subModuleRepository.persist(subModule);
+
+    await this.tryToEmitEvent(
+      new RelateSubModuleWithModuleEventBody({
+        subModuleId: subModule.id,
+        moduleId: module,
+      }),
+    );
 
     return subModule;
   }
@@ -73,7 +73,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       await this.eventStoreService.emit(event);
     } catch (error) {
       await this.subModuleRepository.delete(relatedSubModuleWithModuleEventBody.subModuleId);
-      throw new Error('Error trying to emit event');
+      throw new InternalServerErrorException();
     }
   }
 }

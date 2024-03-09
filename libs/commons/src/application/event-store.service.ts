@@ -7,7 +7,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class EventStoreService implements IEventStore {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  async emit(data: IDomainEvent): Promise<void> {
-    await this.eventEmitter.emitAsync(data.type, data);
+  async emit(data: IDomainEvent): Promise<any[]> {
+    return await this.eventEmitter.emitAsync(data.type, data);
   }
 }

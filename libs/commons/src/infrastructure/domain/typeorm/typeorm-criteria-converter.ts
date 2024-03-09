@@ -42,6 +42,10 @@ export class TypeormCriteriaConverter<T extends Document> {
       options.order = this.generateSort(criteria.order);
     }
 
+    if (criteria.withDeleted) {
+      options.withDeleted = true;
+    }
+
     return options;
   }
 
