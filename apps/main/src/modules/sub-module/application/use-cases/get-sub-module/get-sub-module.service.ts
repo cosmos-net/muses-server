@@ -5,7 +5,7 @@ import { IApplicationServiceQuery } from '@lib-commons/application/application-s
 import { GetSubModuleQuery } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.query';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
-import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
 
 @Injectable()
 export class GetSubModuleService implements IApplicationServiceQuery<GetSubModuleQuery> {

@@ -7,7 +7,7 @@ import { ListSubModule } from '@module-sub-module/domain/aggregate/list-sub-modu
 import { Filters } from '@lib-commons/domain/criteria/filters';
 import { Order } from '@lib-commons/domain/criteria/order';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 
 @Injectable()
