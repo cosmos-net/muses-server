@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OverwriteSubModuleOnModuleEvent } from '@module-sub-module/domain/events/overwrite-sub-module-on-module-event/overwrite-sub-module-on-module.event';
-import { ExchangeSubModuleModuleService } from '@app-main/modules/module/application/use-cases/exchange-sub-module-module/exchange-sub-module-module.service';
+import { ExchangeSubModuleModuleService } from '@module-module/application/use-cases/exchange-sub-module-module/exchange-sub-module-module.service';
 
 @Injectable()
 export class OverwriteSubModuleOnModuleEventHandler {

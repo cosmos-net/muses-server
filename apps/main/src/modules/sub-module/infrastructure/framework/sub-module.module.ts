@@ -9,7 +9,7 @@ import { CreateSubModuleController } from '@module-sub-module/infrastructure/con
 import { CreateSubModuleService } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.service';
 import { ModuleFacadeService } from '@module-sub-module/infrastructure/domain/services/sub-module-module-facade.service';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
-import { MainModuleModule } from '@app-main/modules/module/infrastructure/framework/module.module';
+import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { ListSubModuleController } from '@module-sub-module/infrastructure/controllers/list-sub-module/list-sub-module.controller';
 import { ListSubModuleService } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.service';
 import { DeleteSubModuleController } from '@module-sub-module/infrastructure/controllers/delete-sub-module/delete-sub-module.controller';

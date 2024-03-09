@@ -2,12 +2,12 @@ import { IApplicationServiceCommand } from '@lib-commons/application/application
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateSubModuleCommand } from './create-sub-module.command';
 import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '../../constants/injection-token';
-import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
-import { ISubModuleRepository } from '@app-main/modules/sub-module/domain/contracts/sub-module-repository';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
+import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
-import { SubModule } from '@app-main/modules/sub-module/domain/aggregate/sub-module';
-import { RelateSubModuleWithModuleEventBody } from '@app-main/modules/sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module-event-body';
-import { RelateSubModuleWithModuleEvent } from '@app-main/modules/sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module.event';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { RelateSubModuleWithModuleEventBody } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module-event-body';
+import { RelateSubModuleWithModuleEvent } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module.event';
 import { SubModuleNameAlreadyUsedException } from '@module-sub-module/domain/exceptions/sub-module-name-already-used.exception';
 import { ModuleToRelateIsDisabledException } from '@module-sub-module/domain/exceptions/module-to-relate-is-disabled.exception';
 @Injectable()

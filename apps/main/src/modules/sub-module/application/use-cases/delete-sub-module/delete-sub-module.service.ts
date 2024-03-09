@@ -7,7 +7,7 @@ import { DeleteSubModuleCommand } from '@module-sub-module/application/use-cases
 import { RemoveDisabledSubModuleFromModuleEventBody } from '@module-sub-module/domain/events/remove-disabled-sub-module-from-module-event/remove-disabled-sub-module-from-module-event.body';
 import { RemoveDisabledSubModuleFromModuleEvent } from '@module-sub-module/domain/events/remove-disabled-sub-module-from-module-event/remove-disabled-sub-module-from-module.event';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
-import { SubModule } from '@app-main/modules/sub-module/domain/aggregate/sub-module';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 
 @Injectable()
 export class DeleteSubModuleService implements IApplicationServiceCommand<DeleteSubModuleCommand> {

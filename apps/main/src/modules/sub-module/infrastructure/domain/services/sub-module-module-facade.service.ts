@@ -1,4 +1,4 @@
-import { IModuleFacade } from '@app-main/modules/sub-module/domain/contracts/module-sub-module-facade';
+import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
 import { ModuleFacade } from '@module-module/infrastructure/api-facade/module-module.facade';
 import { Injectable } from '@nestjs/common';
 
