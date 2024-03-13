@@ -13,6 +13,7 @@ import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/data
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { join } from 'path';
+import { MainActionModule } from '@app-main/modules/action/infrastructure/framework/action.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { join } from 'path';
     MainProjectModule,
     MainModuleModule,
     MainSubModuleModule,
+    MainActionModule,
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forRootAsync({
