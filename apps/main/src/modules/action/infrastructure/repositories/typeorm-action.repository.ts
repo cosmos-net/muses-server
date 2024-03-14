@@ -3,7 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { ActionEntity } from '../domain/action-muses.entity';
 import { IActionRepository } from '../../domain/contracts/action-repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository, ObjectId } from 'typeorm';
+import { MongoRepository } from 'typeorm';
+import { ObjectId } from 'mongodb';
 import { Action } from '../../domain/aggregate/action';
 
 @Injectable()

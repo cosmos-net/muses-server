@@ -6,8 +6,8 @@ export interface IGetActionOutputDto {
   name: string;
   description: string;
   isEnabled: boolean;
-  modules: IModuleSchema | string[] | any;
-  subModules: ISubModuleSchema | string[] | any;
+  modules: IModuleSchema[] | string[] | any;
+  subModules: ISubModuleSchema[] | string[] | any;
   createdAt: string | Date;
   updatedAt: string | Date;
   deletedAt?: string | Date;
@@ -18,8 +18,8 @@ export class GetActionOutputDto implements IGetActionOutputDto {
   name: string;
   description: string;
   isEnabled: boolean;
-  modules: IModuleSchema | string[] | any;
-  subModules: ISubModuleSchema | string[] | any;
+  modules: IModuleSchema[] | string[] | any;
+  subModules: ISubModuleSchema[] | string[] | any;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
