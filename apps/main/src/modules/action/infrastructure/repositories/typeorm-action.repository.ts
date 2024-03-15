@@ -1,11 +1,11 @@
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
 import { Injectable } from '@nestjs/common';
-import { ActionEntity } from '../domain/action-muses.entity';
-import { IActionRepository } from '../../domain/contracts/action-repository';
+import { ActionEntity } from '@module-action/infrastructure/domain/action-muses.entity';
+import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { Action } from '../../domain/aggregate/action';
+import { Action } from '@module-action/domain/aggregate/action';
 
 @Injectable()
 export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> implements IActionRepository {

@@ -1,7 +1,7 @@
-import { GetActionService } from '@module-action/application/use-cases/get-action/ge-action.service';
+import { GetActionService } from '@module-action/application/use-cases/get-action/get-action.service';
 import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
-import { GetActionOutputDto, IGetActionOutputDto } from './presentation/get-action-output.dto';
-import { GetActionQuery } from '@app-main/modules/action/application/use-cases/get-action/get-action.query';
+import { GetActionOutputDto, IGetActionOutputDto } from '@module-action/infrastructure/controllers/get-action/presentation/get-action-output.dto';
+import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
 @Controller('actions')
