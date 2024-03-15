@@ -1,0 +1,1 @@
+export const ACTION_REPOSITORY = Symbol('ACTION_REPOSITORY');
