@@ -1,6 +1,6 @@
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { Inject, Injectable } from '@nestjs/common';
-import { ACTION_REPOSITORY } from '../../constants/injection-token';
+import { ACTION_REPOSITORY } from '@module-action/application/constants/injection-token';
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { Action } from '@module-action/domain/aggregate/action';
