@@ -6,6 +6,7 @@
     "auth-module",
     "project-module",
     "module-management",
-    "sub-module-management"
+    "sub-module-management",
+    "action-module-management"
   ]
 }
