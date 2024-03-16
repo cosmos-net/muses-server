@@ -30,6 +30,7 @@ import { AddSubModuleService } from '@module-module/application/use-cases/add-su
 import { RemoveSubModuleService } from '@module-module/application/use-cases/remove-sub-modules/remove-sub-modules.service';
 import { SubModuleFacadeService } from '@module-module/infrastructure/domain/services/module-sub-module-facade.service';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
+import { GetModulesByIdsService } from '@module-module/application/use-cases/get-modules-by-ids/get-modules-by-ids.service';
 
 @Module({
   imports: [forwardRef(() => MainProjectModule), MainSubModuleModule, TypeOrmModule.forFeature([ModuleEntity])],
@@ -55,6 +56,7 @@ import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework
     ExchangeSubModuleModuleService,
     AddSubModuleService,
     RemoveSubModuleService,
+    GetModulesByIdsService,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
@@ -80,6 +82,7 @@ import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework
     ExchangeSubModuleModuleService,
     AddSubModuleService,
     RemoveSubModuleService,
+    GetModulesByIdsService,
   ],
 })
 export class MainModuleModule {}
