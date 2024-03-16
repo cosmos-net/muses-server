@@ -11,6 +11,7 @@ import DeletedAt from '@module-action/domain/aggregate/value-objects/deleted-at.
 import UpdatedAt from '@module-action/domain/aggregate/value-objects/updated-at.vo';
 import { Module } from '@module-module/domain/aggregate/module';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { ActionPropertyWithSameValueException } from '../exceptions/action-property-with-same-value.exception';
 
 export class Action {
   private _entityRoot = {} as IActionSchemaAggregate;
@@ -80,6 +81,34 @@ export class Action {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
+  public redescribe(name?: string, description?: string): void {
+    if (name) {
+      if (this._entityRoot.name.value === name) {
+        throw new ActionPropertyWithSameValueException('name', name);
+      }
+
+      this._entityRoot.name = new Name(name);
+    }
+
+    if (description) {
+      if (this._entityRoot.description.value === description) {
+        throw new ActionPropertyWithSameValueException('description', description);
+      }
+
+      this._entityRoot.description = new Description(description);
+    }
+  }
+
+  public changeStatus(isEnabled?: boolean): void {
+    if (isEnabled !== undefined) {
+      if (this._entityRoot.isEnabled.value === isEnabled) {
+        throw new ActionPropertyWithSameValueException('isEnabled', isEnabled);
+      }
+
+      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
+    }
+  }
+
   public hydrate(schema: IActionSchema): void {
     this._entityRoot.id = new Id(schema.id);
     this._entityRoot.name = new Name(schema.name);
@@ -140,6 +169,7 @@ export class Action {
             partialSchema[key] = value.map((subModule) => subModule.id);
             continue;
           }
+
           if (key === 'modules') {
             partialSchema[key] = value.map((module) => module.id);
             continue;
@@ -151,5 +181,17 @@ export class Action {
     }
 
     return partialSchema;
+  }
+
+  public useModules(modules: IModuleSchema[]): void {
+    for (const module of modules) {
+      this._entityRoot.modules.push(new Module(module));
+    }
+  }
+
+  public useSubModules(subModules: ISubModuleSchema[]): void {
+    for (const subModule of subModules) {
+      this._entityRoot.subModules.push(new SubModule(subModule));
+    }
   }
 }

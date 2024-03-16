@@ -9,4 +9,5 @@ export interface ISubModuleRepository {
   delete(id: string): Promise<void>;
   searchListBy(criteria: Criteria): Promise<ListSubModule>;
   softDeleteBy(module: SubModule): Promise<number | undefined>;
+  getListByIds(ids: string[]): Promise<ListSubModule>;
 }
