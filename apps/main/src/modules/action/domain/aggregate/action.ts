@@ -240,16 +240,4 @@ export class Action {
 
     return subModulesToRemove;
   }
-
-  public useModules(modules: IModuleSchema[]): void {
-    for (const module of modules) {
-      this._entityRoot.modules.push(new Module(module));
-    }
-  }
-
-  public useSubModules(subModules: ISubModuleSchema[]): void {
-    for (const subModule of subModules) {
-      this._entityRoot.subModules.push(new SubModule(subModule));
-    }
-  }
 }
