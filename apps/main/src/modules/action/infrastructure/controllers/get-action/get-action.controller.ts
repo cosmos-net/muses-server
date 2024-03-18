@@ -1,6 +1,9 @@
 import { GetActionService } from '@module-action/application/use-cases/get-action/get-action.service';
 import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
-import { GetActionOutputDto, IGetActionOutputDto } from '@module-action/infrastructure/controllers/get-action/presentation/get-action-output.dto';
+import {
+  GetActionOutputDto,
+  IGetActionOutputDto,
+} from '@module-action/infrastructure/controllers/get-action/presentation/get-action-output.dto';
 import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
