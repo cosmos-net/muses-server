@@ -77,6 +77,11 @@ export class Action {
     return this._entityRoot.modules;
   }
 
+  public describe(name: string, description: string): void {
+    this._entityRoot.name = new Name(name);
+    this._entityRoot.description = new Description(description);
+  }
+
   public enable(): void {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
