@@ -7,6 +7,6 @@
     "project-module",
     "module-management",
     "sub-module-management",
-    "actions-management"
+    "action-module-management"
   ]
 }

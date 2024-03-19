@@ -137,4 +137,21 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
 
     return result.modifiedCount;
   }
+
+  async getListByIds(ids: string[]): Promise<ListModule> {
+    const idsFormatted = ids.map((id) => new ObjectId(id));
+
+    const modules = await this.moduleRepository.find({ where: { _id: { $in: idsFormatted } } });
+
+    const modulesMapped = modules.map((module) => ({
+      ...module,
+      ...(module.project && { project: module.project.toHexString() }),
+      ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
+      id: module._id.toHexString(),
+    }));
+
+    const list = new ListModule(modulesMapped, modulesMapped.length);
+
+    return list;
+  }
 }

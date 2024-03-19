@@ -13,4 +13,5 @@ export interface IModuleRepository {
   ): Promise<Module | null>;
   searchListBy(criteria: Criteria): Promise<ListModule>;
   softDeleteBy(module: Module): Promise<number | undefined>;
+  getListByIds(ids: string[]): Promise<ListModule>;
 }

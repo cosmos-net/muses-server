@@ -17,6 +17,7 @@ import { DeleteSubModuleService } from '@module-sub-module/application/use-cases
 import { SubModuleFacade } from '@module-sub-module/infrastructure/api-facade/sub-module.facade';
 import { UpdateSubModuleService } from '@module-sub-module/application/use-cases/update-sub-module/update-sub-module.service';
 import { UpdateSubModuleController } from '@module-sub-module/infrastructure/controllers/update-sub-module/update-sub-module.controller';
+import { GetSubModulesByIdsService } from '@module-sub-module/application/use-cases/get-sub-modules-by-ids/get-modules-by-ids.service';
 
 @Module({
   imports: [forwardRef(() => MainModuleModule), TypeOrmModule.forFeature([SubModuleEntity])],
@@ -35,6 +36,7 @@ import { UpdateSubModuleController } from '@module-sub-module/infrastructure/con
     DeleteSubModuleService,
     UpdateSubModuleService,
     SubModuleFacade,
+    GetSubModulesByIdsService,
     {
       provide: MODULE_FACADE,
       useClass: ModuleFacadeService,
@@ -51,6 +53,7 @@ import { UpdateSubModuleController } from '@module-sub-module/infrastructure/con
     DeleteSubModuleService,
     UpdateSubModuleService,
     SubModuleFacade,
+    GetSubModulesByIdsService,
   ],
 })
 export class MainSubModuleModule {}
