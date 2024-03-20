@@ -44,6 +44,7 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
       updatedAt: moduleModel.updatedAt,
       deletedAt: moduleModel.deletedAt,
       subModules: moduleModel.subModules,
+      actions: moduleModel.actions,
     });
 
     return subModule;

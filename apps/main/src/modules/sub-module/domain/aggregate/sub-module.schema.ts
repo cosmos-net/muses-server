@@ -6,6 +6,7 @@ export interface ISubModuleSchema {
   description: string;
   isEnabled: boolean;
   module: IModuleSchema | any;
+  actions: string[] | any;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
