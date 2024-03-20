@@ -19,6 +19,7 @@ export class Action {
   constructor(schema?: IActionSchema | Partial<IActionSchema> | string | null) {
     if (!this._entityRoot.subModules?.length) this._entityRoot.subModules = [];
     if (!this._entityRoot.modules?.length) this._entityRoot.modules = [];
+
     if (schema) {
       let isPartialSchema: boolean = false;
       if (typeof schema !== 'string' && Object.keys(schema).length === 2) {
@@ -69,11 +70,11 @@ export class Action {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get subModules(): ISubModuleSchema[] {
+  get subModules(): ISubModuleSchema[] | string[] {
     return this._entityRoot.subModules;
   }
 
-  get modules(): IModuleSchema[] {
+  get modules(): IModuleSchema[] | string[] {
     return this._entityRoot.modules;
   }
 
@@ -183,15 +184,43 @@ export class Action {
     return partialSchema;
   }
 
-  public useModules(modules: IModuleSchema[]): void {
-    for (const module of modules) {
+  public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): IModuleSchema[] {
+    const modulesToAdd = modules.filter((module) => !this._entityRoot.modules.includes(module.id));
+
+    const modulesToRemove = this._entityRoot.modules.filter(
+      (module) => !modules.map((module) => module.id).includes(module),
+    );
+
+    if (modulesToAdd.length === 0 && modulesToRemove.length === 0) {
+      throw new ActionPropertyWithSameValueException('modules', this._entityRoot.modules);
+    }
+
+    this._entityRoot.modules = [];
+
+    for (const module of modulesToAdd) {
       this._entityRoot.modules.push(new Module(module));
     }
+
+    return modulesToRemove;
   }
 
-  public useSubModules(subModules: ISubModuleSchema[]): void {
-    for (const subModule of subModules) {
+  public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): ISubModuleSchema[] {
+    const subModulesToAdd = subModules.filter((subModule) => !this._entityRoot.subModules.includes(subModule.id));
+
+    const subModulesToRemove = this._entityRoot.subModules.filter(
+      (subModule) => !subModules.map((subModule) => subModule.id).includes(subModule),
+    );
+
+    if (subModulesToAdd.length === 0 && subModulesToRemove.length === 0) {
+      throw new ActionPropertyWithSameValueException('subModules', this._entityRoot.subModules);
+    }
+
+    this._entityRoot.subModules = [];
+
+    for (const subModule of subModulesToAdd) {
       this._entityRoot.subModules.push(new SubModule(subModule));
     }
+
+    return subModulesToRemove;
   }
 }

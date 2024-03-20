@@ -53,6 +53,7 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
         updatedAt: moduleModel.updatedAt,
         deletedAt: moduleModel.deletedAt,
         subModules: moduleModel.subModules,
+        actions: moduleModel.actions,
       });
 
       isSubModuleChanged = true;
