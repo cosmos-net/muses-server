@@ -6,6 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Action } from '@module-action/domain/aggregate/action';
+import { ListAction } from '@module-action/domain/aggregate/list-action';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
 
 @Injectable()
 export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> implements IActionRepository {
@@ -76,5 +78,21 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
       id: action._id.toHexString(),
     });
+  }
+
+  async searchListBy(criteria: Criteria): Promise<ListAction> {
+    const query = this.getQueryByCriteria(criteria);
+
+    const [actions, total] = await this.actionRepository.findAndCount(query);
+
+    const actionsMapped = actions.map((action) => ({
+      ...action,
+      ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
+      ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      id: action._id.toHexString(),
+    }));
+
+    const list = new ListAction(actionsMapped, total);
+    return list;
   }
 }
