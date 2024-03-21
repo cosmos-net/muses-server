@@ -7,6 +7,8 @@ import { RemoveDisabledSubModuleFromModuleEventHandler } from '@module-module/ap
 import { RelateSubModuleWithModuleEventHandler } from '@module-module/application/event-handlers/relate-submodule-with-module-event.handler';
 import { OverwriteSubModuleOnModuleEvent } from '@module-sub-module/domain/events/overwrite-sub-module-on-module-event/overwrite-sub-module-on-module.event';
 import { OverwriteSubModuleOnModuleEventHandler } from '@module-module/application/event-handlers/overwrite-sub-module-on-module-event.handler';
+import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
+import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
 
 @Injectable()
 export class ModuleListener {
@@ -14,6 +16,7 @@ export class ModuleListener {
     private readonly removeDisabledSubModuleFromModuleEventHandler: RemoveDisabledSubModuleFromModuleEventHandler,
     private readonly relateSubModuleWithModuleEventHandler: RelateSubModuleWithModuleEventHandler,
     private readonly overwriteSubModuleOnModuleEventHandler: OverwriteSubModuleOnModuleEventHandler,
+    private readonly updateRelationsWithModulesEventHandler: UpdateRelationsWithModulesEventHandler,
   ) {}
 
   @OnEvent(EventTopicEnum.SUB_MODULE_MGT + RelateSubModuleWithModuleEvent.name)
@@ -31,5 +34,10 @@ export class ModuleListener {
   @OnEvent(EventTopicEnum.SUB_MODULE_MGT + OverwriteSubModuleOnModuleEvent.name)
   public async handleOverwriteSubModuleOnModuleEvent(event: OverwriteSubModuleOnModuleEvent): Promise<void> {
     await this.overwriteSubModuleOnModuleEventHandler.handle(event);
+  }
+
+  @OnEvent(EventTopicEnum.ACTION_MGT + UpdateRelationsWithModulesEvent.name)
+  public async handleUpdateRelationsWithModulesEvent(event: UpdateRelationsWithModulesEvent): Promise<void> {
+    await this.updateRelationsWithModulesEventHandler.handle(event);
   }
 }
