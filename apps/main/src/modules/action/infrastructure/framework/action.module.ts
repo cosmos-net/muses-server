@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GetActionController } from '@module-action/infrastructure/controllers/get-action/get-action.controller';
 import { GetActionService } from '@module-action/application/use-cases/get-action/get-action.service';
@@ -17,9 +17,14 @@ import { MainModuleModule } from '@app-main/modules/module/infrastructure/framew
 import { UpdateActionController } from '@module-action/infrastructure/controllers/update-action/update-action.controller';
 import { CreateActionService } from '@module-action/application/use-cases/create-action/create-action.service';
 import { CreateActionController } from '@module-action/infrastructure/controllers/create-action/create-action.controller';
-
+import { ActionFacade } from '@module-action/infrastructure/api-facade/action.facade';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 @Module({
-  imports: [MainModuleModule, MainSubModuleModule, TypeOrmModule.forFeature([ActionEntity])],
+  imports: [
+    forwardRef(() => MainModuleModule),
+    forwardRef(() => MainSubModuleModule),
+    TypeOrmModule.forFeature([ActionEntity]),
+  ],
   controllers: [GetActionController, CreateActionController, UpdateActionController],
   providers: [
     GetActionService,
@@ -27,6 +32,8 @@ import { CreateActionController } from '@module-action/infrastructure/controller
     UpdateActionService,
     ModuleFacadeService,
     SubModuleFacadeService,
+    ActionFacade,
+    EventStoreService,
     {
       provide: ACTION_REPOSITORY,
       useClass: TypeOrmActionRepository,
@@ -40,6 +47,6 @@ import { CreateActionController } from '@module-action/infrastructure/controller
       useClass: ModuleFacadeService,
     },
   ],
-  exports: [GetActionService, UpdateActionService, ModuleFacadeService, SubModuleFacadeService],
+  exports: [GetActionService, UpdateActionService, ModuleFacadeService, SubModuleFacadeService, ActionFacade],
 })
 export class MainActionModule {}

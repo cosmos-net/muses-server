@@ -14,6 +14,7 @@ export interface IModuleSchemaAggregate {
   description: Description;
   project: Project;
   subModules: SubModule[] & string[];
+  actions: string[];
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
