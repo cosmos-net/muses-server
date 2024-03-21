@@ -44,4 +44,11 @@ export class ModuleEntity extends BaseEntity implements IModuleSchema {
     type: 'array',
   })
   subModules: ObjectId[];
+
+  @Column({
+    name: 'actions',
+    nullable: true,
+    type: 'array',
+  })
+  actions: ObjectId[];
 }

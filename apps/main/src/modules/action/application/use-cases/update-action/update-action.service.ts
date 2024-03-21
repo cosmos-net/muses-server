@@ -10,9 +10,19 @@ import { IActionRepository } from '@module-action/domain/contracts/action-reposi
 import { IModuleFacade } from '@module-action/domain/contracts/module-facade';
 import { ISubModuleFacade } from '@module-action/domain/contracts/sub-module-facade';
 import { Action } from '@module-action/domain/aggregate/action';
+import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
+import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { UpdateRelationsWithModulesEventBody } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules-event.body';
+import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
+import { UpdateRelationsWithSubModulesEventBody } from '@module-action/domain/events/update-relations-with-sub-modules/update-relations-with-sub-modules-event.body';
+import { UpdateRelationsWithSubModulesEvent } from '@module-action/domain/events/update-relations-with-sub-modules/update-relations-with-sub-modules.event';
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
+  private modulesLegacy: IModuleSchema[] = [];
+  private subModulesLegacy: ISubModuleSchema[] = [];
+
   constructor(
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
@@ -20,6 +30,7 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     private moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_FACADE)
     private subModuleFacade: ISubModuleFacade,
+    private readonly eventStoreService: EventStoreService,
   ) {}
 
   async process<T extends UpdateActionCommand>(command: T): Promise<Action> {
@@ -41,7 +52,7 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
         throw new Error('Modules not found');
       }
 
-      action.useModules(modulesFound.entities());
+      this.modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
     }
 
     if (subModules) {
@@ -51,9 +62,35 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
         throw new Error('SubModules not found');
       }
 
-      action.useSubModules(subModulesFound.entities());
+      this.subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
     }
 
+    await this.tryToEmitEventToUpdateRelationWithModules({
+      actionId: action.id,
+      legacyModules: this.modulesLegacy.map((module) => module.id),
+      newModules: action.modules.map((module) => module.id),
+    });
+
+    await this.tryToEmitEventToUpdateRelationWithSubModules({
+      actionId: action.id,
+      legacySubModules: this.subModulesLegacy.map((subModule) => subModule.id),
+      newSubModules: action.subModules.map((subModule) => subModule.id),
+    });
+
     return this.actionRepository.persist(action);
+  }
+
+  private async tryToEmitEventToUpdateRelationWithModules(
+    updateRelationsWithModulesEventBody: UpdateRelationsWithModulesEventBody,
+  ): Promise<void> {
+    const event = new UpdateRelationsWithModulesEvent(updateRelationsWithModulesEventBody);
+    await this.eventStoreService.emit(event);
+  }
+
+  private async tryToEmitEventToUpdateRelationWithSubModules(
+    updateRelationsWithSubModulesEventBody: UpdateRelationsWithSubModulesEventBody,
+  ): Promise<void> {
+    const event = new UpdateRelationsWithSubModulesEvent(updateRelationsWithSubModulesEventBody);
+    await this.eventStoreService.emit(event);
   }
 }

@@ -84,6 +84,10 @@ export class Module {
     return this._entityRoot.subModules;
   }
 
+  get actions(): string[] {
+    return this._entityRoot.actions;
+  }
+
   set id(id: string) {
     this._entityRoot.id = new Id(id);
   }
@@ -150,6 +154,7 @@ export class Module {
       description: this._entityRoot.description.value,
       project: this._entityRoot.project.toPrimitives(),
       subModules: this._entityRoot.subModules,
+      actions: this._entityRoot.actions,
       isEnabled: this._entityRoot.isEnabled.value,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
@@ -245,16 +250,27 @@ export class Module {
     }
   }
 
-  public exchangeSubmodules(previousSubModuleId: string, newSubModule: SubModule): void {
-    if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
-      const previousSubModuleIndex = this._entityRoot.subModules.findIndex((m) => m.id === previousSubModuleId);
+  public removeAction(actionId: string): void {
+    if (this._entityRoot.actions && this._entityRoot.actions.length > 0) {
+      const actionIndex = this._entityRoot.actions.findIndex((action) => action === actionId);
 
-      if (previousSubModuleIndex === -1) {
-        throw new SubModuleNotFoundException();
+      if (actionIndex === -1) {
+        throw new Error('Action not found');
       }
 
-      this._entityRoot.subModules.push(newSubModule);
-      this._entityRoot.subModules.splice(previousSubModuleIndex, 1);
+      this._entityRoot.actions.splice(actionIndex, 1);
     }
+  }
+
+  public addAction(actionId: string): void {
+    if (this._entityRoot.actions && this._entityRoot.actions.length > 0) {
+      const isActionAlreadyAdded = this._entityRoot.actions.find((action) => action === actionId);
+
+      if (isActionAlreadyAdded) {
+        throw new Error('Action already added');
+      }
+    }
+
+    this._entityRoot.actions.push(actionId);
   }
 }

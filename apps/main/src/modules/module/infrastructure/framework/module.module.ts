@@ -5,6 +5,7 @@ import { ModuleEntity } from '@module-module/infrastructure/domain/module-muses.
 import { CreateModuleController } from '@module-module/infrastructure/controllers/create-module/create-module.controller';
 import { CreateModuleService } from '@module-module/application/use-cases/create-module/create-module.service';
 import {
+  ACTION_FACADE,
   MODULE_REPOSITORY,
   PROJECT_MODULE_FACADE,
   SUB_MODULE_MODULE_FACADE,
@@ -31,9 +32,18 @@ import { RemoveSubModuleService } from '@module-module/application/use-cases/rem
 import { SubModuleFacadeService } from '@module-module/infrastructure/domain/services/module-sub-module-facade.service';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { GetModulesByIdsService } from '@module-module/application/use-cases/get-modules-by-ids/get-modules-by-ids.service';
+import { ActionFacadeService } from '@module-module/infrastructure/domain/services/action-facade.service';
+import { MainActionModule } from '@app-main/modules/action/infrastructure/framework/action.module';
+import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
+import { ExchangeActionModulesService } from '@module-module/application/use-cases/exchange-action-modules/exchange-action-modules.service';
 
 @Module({
-  imports: [forwardRef(() => MainProjectModule), MainSubModuleModule, TypeOrmModule.forFeature([ModuleEntity])],
+  imports: [
+    forwardRef(() => MainProjectModule),
+    forwardRef(() => MainActionModule),
+    MainSubModuleModule,
+    TypeOrmModule.forFeature([ModuleEntity]),
+  ],
   controllers: [
     CreateModuleController,
     UpdateModuleController,
@@ -57,6 +67,9 @@ import { GetModulesByIdsService } from '@module-module/application/use-cases/get
     AddSubModuleService,
     RemoveSubModuleService,
     GetModulesByIdsService,
+    ActionFacadeService,
+    UpdateRelationsWithModulesEventHandler,
+    ExchangeActionModulesService,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
@@ -68,6 +81,10 @@ import { GetModulesByIdsService } from '@module-module/application/use-cases/get
     {
       provide: SUB_MODULE_MODULE_FACADE,
       useClass: SubModuleFacadeService,
+    },
+    {
+      provide: ACTION_FACADE,
+      useClass: ActionFacadeService,
     },
   ],
   exports: [
