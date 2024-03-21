@@ -6,6 +6,7 @@ export interface IModuleSchema {
   description: string;
   project: IProject | any;
   subModules: IModuleSchema[] | string[] | any;
+  actions: string[] | any;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;

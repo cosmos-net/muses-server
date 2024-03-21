@@ -53,6 +53,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       updatedAt: moduleModel.updatedAt,
       deletedAt: moduleModel.deletedAt,
       subModules: moduleModel.subModules,
+      actions: moduleModel.actions,
     });
 
     await this.subModuleRepository.persist(subModule);

@@ -70,6 +70,10 @@ export class SubModule {
     return this._entityRoot.module;
   }
 
+  get actions(): string[] {
+    return this._entityRoot.actions;
+  }
+
   public describe(name: string, description: string): void {
     this._entityRoot.name = new Name(name);
     this._entityRoot.description = new Description(description);
@@ -135,6 +139,7 @@ export class SubModule {
       name: this.name,
       description: this.description,
       isEnabled: this.isEnabled,
+      actions: this.actions,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
@@ -189,5 +194,29 @@ export class SubModule {
 
       this._entityRoot.isEnabled = new IsEnabled(isEnabled);
     }
+  }
+
+  public removeAction(actionId: string): void {
+    if (this._entityRoot.actions && this._entityRoot.actions.length > 0) {
+      const actionIndex = this._entityRoot.actions.findIndex((action) => action === actionId);
+
+      if (actionIndex === -1) {
+        throw new Error('Action not found');
+      }
+
+      this._entityRoot.actions.splice(actionIndex, 1);
+    }
+  }
+
+  public addAction(actionId: string): void {
+    if (this._entityRoot.actions && this._entityRoot.actions.length > 0) {
+      const isActionAlreadyAdded = this._entityRoot.actions.find((action) => action === actionId);
+
+      if (isActionAlreadyAdded) {
+        throw new Error('Action already added');
+      }
+    }
+
+    this._entityRoot.actions.push(actionId);
   }
 }
