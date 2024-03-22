@@ -189,6 +189,18 @@ export class Action {
     return partialSchema;
   }
 
+  public useModules(modules: IModuleSchema[] | string[]): void {
+    for (const module of modules) {
+      this._entityRoot.modules.push(new Module(module));
+    }
+  }
+
+  public useSubModules(subModules: ISubModuleSchema[] | string[]): void {
+    for (const subModule of subModules) {
+      this._entityRoot.subModules.push(new SubModule(subModule));
+    }
+  }
+
   public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): IModuleSchema[] {
     const modulesToAdd = modules.filter((module) => !this._entityRoot.modules.includes(module.id));
 

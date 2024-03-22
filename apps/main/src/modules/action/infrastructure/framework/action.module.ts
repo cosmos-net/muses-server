@@ -27,6 +27,7 @@ import { EventStoreService } from '@lib-commons/application/event-store.service'
   ],
   controllers: [GetActionController, CreateActionController, UpdateActionController],
   providers: [
+    EventStoreService,
     GetActionService,
     CreateActionService,
     UpdateActionService,

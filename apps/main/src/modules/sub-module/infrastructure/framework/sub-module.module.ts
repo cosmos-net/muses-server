@@ -27,6 +27,8 @@ import { UpdateRelationsWithSubModulesEventHandler } from '@module-sub-module/ap
 import { ExchangeActionSubModulesService } from '@module-sub-module/application/use-cases/exchange-action-sub-modules/exchange-action-sub-modules.service';
 import { MainActionModule } from '@module-action/infrastructure/framework/action.module';
 import { ActionFacadeService } from '@module-sub-module/infrastructure/domain/services/action-facade.service';
+import { RelateActionWithSubModuleEventHandler } from '@module-sub-module/application/event-handlers/relate-action-with-sub-module-event.handler';
+import { AddActionService } from '@module-sub-module/application/use-cases/add-action/add-action.service';
 
 @Module({
   imports: [
@@ -54,6 +56,8 @@ import { ActionFacadeService } from '@module-sub-module/infrastructure/domain/se
     UpdateRelationsWithSubModulesEventHandler,
     ExchangeActionSubModulesService,
     ActionFacadeService,
+    AddActionService,
+    RelateActionWithSubModuleEventHandler,
     {
       provide: MODULE_FACADE,
       useClass: ModuleFacadeService,

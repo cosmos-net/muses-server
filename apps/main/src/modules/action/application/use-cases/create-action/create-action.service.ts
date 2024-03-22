@@ -11,10 +11,16 @@ import { ISubModuleFacade } from '@module-action/domain/contracts/sub-module-fac
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { ActionNameAlreadyUsedException } from '@app-main/modules/action/domain/exceptions/action-name-already-used.exception';
 import { Action } from '@module-action/domain/aggregate/action';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { RelateActionWithSubModuleEvent } from '@module-action/domain/events/relate-sub-module-with-action/relate-action-with-sub-module.event';
+import { RelateActionWithSubModuleEventBody } from '@module-action/domain/events/relate-sub-module-with-action/relate-action-with-sub-module-event-body';
+import { RelateActionWithModuleEventBody } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module-event-body';
+import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module.event';
 
 @Injectable()
 export class CreateActionService implements IApplicationServiceCommand<CreateActionCommand> {
   constructor(
+    private readonly eventStoreService: EventStoreService,
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
     @Inject(MODULE_FACADE)
@@ -56,6 +62,34 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
       action.useSubModules(subModulesFound.entities());
     }
 
-    return this.actionRepository.persist(action);
+    await this.actionRepository.persist(action);
+
+    await this.tryToEmitModuleEvent(
+      new RelateActionWithModuleEventBody({
+        actionId: action.id,
+        modules: action.modules.map((module) => module.id),
+      }),
+    );
+
+    await this.tryToEmitSubModuleEvent(
+      new RelateActionWithSubModuleEventBody({
+        actionId: action.id,
+        subModules: action.subModules.map((subModule) => subModule.id),
+      }),
+    );
+
+    return action;
+  }
+
+  private async tryToEmitModuleEvent(relatedActionWithModuleEventBody: RelateActionWithModuleEventBody): Promise<void> {
+    const event = new RelateActionWithModuleEvent(relatedActionWithModuleEventBody);
+    await this.eventStoreService.emit(event);
+  }
+
+  private async tryToEmitSubModuleEvent(
+    relatedActionWithModuleEventBody: RelateActionWithSubModuleEventBody,
+  ): Promise<void> {
+    const event = new RelateActionWithSubModuleEvent(relatedActionWithModuleEventBody);
+    await this.eventStoreService.emit(event);
   }
 }
