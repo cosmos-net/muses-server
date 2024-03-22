@@ -76,13 +76,11 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const action = await this.actionRepository.save(partialSchema);
 
-    model.fromPrimitives({
+    return new Action({
       ...action,
       ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
       id: action._id.toHexString(),
     });
-
-    return model;
   }
 }

@@ -62,23 +62,23 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
       action.useSubModules(subModulesFound.entities());
     }
 
-    await this.actionRepository.persist(action);
+    const newAction = await this.actionRepository.persist(action);
 
     await this.tryToEmitModuleEvent(
       new RelateActionWithModuleEventBody({
-        actionId: action.id,
-        modules: action.modules.map((module) => module.id),
+        actionId: newAction.id,
+        modules: newAction.modules.map((module) => module.id),
       }),
     );
 
     await this.tryToEmitSubModuleEvent(
       new RelateActionWithSubModuleEventBody({
-        actionId: action.id,
-        subModules: action.subModules.map((subModule) => subModule.id),
+        actionId: newAction.id,
+        subModules: newAction.subModules.map((subModule) => subModule.id),
       }),
     );
 
-    return action;
+    return newAction;
   }
 
   private async tryToEmitModuleEvent(relatedActionWithModuleEventBody: RelateActionWithModuleEventBody): Promise<void> {
