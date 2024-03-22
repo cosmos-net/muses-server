@@ -20,9 +20,9 @@ export class CreateActionController {
         subModules: dto.subModules,
       });
 
-      const subModule = await this.createSubModuleService.process(command);
+      const action = await this.createSubModuleService.process(command);
 
-      const mapper = new CreateActionOutputDto(subModule);
+      const mapper = new CreateActionOutputDto(action);
 
       return mapper;
     } catch (error) {

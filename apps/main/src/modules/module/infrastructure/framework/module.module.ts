@@ -36,6 +36,8 @@ import { ActionFacadeService } from '@module-module/infrastructure/domain/servic
 import { MainActionModule } from '@app-main/modules/action/infrastructure/framework/action.module';
 import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
 import { ExchangeActionModulesService } from '@module-module/application/use-cases/exchange-action-modules/exchange-action-modules.service';
+import { AddActionService } from '@module-module/application/use-cases/add-action/add-action.service';
+import { RelateActionWithModuleEventHandler } from '@module-module/application/event-handlers/relate-action-with-module-event.handler';
 
 @Module({
   imports: [
@@ -70,6 +72,8 @@ import { ExchangeActionModulesService } from '@module-module/application/use-cas
     ActionFacadeService,
     UpdateRelationsWithModulesEventHandler,
     ExchangeActionModulesService,
+    AddActionService,
+    RelateActionWithModuleEventHandler,
     {
       provide: PROJECT_MODULE_FACADE,
       useClass: ProjectModuleFacadeService,
@@ -100,6 +104,8 @@ import { ExchangeActionModulesService } from '@module-module/application/use-cas
     AddSubModuleService,
     RemoveSubModuleService,
     GetModulesByIdsService,
+    AddActionService,
+    RelateActionWithModuleEventHandler,
   ],
 })
 export class MainModuleModule {}

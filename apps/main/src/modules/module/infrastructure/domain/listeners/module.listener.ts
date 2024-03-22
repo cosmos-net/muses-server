@@ -9,6 +9,8 @@ import { OverwriteSubModuleOnModuleEvent } from '@module-sub-module/domain/event
 import { OverwriteSubModuleOnModuleEventHandler } from '@module-module/application/event-handlers/overwrite-sub-module-on-module-event.handler';
 import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
 import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
+import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module.event';
+import { RelateActionWithModuleEventHandler } from '@module-module/application/event-handlers/relate-action-with-module-event.handler';
 
 @Injectable()
 export class ModuleListener {
@@ -17,6 +19,7 @@ export class ModuleListener {
     private readonly relateSubModuleWithModuleEventHandler: RelateSubModuleWithModuleEventHandler,
     private readonly overwriteSubModuleOnModuleEventHandler: OverwriteSubModuleOnModuleEventHandler,
     private readonly updateRelationsWithModulesEventHandler: UpdateRelationsWithModulesEventHandler,
+    private readonly relateActionWithModuleEventHandler: RelateActionWithModuleEventHandler,
   ) {}
 
   @OnEvent(EventTopicEnum.SUB_MODULE_MGT + RelateSubModuleWithModuleEvent.name)
@@ -39,5 +42,10 @@ export class ModuleListener {
   @OnEvent(EventTopicEnum.ACTION_MGT + UpdateRelationsWithModulesEvent.name)
   public async handleUpdateRelationsWithModulesEvent(event: UpdateRelationsWithModulesEvent): Promise<void> {
     await this.updateRelationsWithModulesEventHandler.handle(event);
+  }
+
+  @OnEvent(EventTopicEnum.ACTION_MGT + RelateActionWithModuleEvent.name)
+  public async handleRelateActionWithModuleEvent(event: RelateActionWithModuleEvent): Promise<void> {
+    await this.relateActionWithModuleEventHandler.handle(event);
   }
 }
