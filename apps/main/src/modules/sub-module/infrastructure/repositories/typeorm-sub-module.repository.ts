@@ -32,6 +32,7 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
     const subModule = new SubModule({
       ...subModuleFound,
       ...(subModuleFound.module && { module: subModuleFound.module.toHexString() }),
+      ...(subModuleFound.actions && { actions: subModuleFound.actions.map((action) => action.toHexString()) }),
       id: subModuleFound._id.toHexString(),
     });
 
@@ -54,6 +55,15 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
       partialSchema = {
         ...partialSchema,
         module: moduleId,
+      };
+    }
+
+    if (partialSchema.actions) {
+      const actionsIds = partialSchema.actions.map((action) => new ObjectId(action));
+
+      partialSchema = {
+        ...partialSchema,
+        actions: actionsIds,
       };
     }
 

@@ -18,8 +18,8 @@ export class SubModuleListener {
     await this.updateRelationsWithSubModulesEventHandler.handle(event);
   }
 
-  @OnEvent(EventTopicEnum.ACTION_MGT + RelateActionWithSubModuleEventHandler.name)
-  public async handleRelateActionWithSubModuleEventHandler(event: RelateActionWithSubModuleEvent): Promise<void> {
+  @OnEvent(EventTopicEnum.ACTION_MGT + RelateActionWithSubModuleEvent.name)
+  public async handleRelateActionWithSubModuleEvent(event: RelateActionWithSubModuleEvent): Promise<void> {
     await this.relateActionWithSubModuleEventHandler.handle(event);
   }
 }

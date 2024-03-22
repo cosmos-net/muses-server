@@ -67,14 +67,14 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
     await this.tryToEmitModuleEvent(
       new RelateActionWithModuleEventBody({
         actionId: newAction.id,
-        modules: newAction.modules.map((module) => module.id),
+        modules: newAction.modules.map((module) => module),
       }),
     );
 
     await this.tryToEmitSubModuleEvent(
       new RelateActionWithSubModuleEventBody({
         actionId: newAction.id,
-        subModules: newAction.subModules.map((subModule) => subModule.id),
+        subModules: newAction.subModules.map((subModule) => subModule),
       }),
     );
 
