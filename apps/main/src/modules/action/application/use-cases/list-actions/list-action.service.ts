@@ -38,13 +38,14 @@ export class ListActionService implements IApplicationServiceQuery<ListActionQue
 
     const populatedActions: Action[] = [];
 
-    for (const action of actions.items) {
+    for await (const action of actions.items) {
       const modules = await this.moduleFacade.getModuleByIds(action.modules.map((module) => module.id));
       action.useModules(modules.entities());
 
       const subModules = await this.subModuleFacade.getSubModuleByIds(
         action.subModules.map((subModule) => subModule.id),
       );
+
       action.useSubModules(subModules.entities());
       populatedActions.push(action);
     }
