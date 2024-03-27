@@ -78,6 +78,11 @@ export class Action {
     return this._entityRoot.modules;
   }
 
+  public describe(name: string, description: string): void {
+    this._entityRoot.name = new Name(name);
+    this._entityRoot.description = new Description(description);
+  }
+
   public enable(): void {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
@@ -182,6 +187,18 @@ export class Action {
     }
 
     return partialSchema;
+  }
+
+  public useModules(modules: IModuleSchema[] | string[]): void {
+    for (const module of modules) {
+      this._entityRoot.modules.push(new Module(module));
+    }
+  }
+
+  public useSubModules(subModules: ISubModuleSchema[] | string[]): void {
+    for (const subModule of subModules) {
+      this._entityRoot.subModules.push(new SubModule(subModule));
+    }
   }
 
   public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): IModuleSchema[] {
