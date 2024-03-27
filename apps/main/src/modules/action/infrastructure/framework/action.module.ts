@@ -19,13 +19,16 @@ import { CreateActionService } from '@module-action/application/use-cases/create
 import { CreateActionController } from '@module-action/infrastructure/controllers/create-action/create-action.controller';
 import { ActionFacade } from '@module-action/infrastructure/api-facade/action.facade';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { ListActionController } from '@module-action/infrastructure/controllers/list-action/list-action.controller';
+import { ListActionService } from '@module-action/application/use-cases/list-actions/list-action.service';
+
 @Module({
   imports: [
     forwardRef(() => MainModuleModule),
     forwardRef(() => MainSubModuleModule),
     TypeOrmModule.forFeature([ActionEntity]),
   ],
-  controllers: [GetActionController, CreateActionController, UpdateActionController],
+  controllers: [GetActionController, CreateActionController, UpdateActionController, ListActionController],
   providers: [
     EventStoreService,
     GetActionService,
@@ -35,6 +38,7 @@ import { EventStoreService } from '@lib-commons/application/event-store.service'
     SubModuleFacadeService,
     ActionFacade,
     EventStoreService,
+    ListActionService,
     {
       provide: ACTION_REPOSITORY,
       useClass: TypeOrmActionRepository,
@@ -48,6 +52,13 @@ import { EventStoreService } from '@lib-commons/application/event-store.service'
       useClass: ModuleFacadeService,
     },
   ],
-  exports: [GetActionService, UpdateActionService, ModuleFacadeService, SubModuleFacadeService, ActionFacade],
+  exports: [
+    ListActionService,
+    GetActionService,
+    UpdateActionService,
+    ModuleFacadeService,
+    SubModuleFacadeService,
+    ActionFacade,
+  ],
 })
 export class MainActionModule {}
