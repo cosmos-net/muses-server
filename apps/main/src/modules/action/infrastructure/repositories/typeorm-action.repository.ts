@@ -38,6 +38,12 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
     return action;
   }
 
+  async isNameAvailable(name: string): Promise<boolean> {
+    const actionFound = await this.actionRepository.findOne({ where: { name } });
+
+    return !actionFound;
+  }
+
   async persist(model: Action): Promise<Action> {
     let partialSchema: Partial<ActionEntity> = model.entityRootPartial();
 

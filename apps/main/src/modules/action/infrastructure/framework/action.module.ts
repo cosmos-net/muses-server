@@ -15,6 +15,8 @@ import { UpdateActionService } from '@module-action/application/use-cases/update
 import { MainSubModuleModule } from '@app-main/modules/sub-module/infrastructure/framework/sub-module.module';
 import { MainModuleModule } from '@app-main/modules/module/infrastructure/framework/module.module';
 import { UpdateActionController } from '@module-action/infrastructure/controllers/update-action/update-action.controller';
+import { CreateActionService } from '@module-action/application/use-cases/create-action/create-action.service';
+import { CreateActionController } from '@module-action/infrastructure/controllers/create-action/create-action.controller';
 import { ActionFacade } from '@module-action/infrastructure/api-facade/action.facade';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { ListActionController } from '@module-action/infrastructure/controllers/list-action/list-action.controller';
@@ -26,9 +28,11 @@ import { ListActionService } from '@module-action/application/use-cases/list-act
     forwardRef(() => MainSubModuleModule),
     TypeOrmModule.forFeature([ActionEntity]),
   ],
-  controllers: [GetActionController, UpdateActionController, ListActionController],
+  controllers: [GetActionController, CreateActionController, UpdateActionController, ListActionController],
   providers: [
+    EventStoreService,
     GetActionService,
+    CreateActionService,
     UpdateActionService,
     ModuleFacadeService,
     SubModuleFacadeService,

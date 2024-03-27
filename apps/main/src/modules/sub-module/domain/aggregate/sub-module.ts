@@ -127,6 +127,10 @@ export class SubModule {
     } else if (this._entityRoot.module === undefined && schema.module instanceof Object) {
       this._entityRoot.module = new Module(schema.module);
     }
+
+    if (Array.isArray(schema.actions)) {
+      this._entityRoot.actions = schema.actions;
+    }
   }
 
   public useModule(module: IModuleSchema): void {
@@ -160,6 +164,10 @@ export class SubModule {
         }
 
         if (key === 'module') {
+          partialSchema[key] = value;
+        }
+
+        if (key === 'actions') {
           partialSchema[key] = value;
         }
       }
@@ -215,8 +223,11 @@ export class SubModule {
       if (isActionAlreadyAdded) {
         throw new Error('Action already added');
       }
+
+      return;
     }
 
+    this._entityRoot.actions = [];
     this._entityRoot.actions.push(actionId);
   }
 }
