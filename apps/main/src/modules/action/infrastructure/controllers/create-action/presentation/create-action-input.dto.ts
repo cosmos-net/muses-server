@@ -1,5 +1,5 @@
 import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
-import { IsArray, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { ArrayMinSize, IsArray, IsNotEmpty, IsString, Length, ValidateIf } from 'class-validator';
 
 export class CreateActionInputDto {
   @Length(3, 50)
@@ -12,15 +12,19 @@ export class CreateActionInputDto {
   @IsNotEmpty()
   readonly description: string;
 
+  @ValidateIf(
+    (object) => object.subModules === undefined || object.subModules === null || object.subModules.length === 0,
+  )
   @IsObjectIdHex()
+  @IsString({ each: true })
   @IsArray()
-  @IsNotEmpty()
-  @IsOptional()
-  subModules: string[];
+  @ArrayMinSize(1)
+  readonly modules?: string[];
 
+  @ValidateIf((object) => object.modules === undefined || object.modules === null || object.modules.length === 0)
   @IsObjectIdHex()
+  @IsString({ each: true })
   @IsArray()
-  @IsNotEmpty()
-  @IsOptional()
-  modules: string[];
+  @ArrayMinSize(1)
+  readonly subModules?: string[];
 }

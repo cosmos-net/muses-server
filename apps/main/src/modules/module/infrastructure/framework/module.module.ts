@@ -33,7 +33,7 @@ import { SubModuleFacadeService } from '@module-module/infrastructure/domain/ser
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { GetModulesByIdsService } from '@module-module/application/use-cases/get-modules-by-ids/get-modules-by-ids.service';
 import { ActionFacadeService } from '@module-module/infrastructure/domain/services/action-facade.service';
-import { MainActionModule } from '@app-main/modules/action/infrastructure/framework/action.module';
+import { MainActionModule } from '@module-action/infrastructure/framework/action.module';
 import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
 import { ExchangeActionModulesService } from '@module-module/application/use-cases/exchange-action-modules/exchange-action-modules.service';
 import { AddActionService } from '@module-module/application/use-cases/add-action/add-action.service';

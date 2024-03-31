@@ -68,13 +68,13 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     await this.tryToEmitEventToUpdateRelationWithModules({
       actionId: action.id,
       legacyModules: this.modulesLegacy.map((module) => module.id),
-      newModules: action.modules.map((module) => module.id),
+      newModules: action.modules?.map((module) => module.id) || [],
     });
 
     await this.tryToEmitEventToUpdateRelationWithSubModules({
       actionId: action.id,
       legacySubModules: this.subModulesLegacy.map((subModule) => subModule.id),
-      newSubModules: action.subModules.map((subModule) => subModule.id),
+      newSubModules: action.subModules?.map((subModule) => subModule.id) || [],
     });
 
     return this.actionRepository.persist(action);

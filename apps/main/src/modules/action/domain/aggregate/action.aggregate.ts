@@ -13,8 +13,8 @@ export interface IActionSchemaAggregate {
   name: Name;
   description: Description;
   isEnabled: IsEnabled;
-  modules: Module[] & string[];
-  subModules: SubModule[] & string[];
+  modules?: Module[] & string[];
+  subModules?: SubModule[] & string[];
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
   deletedAt?: DeletedAt;

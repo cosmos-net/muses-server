@@ -2,8 +2,8 @@ import { IApplicationServiceCommand } from '@lib-commons/application/application
 import { Inject, Injectable } from '@nestjs/common';
 import { MODULE_REPOSITORY } from '@module-module/application/constants/injection-tokens';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
-import { ModuleNotFoundException } from '@module-project/domain/exceptions/module-not-found.exception';
 import { RemoveSubModuleCommand } from '@module-module/application/use-cases/remove-sub-modules/remove-sub-modules.command';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class RemoveSubModuleService implements IApplicationServiceCommand<RemoveSubModuleCommand> {
