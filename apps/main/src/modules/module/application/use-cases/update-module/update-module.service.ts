@@ -5,11 +5,11 @@ import { MODULE_REPOSITORY, PROJECT_MODULE_FACADE } from '@module-module/applica
 import { IProjectModuleFacade } from '@module-module/domain/contracts/project-module-facade';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
 import { Module } from '@module-module/domain/aggregate/module';
-import { ModuleNotFoundException } from '@module-module/domain/exceptions/module-not-found.exception';
 import { ModuleAlreadyRelatedWithProject } from '@module-module/domain/exceptions/module-already-related-with-project.exception';
 import { OverwriteModuleOnProjectEventBody } from '@module-module/domain/events/overwrite-module-on-project-event/overwrite-module-on-project-event-body';
 import { OverwriteModuleOnProjectEvent } from '@module-module/domain/events/overwrite-module-on-project-event/overwrite-module-on-project.event';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class UpdateModuleService implements IApplicationServiceCommand<UpdateModuleCommand> {

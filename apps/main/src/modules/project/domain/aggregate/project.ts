@@ -12,7 +12,7 @@ import { IProjectSchema } from '@module-project/domain/aggregate/project.schema'
 import { IProjectAggregate } from '@module-project/domain/aggregate/project.aggregate';
 import { Module } from '@module-module/domain/aggregate/module';
 import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain/exceptions/module-already-related-with-project.exception';
-import { ModuleNotFoundException } from '@module-project/domain/exceptions/module-not-found.exception';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;

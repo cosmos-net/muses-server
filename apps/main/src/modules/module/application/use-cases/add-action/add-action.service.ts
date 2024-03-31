@@ -2,14 +2,15 @@ import { Injectable, Inject, Logger } from '@nestjs/common';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
 import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
 import { AddActionCommand } from './add-action.command';
-import { ISubModuleModuleFacade } from '@module-module/domain/contracts/sub-module-facade';
-import { MODULE_REPOSITORY, SUB_MODULE_MODULE_FACADE } from '@module-module/application/constants/injection-tokens';
+import { ACTION_FACADE, MODULE_REPOSITORY } from '@module-module/application/constants/injection-tokens';
+import { IActionFacade } from '@app-main/modules/module/domain/contracts/action-facade';
+import { ModuleNotFoundException } from '@app-main/modules/common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class AddActionService implements IApplicationServiceCommand<AddActionCommand> {
   constructor(
-    @Inject(SUB_MODULE_MODULE_FACADE)
-    private subModuleFacade: ISubModuleModuleFacade,
+    @Inject(ACTION_FACADE)
+    private actionFacade: IActionFacade,
     @Inject(MODULE_REPOSITORY)
     private moduleRepository: IModuleRepository,
   ) {}
@@ -17,19 +18,20 @@ export class AddActionService implements IApplicationServiceCommand<AddActionCom
 
   async process<T extends AddActionCommand>(command: T): Promise<void> {
     const { actionId, modules } = command;
-    await this.updateModules(actionId, modules);
-  }
 
-  private async updateModules(actionId: string, updateModules: string[]): Promise<void> {
-    for await (const moduleId of updateModules) {
-      const module = await this.moduleRepository.searchOneBy(moduleId, { withDeleted: true });
+    const action = await this.actionFacade.getActionById(actionId);
+    const listModules = await this.moduleRepository.getListByIds(modules);
 
-      if (!module) {
-        this.logger.error(`Module not found with id: ${moduleId}`);
-        continue;
-      }
+    if (listModules.totalItems === 0) {
+      throw new ModuleNotFoundException();
+    }
 
-      module.addAction(actionId);
+    if (listModules.totalItems !== modules.length) {
+      this.logger.warn('Some modules were not found');
+    }
+
+    for await (const module of listModules.entities()) {
+      module.addAction(action.id);
 
       await this.moduleRepository.persist(module);
     }
