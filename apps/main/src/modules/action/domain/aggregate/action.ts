@@ -269,8 +269,6 @@ export class Action {
     for (const module of modules) {
       this._entityRoot.modules.push(module);
     }
-
-    return modulesToRemove;
   }
 
   public useSubModules(subModules: SubModule[]): void {
@@ -281,8 +279,6 @@ export class Action {
     for (const subModule of subModules) {
       this._entityRoot.subModules.push(subModule);
     }
-
-    return subModulesToRemove;
   }
 
   public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): IModuleSchema[] {
@@ -300,11 +296,7 @@ export class Action {
 
     const modulesToAdd = modules.filter((module) => {
       for (const currentModule of currentModules) {
-        if (typeof currentModule === 'object') {
-          return currentModule.id !== module.id;
-        } else {
-          return currentModule !== module.id;
-        }
+        return currentModule !== module.id;
       }
     });
 
@@ -344,11 +336,7 @@ export class Action {
 
     const subModulesToAdd = subModules.filter((subModule) => {
       for (const currentSubModule of currentSubModules) {
-        if (typeof currentSubModule === 'object') {
-          return currentSubModule.id !== subModule.id;
-        } else {
-          return currentSubModule !== subModule.id;
-        }
+        return currentSubModule !== subModule.id;
       }
     });
 
