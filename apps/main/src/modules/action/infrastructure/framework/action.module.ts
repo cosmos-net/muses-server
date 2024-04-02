@@ -21,6 +21,8 @@ import { ActionFacade } from '@module-action/infrastructure/api-facade/action.fa
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { ListActionController } from '@module-action/infrastructure/controllers/list-action/list-action.controller';
 import { ListActionService } from '@module-action/application/use-cases/list-actions/list-action.service';
+import { DisableActionService } from '@module-action/application/use-cases/disable-action/disable-action.service';
+import { DisableActionController } from '@module-action/infrastructure/controllers/disable-action/disable-action.controller';
 
 @Module({
   imports: [
@@ -28,7 +30,13 @@ import { ListActionService } from '@module-action/application/use-cases/list-act
     forwardRef(() => MainSubModuleModule),
     TypeOrmModule.forFeature([ActionEntity]),
   ],
-  controllers: [GetActionController, CreateActionController, UpdateActionController, ListActionController],
+  controllers: [
+    GetActionController,
+    CreateActionController,
+    UpdateActionController,
+    ListActionController,
+    DisableActionController,
+  ],
   providers: [
     EventStoreService,
     GetActionService,
@@ -39,6 +47,7 @@ import { ListActionService } from '@module-action/application/use-cases/list-act
     ActionFacade,
     EventStoreService,
     ListActionService,
+    DisableActionService,
     {
       provide: ACTION_REPOSITORY,
       useClass: TypeOrmActionRepository,
@@ -58,6 +67,7 @@ import { ListActionService } from '@module-action/application/use-cases/list-act
     UpdateActionService,
     ModuleFacadeService,
     SubModuleFacadeService,
+    DisableActionService,
     ActionFacade,
   ],
 })

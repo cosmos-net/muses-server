@@ -11,6 +11,8 @@ import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/up
 import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
 import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module.event';
 import { RelateActionWithModuleEventHandler } from '@module-module/application/event-handlers/relate-action-with-module-event.handler';
+import { RemoveActionFromModulesEvent } from '@app-main/modules/action/domain/events/remove-action-from-modules/remove-action-from-modules.event';
+import { RemoveActionFromModulesEventHandler } from '@module-module/application/event-handlers/remove-action-from-modules-event.handler';
 
 @Injectable()
 export class ModuleListener {
@@ -20,6 +22,7 @@ export class ModuleListener {
     private readonly overwriteSubModuleOnModuleEventHandler: OverwriteSubModuleOnModuleEventHandler,
     private readonly updateRelationsWithModulesEventHandler: UpdateRelationsWithModulesEventHandler,
     private readonly relateActionWithModuleEventHandler: RelateActionWithModuleEventHandler,
+    private readonly removeActionFromModulesEventHandler: RemoveActionFromModulesEventHandler,
   ) {}
 
   @OnEvent(EventTopicEnum.SUB_MODULE_MGT + RelateSubModuleWithModuleEvent.name)
@@ -47,5 +50,10 @@ export class ModuleListener {
   @OnEvent(EventTopicEnum.ACTION_MGT + RelateActionWithModuleEvent.name)
   public async handleRelateActionWithModuleEvent(event: RelateActionWithModuleEvent): Promise<void> {
     await this.relateActionWithModuleEventHandler.handle(event);
+  }
+
+  @OnEvent(EventTopicEnum.ACTION_MGT + RemoveActionFromModulesEvent.name)
+  public async handleRemoveActionFromModulesEvent(event: RemoveActionFromModulesEvent): Promise<void> {
+    await this.removeActionFromModulesEventHandler.handle(event);
   }
 }

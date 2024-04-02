@@ -124,6 +124,25 @@ export class Action {
     this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
+  public disable(): void {
+    if (this._entityRoot.isEnabled.value === false) {
+      throw new ActionPropertyWithSameValueException('isEnabled', false);
+    }
+
+    this._entityRoot.isEnabled = new IsEnabled(false);
+    this._entityRoot.deletedAt = new DeletedAt(new Date());
+  }
+
+  public restore(): void {
+    const isCurrentlyDisabled =
+      this._entityRoot.deletedAt instanceof DeletedAt && this._entityRoot.isEnabled.value === false;
+
+    if (isCurrentlyDisabled) {
+      delete this._entityRoot.deletedAt;
+      this._entityRoot.isEnabled = new IsEnabled(true);
+    }
+  }
+
   public redescribe(name?: string, description?: string): void {
     if (name) {
       if (this._entityRoot.name.value === name) {
