@@ -140,7 +140,10 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
   async getListByIds(ids: string[]): Promise<ListSubModule> {
     const idsFormatted = ids.map((id) => new ObjectId(id));
 
-    const subModules = await this.subModuleRepository.find({ where: { _id: { $in: idsFormatted } } });
+    const subModules = await this.subModuleRepository.find({
+      where: { _id: { $in: idsFormatted } },
+      withDeleted: true,
+    });
 
     const subModulesMapped = subModules.map((subModule) => ({
       ...subModule,
