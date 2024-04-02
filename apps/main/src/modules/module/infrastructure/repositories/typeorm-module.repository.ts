@@ -141,7 +141,10 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
   async getListByIds(ids: string[]): Promise<ListModule> {
     const idsFormatted = ids.map((id) => new ObjectId(id));
 
-    const modules = await this.moduleRepository.find({ where: { _id: { $in: idsFormatted } } });
+    const modules = await this.moduleRepository.find({
+      where: { _id: { $in: idsFormatted } },
+      withDeleted: true,
+    });
 
     const modulesMapped = modules.map((module) => ({
       ...module,
