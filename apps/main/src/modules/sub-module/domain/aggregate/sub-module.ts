@@ -70,7 +70,7 @@ export class SubModule {
     return this._entityRoot.module;
   }
 
-  get actions(): string[] {
+  get actions(): string[] | undefined {
     return this._entityRoot.actions;
   }
 
@@ -210,6 +210,11 @@ export class SubModule {
 
       if (actionIndex === -1) {
         throw new Error('Action not found');
+      }
+
+      if (this._entityRoot.actions.length === 1) {
+        delete this._entityRoot.actions;
+        return;
       }
 
       this._entityRoot.actions.splice(actionIndex, 1);

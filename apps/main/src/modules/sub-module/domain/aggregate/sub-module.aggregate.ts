@@ -12,7 +12,7 @@ export interface ISubModuleSchemaAggregate {
   name: Name;
   description: Description;
   module: Module | string;
-  actions: string[];
+  actions?: string[];
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;

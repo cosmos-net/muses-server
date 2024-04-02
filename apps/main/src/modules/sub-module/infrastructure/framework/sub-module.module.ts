@@ -29,6 +29,8 @@ import { MainActionModule } from '@module-action/infrastructure/framework/action
 import { ActionFacadeService } from '@module-sub-module/infrastructure/domain/services/action-facade.service';
 import { RelateActionWithSubModuleEventHandler } from '@module-sub-module/application/event-handlers/relate-action-with-sub-module-event.handler';
 import { AddActionService } from '@module-sub-module/application/use-cases/add-action/add-action.service';
+import { RemoveActionFromSubModulesEventHandler } from '@module-sub-module/application/event-handlers/remove-action-from-sub-modules-event.handler';
+import { RemoveActionService } from '@module-sub-module/application/use-cases/remove-action/remove-action.service';
 
 @Module({
   imports: [
@@ -58,6 +60,8 @@ import { AddActionService } from '@module-sub-module/application/use-cases/add-a
     ActionFacadeService,
     AddActionService,
     RelateActionWithSubModuleEventHandler,
+    RemoveActionFromSubModulesEventHandler,
+    RemoveActionService,
     {
       provide: MODULE_FACADE,
       useClass: ModuleFacadeService,
@@ -79,6 +83,7 @@ import { AddActionService } from '@module-sub-module/application/use-cases/add-a
     UpdateSubModuleService,
     SubModuleFacade,
     GetSubModulesByIdsService,
+    RemoveActionFromSubModulesEventHandler,
   ],
 })
 export class MainSubModuleModule {}

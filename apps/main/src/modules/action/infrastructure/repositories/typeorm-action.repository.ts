@@ -1,5 +1,5 @@
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ActionEntity } from '@module-action/infrastructure/domain/action-muses.entity';
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -105,5 +105,38 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const list = new ListAction(actionsMapped, total);
     return list;
+  }
+
+  async softDeleteBy(model: Action): Promise<number | undefined> {
+    model.disable();
+
+    let partialSchema: Partial<IActionSchema & ActionEntity> = model.entityRootPartial();
+
+    if (partialSchema.modules) {
+      const modules = partialSchema.modules.map((module) => new ObjectId(module));
+
+      partialSchema = {
+        ...partialSchema,
+        modules,
+      };
+    }
+
+    if (partialSchema.subModules) {
+      const subModules = partialSchema.subModules.map((subModule) => new ObjectId(subModule));
+      partialSchema = {
+        ...partialSchema,
+        subModules,
+      };
+    }
+
+    const { id, ...partialParams } = partialSchema;
+
+    const result = await this.actionRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
+
+    if (result.modifiedCount === 0) {
+      throw new InternalServerErrorException('The action could not be deleted');
+    }
+
+    return result.modifiedCount;
   }
 }
