@@ -12,8 +12,8 @@ import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
-import { SubModuleNotFoundException } from '@module-module/domain/exceptions/sub-module-not-found.exception';
 import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
+import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -263,6 +263,12 @@ export class Module {
   }
 
   public addAction(actionId: string): void {
+    if (!this._entityRoot.actions) {
+      this._entityRoot.actions = [actionId];
+
+      return;
+    }
+
     if (this._entityRoot.actions && this._entityRoot.actions.length > 0) {
       const isActionAlreadyAdded = this._entityRoot.actions.find((action) => action === actionId);
 

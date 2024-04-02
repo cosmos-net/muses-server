@@ -1,14 +1,24 @@
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { Inject, Injectable } from '@nestjs/common';
-import { ACTION_REPOSITORY } from '@module-action/application/constants/injection-token';
+import {
+  ACTION_REPOSITORY,
+  MODULE_FACADE,
+  SUB_MODULE_FACADE,
+} from '@module-action/application/constants/injection-token';
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { Action } from '@module-action/domain/aggregate/action';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
+import { IModuleFacade } from '@app-main/modules/action/domain/contracts/module-facade';
+import { ISubModuleFacade } from '@app-main/modules/action/domain/contracts/sub-module-facade';
 
 @Injectable()
 export class GetActionService implements IApplicationServiceQuery<GetActionQuery> {
   constructor(
+    @Inject(MODULE_FACADE)
+    private readonly moduleFacade: IModuleFacade,
+    @Inject(SUB_MODULE_FACADE)
+    private readonly subModuleFacade: ISubModuleFacade,
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
   ) {}
@@ -22,6 +32,16 @@ export class GetActionService implements IApplicationServiceQuery<GetActionQuery
 
     if (action === null) {
       throw new ActionNotFoundException();
+    }
+
+    if (action.modules && action.modules.length > 0) {
+      const modules = await this.moduleFacade.getModuleByIds(action.modulesIds);
+      action.useModules(modules.entities());
+    }
+
+    if (action.subModules && action.subModules.length > 0) {
+      const subModules = await this.subModuleFacade.getSubModuleByIds(action.subModulesIds);
+      action.useSubModules(subModules.entities());
     }
 
     return action;

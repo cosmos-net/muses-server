@@ -132,6 +132,7 @@
       "^@module-module(|/.*)$": "<rootDir>/apps/main/src/modules/module/$1",
       "^@module-sub-module(|/.*)$": "<rootDir>/apps/main/src/modules/sub-module/$1",
       "^@module-action(|/.*)$": "<rootDir>/apps/main/src/modules/action/$1",
+      "^@module-common(|/.*)$": "<rootDir>/apps/main/src/modules/common/$1",
       "^@test-muses(|/.*)$": "<rootDir>/apps/main/test/$1"
     }
   }
