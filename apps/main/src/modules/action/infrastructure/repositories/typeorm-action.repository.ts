@@ -8,6 +8,7 @@ import { ObjectId } from 'mongodb';
 import { Action } from '@module-action/domain/aggregate/action';
 import { ListAction } from '@module-action/domain/aggregate/list-action';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
+import { IActionSchema } from '@module-action/domain/aggregate/action.schema';
 
 @Injectable()
 export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> implements IActionRepository {
@@ -45,10 +46,11 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
   }
 
   async persist(model: Action): Promise<Action> {
-    let partialSchema: Partial<ActionEntity> = model.entityRootPartial();
+    let partialSchema: Partial<IActionSchema & ActionEntity> = model.entityRootPartial();
 
     if (partialSchema.modules) {
       const modules = partialSchema.modules.map((module) => new ObjectId(module));
+
       partialSchema = {
         ...partialSchema,
         modules,
@@ -68,6 +70,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
       partialSchema = {
         ...partialSchema,
+        id: actionId,
         _id: actionId,
       };
 
@@ -78,12 +81,14 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const action = await this.actionRepository.save(partialSchema);
 
-    return new Action({
+    model.hydrate({
       ...action,
       ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
       id: action._id.toHexString(),
     });
+
+    return model;
   }
 
   async searchListBy(criteria: Criteria): Promise<ListAction> {

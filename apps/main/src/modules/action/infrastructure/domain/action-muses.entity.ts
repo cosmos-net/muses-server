@@ -7,7 +7,9 @@ export class ActionEntity extends BaseEntity implements IActionSchema {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @ObjectIdColumn()
+  @ObjectIdColumn({
+    generated: true,
+  })
   id: string;
 
   @Column({

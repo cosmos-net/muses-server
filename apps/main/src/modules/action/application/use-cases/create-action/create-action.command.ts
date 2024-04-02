@@ -2,9 +2,12 @@ import { ICommand } from '@lib-commons/domain/contracts/presentation/command';
 
 export class CreateActionCommand implements ICommand {
   readonly name: string;
+
   readonly description: string;
-  readonly modules: string[];
-  readonly subModules: string[];
+
+  readonly modules?: string[];
+
+  readonly subModules?: string[];
 
   constructor(props: Partial<CreateActionCommand>) {
     if (props) {

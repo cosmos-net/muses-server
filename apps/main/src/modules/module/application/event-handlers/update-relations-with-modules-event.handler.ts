@@ -1,4 +1,4 @@
-import { UpdateRelationsWithModulesEvent } from '@app-main/modules/action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
+import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
 import { Injectable } from '@nestjs/common';
 import { ExchangeActionModulesService } from '@module-module/application/use-cases/exchange-action-modules/exchange-action-modules.service';
 

@@ -3,7 +3,7 @@ import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common
 import { UpdateSubModuleCommand } from '@module-sub-module/application/use-cases/update-sub-module/update-sub-module.command';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
-import { SubModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
+import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/injection-token';
 import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';

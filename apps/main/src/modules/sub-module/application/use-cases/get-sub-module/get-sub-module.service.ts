@@ -4,7 +4,7 @@ import { MODULE_FACADE, SUB_MODULE_REPOSITORY } from '@module-sub-module/applica
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { GetSubModuleQuery } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.query';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
-import { SubModuleNotFoundException } from '@module-sub-module/domain/exceptions/sub-module-not-found.exception';
+import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 import { IModuleFacade } from '@module-sub-module/domain/contracts/module-sub-module-facade';
 
 @Injectable()

@@ -78,6 +78,12 @@
       "@module-action/*": [
         "apps/main/src/modules/action/*"
       ],
+      "@module-common": [
+        "apps/main/src/modules/common"
+      ],
+      "@module-common/*": [
+        "apps/main/src/modules/common/*"
+      ],
       "@test-muses": [
         "apps/main/test"
       ],
