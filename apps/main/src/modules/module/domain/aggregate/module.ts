@@ -84,7 +84,7 @@ export class Module {
     return this._entityRoot.subModules;
   }
 
-  get actions(): string[] {
+  get actions(): string[] | undefined {
     return this._entityRoot.actions;
   }
 
@@ -256,6 +256,11 @@ export class Module {
 
       if (actionIndex === -1) {
         throw new Error('Action not found');
+      }
+
+      if (this._entityRoot.actions.length === 1) {
+        delete this._entityRoot.actions;
+        return;
       }
 
       this._entityRoot.actions.splice(actionIndex, 1);
