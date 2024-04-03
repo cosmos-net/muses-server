@@ -281,9 +281,7 @@ export class Action {
   }
 
   public useModules(modules: Module[]): void {
-    if (!this._entityRoot.modules) {
-      this._entityRoot.modules = [];
-    }
+    this._entityRoot.modules = [];
 
     for (const module of modules) {
       this._entityRoot.modules.push(module);
@@ -291,9 +289,7 @@ export class Action {
   }
 
   public useSubModules(subModules: SubModule[]): void {
-    if (!this._entityRoot.subModules) {
-      this._entityRoot.subModules = [];
-    }
+    this._entityRoot.subModules = [];
 
     for (const subModule of subModules) {
       this._entityRoot.subModules.push(subModule);
