@@ -10,6 +10,6 @@ export class DisableActionOutputDto implements IDisableActionOutputDto {
 
   constructor(root: IDisableActionOutputDto) {
     this.success = root.success;
-    this.message = `SubModule with id ${root.id} has ${root.success ? 'been' : 'not been'} deleted`;
+    this.message = `Action with id ${root.id} has ${root.success ? 'been' : 'not been'} deleted`;
   }
 }
