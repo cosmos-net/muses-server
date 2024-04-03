@@ -17,6 +17,9 @@ import { UpdateRelationsWithModulesEventBody } from '@module-action/domain/event
 import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
 import { UpdateRelationsWithSubModulesEventBody } from '@module-action/domain/events/update-relations-with-sub-modules/update-relations-with-sub-modules-event.body';
 import { UpdateRelationsWithSubModulesEvent } from '@module-action/domain/events/update-relations-with-sub-modules/update-relations-with-sub-modules.event';
+import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
+import { ActionNotFoundException } from '@app-main/modules/action/domain/exceptions/action-not-found.exception';
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
@@ -39,43 +42,43 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     const action = await this.actionRepository.searchOneBy(id, { withDeleted: true });
 
     if (!action) {
-      throw new Error('Action not found');
+      throw new ActionNotFoundException();
     }
 
     action.redescribe(name, description);
     action.changeStatus(enabled);
 
-    if (modules) {
+    if (modules && modules.length > 0) {
       const modulesFound = await this.moduleFacade.getModuleByIds(modules);
 
       if (modulesFound.totalItems === 0) {
-        throw new Error('Modules not found');
+        throw new ModuleNotFoundException();
       }
 
       this.modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
+
+      await this.tryToEmitEventToUpdateRelationWithModules({
+        actionId: action.id,
+        legacyModules: this.modulesLegacy.map((module) => module.id),
+        newModules: action.modules?.map((module) => module.id) || [],
+      });
     }
 
-    if (subModules) {
+    if (subModules && subModules.length > 0) {
       const subModulesFound = await this.subModuleFacade.getSubModuleByIds(subModules);
 
       if (subModulesFound.totalItems === 0) {
-        throw new Error('SubModules not found');
+        throw new SubModuleNotFoundException();
       }
 
       this.subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
+
+      await this.tryToEmitEventToUpdateRelationWithSubModules({
+        actionId: action.id,
+        legacySubModules: this.subModulesLegacy.map((subModule) => subModule.id),
+        newSubModules: action.subModules?.map((subModule) => subModule.id) || [],
+      });
     }
-
-    await this.tryToEmitEventToUpdateRelationWithModules({
-      actionId: action.id,
-      legacyModules: this.modulesLegacy.map((module) => module.id),
-      newModules: action.modules?.map((module) => module.id) || [],
-    });
-
-    await this.tryToEmitEventToUpdateRelationWithSubModules({
-      actionId: action.id,
-      legacySubModules: this.subModulesLegacy.map((subModule) => subModule.id),
-      newSubModules: action.subModules?.map((subModule) => subModule.id) || [],
-    });
 
     return this.actionRepository.persist(action);
   }
