@@ -7,7 +7,7 @@ import {
 import { DisableActionCommand } from '@module-action/application/use-cases/disable-action/disable-action.command';
 import { DisableActionInputDto } from '@module-action/infrastructure/controllers/disable-action/presentation/disable-action-input.dto';
 
-@Controller('actions')
+@Controller('action')
 export class DisableActionController {
   private readonly logger = new Logger(DisableActionController.name);
   constructor(private readonly disableActionService: DisableActionService) {}

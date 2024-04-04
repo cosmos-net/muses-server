@@ -4,7 +4,7 @@ import { RemoveActionCommand } from '@module-module/application/use-cases/remove
 import { IActionFacade } from '@module-module/domain/contracts/action-facade';
 import { IModuleRepository } from '@module-module/domain/contracts/module-repository';
 import { ACTION_FACADE, MODULE_REPOSITORY } from '@module-module/application/constants/injection-tokens';
-import { ModuleNotFoundException } from '@app-main/modules/common/domain/exceptions/module-not-found.exception';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class RemoveActionService implements IApplicationServiceCommand<RemoveActionCommand> {
