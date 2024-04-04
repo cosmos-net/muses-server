@@ -5,7 +5,7 @@ import { CreateActionCommand } from '@module-action/application/use-cases/create
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { CreateActionService } from '@module-action/application/use-cases/create-action/create-action.service';
 
-@Controller('/actions')
+@Controller('/action')
 export class CreateActionController {
   private readonly logger = new Logger(CreateActionController.name);
   constructor(private readonly createSubModuleService: CreateActionService) {}

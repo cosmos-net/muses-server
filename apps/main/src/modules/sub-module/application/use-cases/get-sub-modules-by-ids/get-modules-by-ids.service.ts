@@ -1,6 +1,6 @@
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
 import { Inject, Injectable } from '@nestjs/common';
-import { GetSubModulesByIdsQuery } from '@app-main/modules/sub-module/application/use-cases/get-sub-modules-by-ids/get-modules-by-ids.query';
+import { GetSubModulesByIdsQuery } from '@module-sub-module/application/use-cases/get-sub-modules-by-ids/get-modules-by-ids.query';
 import { ISubModuleRepository } from '@module-sub-module/domain/contracts/sub-module-repository';
 import { SUB_MODULE_REPOSITORY } from '@module-sub-module/application/constants/injection-token';
 import { ListSubModule } from '@module-sub-module/domain/aggregate/list-sub-module';

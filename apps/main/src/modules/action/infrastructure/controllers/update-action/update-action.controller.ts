@@ -5,7 +5,7 @@ import { UpdateActionCommand } from '@module-action/application/use-cases/update
 import { UpdateActionOutputDto } from './presentation/update-action-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-@Controller('actions')
+@Controller('action')
 export class UpdateActionController {
   private readonly logger = new Logger(UpdateActionController.name);
 

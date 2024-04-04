@@ -3,8 +3,8 @@ import { IModuleRepository } from '@module-module/domain/contracts/module-reposi
 import { IApplicationServiceCommand } from '@lib-commons/application/application-service-command';
 import { AddActionCommand } from './add-action.command';
 import { ACTION_FACADE, MODULE_REPOSITORY } from '@module-module/application/constants/injection-tokens';
-import { IActionFacade } from '@app-main/modules/module/domain/contracts/action-facade';
-import { ModuleNotFoundException } from '@app-main/modules/common/domain/exceptions/module-not-found.exception';
+import { IActionFacade } from '@module-module/domain/contracts/action-facade';
+import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
 export class AddActionService implements IApplicationServiceCommand<AddActionCommand> {

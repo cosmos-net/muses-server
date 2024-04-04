@@ -139,4 +139,22 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     return result.modifiedCount;
   }
+
+  async searchListByIds(ids: string[], options: { withDeleted: boolean }): Promise<ListAction> {
+    const actions = await this.actionRepository.find({
+      where: { _id: { $in: ids.map((id) => new ObjectId(id)) } },
+      withDeleted: options.withDeleted,
+    });
+
+    const actionsMapped = actions.map((action) => ({
+      ...action,
+      ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
+      ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      id: action._id.toHexString(),
+    }));
+
+    const list = new ListAction(actionsMapped, actionsMapped.length);
+
+    return list;
+  }
 }

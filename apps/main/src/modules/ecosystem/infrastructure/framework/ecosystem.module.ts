@@ -8,12 +8,12 @@ import { DeleteEcosystemService } from '@module-eco/application/use-cases/delete
 import { ListEcosystemService } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.service';
 import { UpdateEcosystemService } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.service';
 import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { RetrieveEcosystemController } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/retrieve-ecosystem.controller';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { EcosystemModuleFacade } from '@module-eco/infrastructure/api-facade/ecosystem-module.facade';
 import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
 import { TypeOrmEcosystemRepository } from '@module-eco/infrastructure/repositories/typeorm-ecosystem.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([EcosystemEntity])],

@@ -12,8 +12,9 @@ import { ConfigModule } from '@lib-commons/infrastructure/framework/common-main.
 import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/database.loader';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
-import { join } from 'path';
 import { MainActionModule } from '@module-action/infrastructure/framework/action.module';
+import { MainResourceModule } from '@module-resource/infrastructure/framework/resources.module';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MainActionModule } from '@module-action/infrastructure/framework/action
     MainModuleModule,
     MainSubModuleModule,
     MainActionModule,
+    MainResourceModule,
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot(MainConfigOptions),
     TypeOrmModule.forRootAsync({
@@ -31,7 +33,6 @@ import { MainActionModule } from '@module-action/infrastructure/framework/action
       useFactory: (configService: ConfigService) => {
         const db = configService.get<MongoType>('mongo') as MongoType;
         const namingStrategy = new DefaultNamingStrategy();
-
         return {
           type: db.type,
           host: db.host,
