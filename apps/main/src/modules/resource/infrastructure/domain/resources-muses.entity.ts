@@ -1,6 +1,7 @@
 import { BaseEntity } from '@lib-commons/infrastructure/domain/base-commons.entity';
 import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 import { IResourceSchema } from '@module-resource/domain/aggregate/resource.schema';
+import { EnumMethodValue } from '@module-resource/domain/aggregate/value-objects/method.vo';
 
 @Entity({ name: 'resource' })
 export class ResourceEntity extends BaseEntity implements IResourceSchema {
@@ -39,11 +40,12 @@ export class ResourceEntity extends BaseEntity implements IResourceSchema {
   endpoint: string;
 
   @Column({
-    type: 'string',
+    type: 'enum',
+    enum: EnumMethodValue,
     name: 'method',
     nullable: false,
   })
-  method: string;
+  method: EnumMethodValue;
 
   @Column({
     type: 'array',

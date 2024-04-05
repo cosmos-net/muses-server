@@ -6,7 +6,7 @@ import DeletedAt from '@module-resource/domain/aggregate/value-objects/deleted-a
 import UpdatedAt from '@module-resource/domain/aggregate/value-objects/updated-at.vo';
 import IsEnabled from '@module-resource/domain/aggregate/value-objects/is-enabled.vo';
 import Endpoint from '@module-resource/domain/aggregate/value-objects/endpoint.vo';
-import Method from '@module-resource/domain/aggregate/value-objects/method.vo';
+import Method, { EnumMethodValue } from '@module-resource/domain/aggregate/value-objects/method.vo';
 import { IResourceSchema } from '@module-resource/domain/aggregate/resource.schema';
 import { IActionSchemaAggregate } from '@module-resource/domain/aggregate/resource.aggregate';
 import { Action } from '@module-action/domain/aggregate/action';
@@ -16,8 +16,8 @@ import { IActionSchema } from '@app-main/modules/action/domain/aggregate/action.
 export class Resource {
   private _entityRoot = {} as IActionSchemaAggregate;
 
-  constructor(schema: IResourceSchema) {
-    this.hydrate(schema);
+  constructor(schema?: IResourceSchema) {
+    if (schema) this.hydrate(schema);
   }
 
   public get id(): string {
@@ -40,7 +40,7 @@ export class Resource {
     return this._entityRoot.endpoint.value;
   }
 
-  public get method(): string {
+  public get method(): EnumMethodValue {
     return this._entityRoot.method.value;
   }
 
@@ -104,6 +104,11 @@ export class Resource {
     this._entityRoot.deletedAt = new DeletedAt(new Date());
   }
 
+  public configNetwork(endpoint: string, method: EnumMethodValue): void {
+    this._entityRoot.endpoint = new Endpoint(endpoint);
+    this._entityRoot.method = new Method(method);
+  }
+
   public toPrimitives(): IResourceSchema {
     return {
       id: this._entityRoot.id.value,
@@ -124,32 +129,68 @@ export class Resource {
 
   public hydrateTriggers(schema: IResourceSchema): void {
     if (schema.triggers) {
-      const triggers = schema.triggers.map((trigger) => {
-        return trigger instanceof Object ? new Resource(trigger) : (trigger as string);
-      });
-
-      if (!this._entityRoot.triggers) {
+      if (!this._entityRoot.triggers || this._entityRoot.triggers.length === 0) {
         this._entityRoot.triggers = [];
+
+        const triggers = this._entityRoot.triggers.map((trigger) => {
+          return trigger instanceof Resource ? trigger : trigger;
+        });
+
+        this._entityRoot.triggers.push(...triggers);
       }
 
-      for (const trigger of triggers) {
-        this._entityRoot.triggers.push(trigger);
+      for (const trigger of schema.triggers) {
+        const triggerIndex = this._entityRoot.triggers.findIndex((resource) => {
+          if (resource instanceof Resource && trigger instanceof Resource) {
+            return resource.id === trigger.id;
+          } else if (resource instanceof Resource && typeof trigger === 'string') {
+            return resource.id === trigger;
+          } else if (typeof resource === 'string' && trigger instanceof Resource) {
+            return resource === trigger.id;
+          } else if (typeof resource === 'string' && typeof trigger === 'string') {
+            return resource === trigger;
+          }
+
+          return false;
+        });
+
+        if (triggerIndex === -1) {
+          this._entityRoot.triggers.push(trigger);
+        }
       }
     }
   }
 
   public hydrateActions(schema: IResourceSchema): void {
     if (schema.actions) {
-      const actions = schema.actions.map((action) => {
-        return action instanceof Object ? new Action(action) : (action as string);
-      });
-
-      if (!this._entityRoot.actions) {
+      if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
         this._entityRoot.actions = [];
+
+        const actions = this._entityRoot.actions.map((action) => {
+          return action instanceof Action ? action : action;
+        });
+
+        this._entityRoot.actions.push(...actions);
       }
 
-      for (const action of actions) {
-        this._entityRoot.actions.push(action);
+      for (const action of schema.actions) {
+        const actionIndex = this._entityRoot.actions.findIndex((act) => {
+          if (act instanceof Action && action instanceof Action) {
+            return act.id === action.id;
+          } else if (act instanceof Action && typeof action === 'string') {
+            return act.id === action;
+          } else if (typeof act === 'string' && action instanceof Action) {
+            return act === action.id;
+          } else if (typeof act === 'string' && typeof action === 'string') {
+            return act === action;
+          }
+
+          return false;
+        });
+
+        if (actionIndex === -1) {
+          this._entityRoot.actions.push(action);
+        }
       }
     }
   }
@@ -196,7 +237,8 @@ export class Resource {
   }
 
   public useActions(actions: Action[]): void {
-    if (this._entityRoot.actions.length === 0) {
+    if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
+      this._entityRoot.actions = [];
       this._entityRoot.actions.push(...actions);
 
       return;
@@ -215,5 +257,29 @@ export class Resource {
 
       this._entityRoot.actions.splice(actionIndex, 1, action);
     }
+  }
+
+  public entityRootPartial(): Partial<IResourceSchema> {
+    const partialSchema: Partial<IResourceSchema> = {};
+
+    for (const [key, value] of Object.entries(this._entityRoot)) {
+      if (value instanceof Object) {
+        if (value.value !== null) {
+          if (key === 'triggers') {
+            partialSchema[key] = value.map((trigger) => trigger.id);
+            continue;
+          }
+
+          if (key === 'actions') {
+            partialSchema[key] = value.map((action) => action.id);
+            continue;
+          }
+
+          partialSchema[key] = value.value;
+        }
+      }
+    }
+
+    return partialSchema;
   }
 }
