@@ -7,7 +7,7 @@ import {
   IGetResourceOutputDto,
 } from '@module-resource/infrastructure/controllers/get-resource/presentation/get-resource-output.dto';
 
-@Controller('resource')
+@Controller('/resource')
 export class GetResourceController {
   private readonly logger = new Logger(GetResourceController.name);
 

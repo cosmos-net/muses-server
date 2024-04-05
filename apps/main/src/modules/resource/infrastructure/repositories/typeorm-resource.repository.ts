@@ -59,4 +59,51 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
 
     return new Resource(this.cleanData(resource));
   }
+
+  async isNameAvailable(name: string): Promise<boolean> {
+    const resource = await this.resourceRepository.findOneBy({ name });
+
+    return !resource;
+  }
+
+  async persist(model: Resource): Promise<Resource> {
+    let partialSchema: Partial<ResourceEntity> = model.entityRootPartial();
+
+    if (partialSchema.triggers) {
+      const triggers = partialSchema.triggers.map((trigger) => new ObjectId(trigger));
+
+      partialSchema = {
+        ...partialSchema,
+        triggers,
+      };
+    }
+
+    if (partialSchema.actions) {
+      const actions = partialSchema.actions.map((action) => new ObjectId(action));
+
+      partialSchema = {
+        ...partialSchema,
+        actions,
+      };
+    }
+
+    if (partialSchema.id) {
+      const resourceId = new ObjectId(partialSchema.id);
+
+      partialSchema = {
+        ...partialSchema,
+        _id: resourceId,
+      };
+
+      await this.resourceRepository.updateOne({ _id: resourceId }, partialSchema);
+
+      return model;
+    }
+
+    const resource = await this.resourceRepository.save(partialSchema);
+
+    model.hydrate(this.cleanData(resource));
+
+    return model;
+  }
 }

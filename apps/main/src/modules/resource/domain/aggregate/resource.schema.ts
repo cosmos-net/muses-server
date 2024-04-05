@@ -1,4 +1,5 @@
 import { IActionSchema } from '@module-action/domain/aggregate/action.schema';
+import { EnumMethodValue } from '@module-resource/domain/aggregate/value-objects/method.vo';
 
 export interface IResourceSchema {
   id: string | any;
@@ -6,7 +7,7 @@ export interface IResourceSchema {
   description: string;
   isEnabled: boolean;
   endpoint: string;
-  method: string;
+  method: EnumMethodValue;
   triggers?: IResourceSchema[] | string[] | null | any;
   actions: IActionSchema[] | string[] | any;
   createdAt: Date;
