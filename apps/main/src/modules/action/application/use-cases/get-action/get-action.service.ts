@@ -9,8 +9,8 @@ import { IApplicationServiceQuery } from '@lib-commons/application/application-s
 import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { Action } from '@module-action/domain/aggregate/action';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
-import { IModuleFacade } from '@app-main/modules/action/domain/contracts/module-facade';
-import { ISubModuleFacade } from '@app-main/modules/action/domain/contracts/sub-module-facade';
+import { IModuleFacade } from '@module-action/domain/contracts/module-facade';
+import { ISubModuleFacade } from '@module-action/domain/contracts/sub-module-facade';
 
 @Injectable()
 export class GetActionService implements IApplicationServiceQuery<GetActionQuery> {

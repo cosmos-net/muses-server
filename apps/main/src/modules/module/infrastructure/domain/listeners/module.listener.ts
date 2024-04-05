@@ -11,7 +11,7 @@ import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/up
 import { UpdateRelationsWithModulesEventHandler } from '@module-module/application/event-handlers/update-relations-with-modules-event.handler';
 import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module.event';
 import { RelateActionWithModuleEventHandler } from '@module-module/application/event-handlers/relate-action-with-module-event.handler';
-import { RemoveActionFromModulesEvent } from '@app-main/modules/action/domain/events/remove-action-from-modules/remove-action-from-modules.event';
+import { RemoveActionFromModulesEvent } from '@module-action/domain/events/remove-action-from-modules/remove-action-from-modules.event';
 import { RemoveActionFromModulesEventHandler } from '@module-module/application/event-handlers/remove-action-from-modules-event.handler';
 
 @Injectable()

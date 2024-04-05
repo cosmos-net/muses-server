@@ -1,0 +1,14 @@
+import { Resource } from '@module-resource/domain/aggregate/resource';
+import { ListResource } from '@module-resource/domain/aggregate/list-resource';
+
+export interface IResourceRepository {
+  persist(resource: Resource): Promise<Resource>;
+  isNameAvailable(name: string): Promise<boolean>;
+  searchListBy(ids: string[]): Promise<ListResource>;
+  searchOneBy(
+    id: string,
+    options: {
+      withDeleted: boolean;
+    },
+  ): Promise<Resource | null>;
+}
