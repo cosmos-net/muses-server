@@ -258,7 +258,7 @@ export class Action {
   }
 
   public entityRootPartial(): Partial<IActionSchema> {
-    const partialSchema: Partial<IModuleSchema> = {};
+    const partialSchema: Partial<IActionSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         if (value.value !== null) {

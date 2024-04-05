@@ -78,6 +78,12 @@
       "@module-action/*": [
         "apps/main/src/modules/action/*"
       ],
+      "@module-resource": [
+        "apps/main/src/modules/resource"
+      ],
+      "@module-resource/*": [
+        "apps/main/src/modules/resource/*"
+      ],
       "@module-common": [
         "apps/main/src/modules/common"
       ],

@@ -1,8 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CreateProjectController } from '@module-project/infrastructure/controllers/create-project/create-project.controller';
 import { CreateProjectService } from '@module-project/application/use-cases/create-project/create-project.service';
 import { ProjectEntity } from '@module-project/infrastructure/domain/project-muses.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   PROJECT_REPOSITORY,
   ECOSYSTEM_MODULE_FACADE,

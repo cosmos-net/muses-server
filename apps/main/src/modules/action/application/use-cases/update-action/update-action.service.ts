@@ -19,7 +19,7 @@ import { UpdateRelationsWithSubModulesEventBody } from '@module-action/domain/ev
 import { UpdateRelationsWithSubModulesEvent } from '@module-action/domain/events/update-relations-with-sub-modules/update-relations-with-sub-modules.event';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
-import { ActionNotFoundException } from '@app-main/modules/action/domain/exceptions/action-not-found.exception';
+import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {

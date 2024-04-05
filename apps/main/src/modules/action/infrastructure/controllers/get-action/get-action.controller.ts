@@ -7,7 +7,7 @@ import {
 import { GetActionQuery } from '@module-action/application/use-cases/get-action/get-action.query';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-@Controller('actions')
+@Controller('action')
 export class GetActionController {
   private readonly logger = new Logger(GetActionController.name);
   constructor(private readonly getActionService: GetActionService) {}
