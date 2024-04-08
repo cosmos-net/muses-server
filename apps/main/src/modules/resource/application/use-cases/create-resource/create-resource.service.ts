@@ -42,6 +42,8 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
     await this.populateActions(actions);
     await this.resourceRepository.persist(resource);
 
+    //TODO: handle events
+
     return resource;
   }
 

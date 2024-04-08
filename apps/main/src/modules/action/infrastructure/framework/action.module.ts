@@ -5,12 +5,13 @@ import { GetActionService } from '@module-action/application/use-cases/get-actio
 import {
   ACTION_REPOSITORY,
   MODULE_FACADE,
+  RESOURCE_FACADE,
   SUB_MODULE_FACADE,
 } from '@module-action/application/constants/injection-token';
 import { TypeOrmActionRepository } from '@module-action/infrastructure/repositories/typeorm-action.repository';
 import { ActionEntity } from '@module-action/infrastructure/domain/action-muses.entity';
-import { ModuleFacadeService } from '@module-action/infrastructure/framework/services/module-facade.service';
-import { SubModuleFacadeService } from '@module-action/infrastructure/framework/services/sub-module-facade.service';
+import { ModuleFacadeService } from '@app-main/modules/action/infrastructure/domain/services/module-facade.service';
+import { SubModuleFacadeService } from '@app-main/modules/action/infrastructure/domain/services/sub-module-facade.service';
 import { UpdateActionService } from '@module-action/application/use-cases/update-action/update-action.service';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
@@ -24,11 +25,18 @@ import { ListActionService } from '@module-action/application/use-cases/list-act
 import { DisableActionService } from '@module-action/application/use-cases/disable-action/disable-action.service';
 import { DisableActionController } from '@module-action/infrastructure/controllers/disable-action/disable-action.controller';
 import { GetAllActionByIds } from '@module-action/application/use-cases/get-all-action-by-ids/get-all-action-by-ids.service';
+import { ActionListener } from '@module-action/infrastructure/domain/listeners/action.listener';
+import { UpdateRelationsWithResourceEventHandler } from '@module-action/application/event-handlers/update-relations-with-resource-event.handler';
+import { AddResourceService } from '@module-action/application/use-cases/add-resource/add-resource.service';
+import { RemoveResourceService } from '@module-action/application/use-cases/remove-resource/remove-resource.service';
+import { ResourceFacadeService } from '@module-action/infrastructure/domain/services/resource-facade.service';
+import { MainResourceModule } from '@app-main/modules/resource/infrastructure/framework/resource.module';
 
 @Module({
   imports: [
     forwardRef(() => MainModuleModule),
     forwardRef(() => MainSubModuleModule),
+    forwardRef(() => MainResourceModule),
     TypeOrmModule.forFeature([ActionEntity]),
   ],
   controllers: [
@@ -50,6 +58,10 @@ import { GetAllActionByIds } from '@module-action/application/use-cases/get-all-
     ListActionService,
     DisableActionService,
     GetAllActionByIds,
+    ActionListener,
+    UpdateRelationsWithResourceEventHandler,
+    AddResourceService,
+    RemoveResourceService,
     {
       provide: ACTION_REPOSITORY,
       useClass: TypeOrmActionRepository,
@@ -61,6 +73,10 @@ import { GetAllActionByIds } from '@module-action/application/use-cases/get-all-
     {
       provide: MODULE_FACADE,
       useClass: ModuleFacadeService,
+    },
+    {
+      provide: RESOURCE_FACADE,
+      useClass: ResourceFacadeService,
     },
   ],
   exports: [

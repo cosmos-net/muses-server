@@ -371,4 +371,16 @@ export class Action {
 
     return subModulesToRemove;
   }
+
+  public addResource(resourceId: string): void {
+    this._entityRoot.resource = resourceId;
+  }
+
+  public removeResource(resourceId): void {
+    if (this._entityRoot.resource !== resourceId) {
+      throw new Error(`The resource ${resourceId} is not related to this action ${this._entityRoot.id}`);
+    }
+
+    this._entityRoot.resource = null;
+  }
 }
