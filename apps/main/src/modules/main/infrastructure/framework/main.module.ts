@@ -13,7 +13,7 @@ import { DatabasesLoader } from '@lib-commons/infrastructure/config/loaders/data
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { MainActionModule } from '@module-action/infrastructure/framework/action.module';
-import { MainResourceModule } from '@module-resource/infrastructure/framework/resources.module';
+import { MainResourceModule } from '@app-main/modules/resource/infrastructure/framework/resource.module';
 import { join } from 'path';
 
 @Module({
