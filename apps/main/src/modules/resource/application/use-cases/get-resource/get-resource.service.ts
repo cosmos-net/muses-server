@@ -4,7 +4,7 @@ import { GetResourceQuery } from '@module-resource/application/use-cases/get-res
 import { RESOURCE_REPOSITORY, FACADE_ACTION } from '@module-resource/application/constants/injection-token';
 import { IResourceRepository } from '@module-resource/domain/contracts/resource-repository';
 import { ResourceNotFoundException } from '@module-resource/domain/exceptions/resource-not-found.exception';
-import { Resource } from '@app-main/modules/resource/domain/aggregate/resource';
+import { Resource } from '@module-resource/domain/aggregate/resource';
 import { IActionFacade } from '@module-resource/domain/contracts/action-facade';
 
 @Injectable()
