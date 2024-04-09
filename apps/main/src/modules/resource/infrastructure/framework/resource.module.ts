@@ -13,16 +13,19 @@ import { ResourceModuleFacade } from '@module-resource/infrastructure/api-facade
 import { UpdateResourceController } from '@module-resource/infrastructure/controllers/update-resource/update-resource.controller';
 import { UpdateResourceService } from '@module-resource/application/use-cases/update-resource/update-resource.service';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
+import { DisableResourceController } from '@module-resource/infrastructure/controllers/disable-resource/disable-resource.controller';
+import { DisableResourceService } from '@module-resource/application/use-cases/disable-resource/disable-resource.service';
 
 @Module({
   imports: [forwardRef(() => MainActionModule), TypeOrmModule.forFeature([ResourceEntity])],
-  controllers: [GetResourceController, CreateResourceController, UpdateResourceController],
+  controllers: [GetResourceController, CreateResourceController, UpdateResourceController, DisableResourceController],
   providers: [
     EventStoreService,
     GetResourceService,
     CreateResourceService,
     ResourceModuleFacade,
     UpdateResourceService,
+    DisableResourceService,
     {
       provide: RESOURCE_REPOSITORY,
       useClass: TypeOrmResourceRepository,
