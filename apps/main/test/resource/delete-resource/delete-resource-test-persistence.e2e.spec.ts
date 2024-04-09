@@ -68,6 +68,13 @@ describe('Delete resource test persistence (e2e)', () => {
 
         expect(resourceFound).toHaveProperty('deletedAt');
         expect(resourceFound).toHaveProperty('isEnabled', false);
+
+        const actionFound = await actionRepository.findOne({
+          where: { _id: action._id },
+          withDeleted: true,
+        });
+
+        expect(actionFound).not.toHaveProperty('resource');
       });
     });
   });

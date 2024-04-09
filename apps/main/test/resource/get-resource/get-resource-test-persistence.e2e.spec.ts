@@ -59,6 +59,22 @@ describe('Get resource test persistence (e2e)', () => {
         expect(response.body.id).toBe(resource._id.toHexString());
         expect(response.body.name).toBe(resource.name);
         expect(response.body.description).toBe(resource.description);
+        expect(response.body.actions[0].id).toBe(action._id.toHexString());
+
+        const resourceFound = await resourceRepository.findOne({
+          where: { _id: resource._id },
+          withDeleted: true,
+        });
+
+        expect(resourceFound).toHaveProperty('name', response.body.name);
+        expect(resourceFound).toHaveProperty('description', response.body.description);
+        expect(resourceFound).toHaveProperty('isEnabled', response.body.isEnabled);
+        expect(resourceFound).toHaveProperty('actions');
+        if (resourceFound?.actions) {
+          expect(resourceFound.actions[0].toHexString()).toBe(response.body.actions[0].id);
+        } else {
+          fail('Resource actions not found');
+        }
       });
     });
   });
