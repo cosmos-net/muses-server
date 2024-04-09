@@ -7,7 +7,7 @@ import { RESOURCE_REPOSITORY, FACADE_ACTION } from '@module-resource/application
 import { ResourceNameAlreadyUsedException } from '@module-resource/domain/exceptions/resource-name-already-used.exception';
 import { Resource } from '@module-resource/domain/aggregate/resource';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
-import { TriggersNotFoundException } from '@app-main/modules/resource/domain/exceptions/triggers-not-found.exception';
+import { TriggersNotFoundException } from '@module-resource/domain/exceptions/triggers-not-found.exception';
 
 @Injectable()
 export class CreateResourceService implements IApplicationServiceCommand<CreateResourceCommand> {
@@ -41,6 +41,8 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
     await this.populateTriggers(triggers);
     await this.populateActions(actions);
     await this.resourceRepository.persist(resource);
+
+    //TODO: handle events
 
     return resource;
   }

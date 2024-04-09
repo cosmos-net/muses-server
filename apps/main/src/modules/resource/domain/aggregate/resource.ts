@@ -87,6 +87,24 @@ export class Resource {
     this._entityRoot.description = new Description(description);
   }
 
+  public reDescribe(name?: string, description?: string): void {
+    if (name) {
+      if (this._entityRoot.name.value === name) {
+        throw new ResourcePropertyWithSameValueException('name', name);
+      }
+
+      this._entityRoot.name = new Name(name);
+    }
+
+    if (description) {
+      if (this._entityRoot.description.value === description) {
+        throw new ResourcePropertyWithSameValueException('description', description);
+      }
+
+      this._entityRoot.description = new Description(description);
+    }
+  }
+
   public enable(): void {
     if (this._entityRoot.isEnabled) {
       throw new ResourcePropertyWithSameValueException('isEnabled', true);
@@ -107,6 +125,24 @@ export class Resource {
   public configNetwork(endpoint: string, method: EnumMethodValue): void {
     this._entityRoot.endpoint = new Endpoint(endpoint);
     this._entityRoot.method = new Method(method);
+  }
+
+  public reConfigNetwork(endpoint?: string, method?: EnumMethodValue): void {
+    if (endpoint) {
+      if (this._entityRoot.endpoint.value === endpoint) {
+        throw new ResourcePropertyWithSameValueException('endpoint', endpoint);
+      }
+
+      this._entityRoot.endpoint = new Endpoint(endpoint);
+    }
+
+    if (method) {
+      if (this._entityRoot.method.value === method) {
+        throw new ResourcePropertyWithSameValueException('method', method);
+      }
+
+      this._entityRoot.method = new Method(method);
+    }
   }
 
   public toPrimitives(): IResourceSchema {
@@ -131,12 +167,9 @@ export class Resource {
     if (schema.triggers) {
       if (!this._entityRoot.triggers || this._entityRoot.triggers.length === 0) {
         this._entityRoot.triggers = [];
+        this._entityRoot.triggers.push(...schema.triggers);
 
-        const triggers = this._entityRoot.triggers.map((trigger) => {
-          return trigger instanceof Resource ? trigger : trigger;
-        });
-
-        this._entityRoot.triggers.push(...triggers);
+        return;
       }
 
       for (const trigger of schema.triggers) {
@@ -165,12 +198,9 @@ export class Resource {
     if (schema.actions) {
       if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
         this._entityRoot.actions = [];
+        this._entityRoot.actions.push(...schema.actions);
 
-        const actions = this._entityRoot.actions.map((action) => {
-          return action instanceof Action ? action : action;
-        });
-
-        this._entityRoot.actions.push(...actions);
+        return;
       }
 
       for (const action of schema.actions) {
@@ -236,6 +266,69 @@ export class Resource {
     }
   }
 
+  public useTriggersAndReturnLegacy(resources: Resource[]): {
+    triggersToAdd: Resource[];
+    triggersToRemove: Resource[];
+  } {
+    if (!this._entityRoot.triggers) {
+      this._entityRoot.triggers = [];
+      this._entityRoot.triggers.push(...resources);
+
+      return {
+        triggersToAdd: resources,
+        triggersToRemove: [],
+      };
+    }
+
+    const triggersToRemove = this._entityRoot.triggers.filter((trigger) => {
+      return !resources.some((resource) => {
+        return trigger instanceof Resource ? trigger.id === resource.id : trigger === resource.id;
+      });
+    });
+
+    for (const triggerToRemove of triggersToRemove) {
+      const triggerIndex = this._entityRoot.triggers.findIndex((trigger) => {
+        if (trigger instanceof Resource && triggerToRemove instanceof Resource) {
+          return trigger.id === triggerToRemove.id;
+        } else if (trigger instanceof Resource && typeof triggerToRemove === 'string') {
+          return trigger.id === triggerToRemove;
+        } else if (typeof trigger === 'string' && triggerToRemove instanceof Resource) {
+          return trigger === triggerToRemove.id;
+        } else if (typeof trigger === 'string' && typeof triggerToRemove === 'string') {
+          return trigger === triggerToRemove;
+        } else {
+          return false;
+        }
+      });
+
+      if (triggerIndex === -1) continue;
+
+      this._entityRoot.triggers.splice(triggerIndex, 1);
+    }
+
+    const triggersToAdd: Resource[] = [];
+
+    for (const resource of resources) {
+      const resourceIndex = this._entityRoot.triggers.findIndex((trigger) => {
+        return trigger instanceof Resource ? trigger.id === resource.id : trigger === resource.id;
+      });
+
+      if (resourceIndex === -1) {
+        this._entityRoot.triggers.push(resource);
+        triggersToAdd.push(resource);
+
+        continue;
+      }
+
+      this._entityRoot.triggers.splice(resourceIndex, 1, resource);
+    }
+
+    return {
+      triggersToAdd,
+      triggersToRemove,
+    };
+  }
+
   public useActions(actions: Action[]): void {
     if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
       this._entityRoot.actions = [];
@@ -257,6 +350,66 @@ export class Resource {
 
       this._entityRoot.actions.splice(actionIndex, 1, action);
     }
+  }
+
+  public useActionAndReturnLegacy(actions: Action[]): { actionsToAdd: Action[]; actionsToRemove: Action[] } {
+    if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
+      this._entityRoot.actions = [];
+      this._entityRoot.actions.push(...actions);
+
+      return {
+        actionsToAdd: actions,
+        actionsToRemove: [],
+      };
+    }
+
+    const actionsToRemove = this._entityRoot.actions.filter((action) => {
+      return !actions.some((act) => {
+        return action instanceof Action ? action.id === act.id : action === act.id;
+      });
+    });
+
+    for (const actionToRemove of actionsToRemove) {
+      const actionIndex = this._entityRoot.actions.findIndex((action) => {
+        if (action instanceof Action && actionToRemove instanceof Action) {
+          return action.id === actionToRemove.id;
+        } else if (action instanceof Action && typeof actionToRemove === 'string') {
+          return action.id === actionToRemove;
+        } else if (typeof action === 'string' && actionToRemove instanceof Action) {
+          return action === actionToRemove.id;
+        } else if (typeof action === 'string' && typeof actionToRemove === 'string') {
+          return action === actionToRemove;
+        } else {
+          return false;
+        }
+      });
+
+      if (actionIndex === -1) continue;
+
+      this._entityRoot.actions.splice(actionIndex, 1);
+    }
+
+    const actionsToAdd: Action[] = [];
+
+    for (const action of actions) {
+      const actionIndex = this._entityRoot.actions.findIndex((act) => {
+        return act instanceof Action ? act.id === action.id : act === action.id;
+      });
+
+      if (actionIndex === -1) {
+        this._entityRoot.actions.push(action);
+        actionsToAdd.push(action);
+
+        continue;
+      }
+
+      this._entityRoot.actions.splice(actionIndex, 1, action);
+    }
+
+    return {
+      actionsToAdd,
+      actionsToRemove,
+    };
   }
 
   public entityRootPartial(): Partial<IResourceSchema> {
