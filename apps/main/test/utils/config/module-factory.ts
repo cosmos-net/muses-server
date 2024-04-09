@@ -15,7 +15,7 @@ import { mongo_test_loader } from './mongo-test.loader';
 import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { MainSubModuleModule } from '@module-sub-module/infrastructure/framework/sub-module.module';
 import { MainActionModule } from '@module-action/infrastructure/framework/action.module';
-import { MainResourceModule } from '@module-resource/infrastructure/framework/resources.module';
+import { MainResourceModule } from '@module-resource/infrastructure/framework/resource.module';
 
 export class ModuleFactory {
   public static async createModule(): Promise<TestingModule> {

@@ -8,6 +8,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import { createActionGenerator } from '@test-muses/utils/generators/action.generator';
 import { createResourceGenerator } from '@test-muses/utils/generators/resource.generator';
+import { ObjectId } from 'mongodb';
 import * as request from 'supertest';
 import { MongoRepository } from 'typeorm';
 
@@ -68,8 +69,31 @@ describe('Create resource test persistence (e2e)', () => {
         expect(response.body.name).toBe(params.name);
         expect(response.body.description).toBe(params.description);
         expect(response.body.isEnabled).toBe(params.isEnabled);
-        expect(response.body.actions[0]).toBe(action._id.toHexString());
-        expect(response.body.triggers[0]).toBe(resource._id.toHexString());
+        expect(response.body.actions[0].id).toBe(action._id.toHexString());
+        expect(response.body.triggers[0].id).toBe(resource._id.toHexString());
+
+        const resourceFound = await resourceRepository.findOne({
+          where: { _id: new ObjectId(response.body.id) },
+          withDeleted: true,
+        });
+
+        expect(resourceFound).toHaveProperty('name', params.name);
+        if (resourceFound?.actions) {
+          expect(resourceFound.actions[0].toHexString()).toBe(action._id.toHexString());
+        } else {
+          fail('Resource actions not found');
+        }
+
+        const actionFound = await actionRepository.findOne({
+          where: { _id: action._id },
+          withDeleted: true,
+        });
+
+        if (actionFound?.resource) {
+          expect(actionFound.resource.toHexString()).toBe(resourceFound._id.toHexString());
+        } else {
+          fail('Action resource not found');
+        }
       });
     });
   });

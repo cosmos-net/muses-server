@@ -47,7 +47,7 @@ describe('Update resource test persistence (e2e)', () => {
   jest.setTimeout(99999999);
 
   describe('Given we want to update a resource', () => {
-    describe('When we send a list of actions and triggers valid', () => {
+    describe('When we send a list of actions valid', () => {
       test('Then expect to update the resource', async () => {
         const action = await createActionGenerator(actionRepository);
         const resource = await createResourceGenerator(resourceRepository, {
@@ -55,23 +55,68 @@ describe('Update resource test persistence (e2e)', () => {
         });
 
         const action2 = await createActionGenerator(actionRepository);
-        const resource2 = await createResourceGenerator(resourceRepository);
 
         const params = {
           id: resource._id.toHexString(),
           actions: [action2._id.toHexString()],
-          triggers: [resource2._id.toHexString()],
         };
 
         const response = await request(app.getHttpServer())
-          .patch('actions')
-          .send({ id: params.id, actions: params.actions, triggers: params.triggers });
+          .patch('/resource')
+          .send({ id: params.id, actions: params.actions });
 
         expect(response.status).toBe(200);
         expect(response.body.name).toBe(resource.name);
         expect(response.body.description).toBe(resource.description);
-        expect(response.body.actions[0]).toBe(action2._id.toHexString());
-        expect(response.body.triggers[0]).toBe(resource2._id.toHexString());
+        expect(response.body.actions[0].id).toBe(action2._id.toHexString());
+
+        const resourceFound = await resourceRepository.findOne({
+          where: { _id: resource._id },
+          withDeleted: true,
+        });
+
+        if (resourceFound?.actions) {
+          expect(resourceFound.actions[0].toHexString()).toBe(action2._id.toHexString());
+        } else {
+          fail('Resource actions not found');
+        }
+      });
+    });
+
+    describe('When we send a list of triggers valid', () => {
+      test('Then expect to update the resource', async () => {
+        //const action = await createActionGenerator(actionRepository);
+        const resourceTrigger = await createResourceGenerator(resourceRepository);
+        const resource = await createResourceGenerator(resourceRepository, {
+          triggers: [resourceTrigger._id],
+        });
+
+        const resource2 = await createResourceGenerator(resourceRepository);
+
+        const params = {
+          id: resource._id.toHexString(),
+          triggers: [resource2._id.toHexString()],
+        };
+
+        const response = await request(app.getHttpServer())
+          .patch('/resource')
+          .send({ id: params.id, triggers: params.triggers });
+
+        expect(response.status).toBe(200);
+        expect(response.body.name).toBe(resource.name);
+        expect(response.body.description).toBe(resource.description);
+        expect(response.body.triggers[0].id).toBe(resource2._id.toHexString());
+
+        const resourceFound = await resourceRepository.findOne({
+          where: { _id: resource._id },
+          withDeleted: true,
+        });
+
+        if (resourceFound?.triggers) {
+          expect(resourceFound.triggers[0].toHexString()).toBe(resource2._id.toHexString());
+        } else {
+          fail('Resource triggers not found');
+        }
       });
     });
   });
