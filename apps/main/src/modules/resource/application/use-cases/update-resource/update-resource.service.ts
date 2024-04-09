@@ -8,10 +8,10 @@ import { IActionFacade } from '@module-resource/domain/contracts/action-facade';
 import { ResourceNotFoundException } from '@module-resource/domain/exceptions/resource-not-found.exception';
 import { Resource } from '@module-resource/domain/aggregate/resource';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
-import { TriggersNotFoundException } from '@app-main/modules/resource/domain/exceptions/triggers-not-found.exception';
+import { TriggersNotFoundException } from '@module-resource/domain/exceptions/triggers-not-found.exception';
 import { Action } from '@module-action/domain/aggregate/action';
-import { UpdateRelationsWithActionEventBody } from '@app-main/modules/resource/domain/events/update-relation-with-action-event/update-relation-with-action-event-body';
-import { UpdateRelationWithActionEvent } from '@app-main/modules/resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
+import { UpdateRelationsWithActionEventBody } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action-event-body';
+import { UpdateRelationWithActionEvent } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
 
 @Injectable()
 export class UpdateResourceService implements IApplicationServiceCommand<UpdateResourceCommand> {
@@ -53,11 +53,15 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
     await this.populateTriggers(triggers);
     await this.populateActions(actions);
 
-    await this.tryToEmitEvent({
-      actionsToAddResource: this.actionsToAdd.map((action) => action.id),
-      actionsToRemoveResource: this.actionsToRemove.map((action) => action.id),
-      resourceId: resource.id,
-    });
+    if (this.actionsToAdd || this.actionsToRemove) {
+      await this.tryToEmitEvent({
+        actionsToAddResource: this.actionsToAdd?.map((action) => action.id),
+        actionsToRemoveResource: this.actionsToRemove?.map((action) => action.id),
+        resourceId: resource.id,
+      });
+    }
+
+    await this.resourceRepository.persist(resource);
 
     return resource;
   }

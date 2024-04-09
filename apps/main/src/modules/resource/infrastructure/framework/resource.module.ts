@@ -10,14 +10,19 @@ import { ActionFacadeService } from '@module-resource/infrastructure/domain/serv
 import { CreateResourceController } from '@module-resource/infrastructure/controllers/create-resource/create-resource.controller';
 import { CreateResourceService } from '@module-resource/application/use-cases/create-resource/create-resource.service';
 import { ResourceModuleFacade } from '@module-resource/infrastructure/api-facade/resource-module.facade';
+import { UpdateResourceController } from '@module-resource/infrastructure/controllers/update-resource/update-resource.controller';
+import { UpdateResourceService } from '@module-resource/application/use-cases/update-resource/update-resource.service';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 
 @Module({
   imports: [forwardRef(() => MainActionModule), TypeOrmModule.forFeature([ResourceEntity])],
-  controllers: [GetResourceController, CreateResourceController],
+  controllers: [GetResourceController, CreateResourceController, UpdateResourceController],
   providers: [
+    EventStoreService,
     GetResourceService,
     CreateResourceService,
     ResourceModuleFacade,
+    UpdateResourceService,
     {
       provide: RESOURCE_REPOSITORY,
       useClass: TypeOrmResourceRepository,

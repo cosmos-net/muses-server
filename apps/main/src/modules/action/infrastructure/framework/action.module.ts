@@ -30,7 +30,7 @@ import { UpdateRelationsWithResourceEventHandler } from '@module-action/applicat
 import { AddResourceService } from '@module-action/application/use-cases/add-resource/add-resource.service';
 import { RemoveResourceService } from '@module-action/application/use-cases/remove-resource/remove-resource.service';
 import { ResourceFacadeService } from '@module-action/infrastructure/domain/services/resource-facade.service';
-import { MainResourceModule } from '@app-main/modules/resource/infrastructure/framework/resource.module';
+import { MainResourceModule } from '@module-resource/infrastructure/framework/resource.module';
 
 @Module({
   imports: [
@@ -40,10 +40,10 @@ import { MainResourceModule } from '@app-main/modules/resource/infrastructure/fr
     TypeOrmModule.forFeature([ActionEntity]),
   ],
   controllers: [
+    ListActionController,
     GetActionController,
     CreateActionController,
     UpdateActionController,
-    ListActionController,
     DisableActionController,
   ],
   providers: [

@@ -95,7 +95,7 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
         _id: resourceId,
       };
 
-      await this.resourceRepository.updateOne({ _id: resourceId }, partialSchema);
+      await this.resourceRepository.updateOne({ _id: resourceId }, { $set: partialSchema });
 
       return model;
     }

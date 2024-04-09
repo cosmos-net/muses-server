@@ -1,7 +1,7 @@
 import { EventTopicEnum } from '@lib-commons/domain/contracts/event/event-topic-enum';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { UpdateRelationWithActionEvent } from '@app-main/modules/resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
+import { UpdateRelationWithActionEvent } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
 import { UpdateRelationsWithResourceEventHandler } from '@app-main/modules/action/application/event-handlers/update-relations-with-resource-event.handler';
 
 @Injectable()
