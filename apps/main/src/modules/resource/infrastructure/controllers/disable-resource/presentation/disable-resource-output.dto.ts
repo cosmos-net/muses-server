@@ -10,6 +10,6 @@ export class DisableResourceOutputDto implements IDisableResourceOutputDto {
 
   constructor(root: IDisableResourceOutputDto) {
     this.success = root.success;
-    this.message = `Action with id ${root.id} has ${root.success ? 'been' : 'not been'} deleted`;
+    this.message = `Resource with id ${root.id} has ${root.success ? 'been' : 'not been'} deleted`;
   }
 }
