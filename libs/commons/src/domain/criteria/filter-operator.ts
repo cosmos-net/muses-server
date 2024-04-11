@@ -8,6 +8,7 @@ export enum Operator {
   GTE = '>=',
   LT = '<',
   LTE = '<=',
+  IN = 'IN',
   CONTAINS = 'CONTAINS',
   NOT_CONTAINS = 'NOT_CONTAINS',
   STARTS_WITH = 'STARTS_WITH',
