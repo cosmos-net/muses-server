@@ -48,6 +48,8 @@ export class FilterOperator extends EnumValueObject<Operator> {
         return new FilterOperator(Operator.IS_NULL);
       case Operator.NOT_NULL:
         return new FilterOperator(Operator.NOT_NULL);
+      case Operator.IN:
+        return new FilterOperator(Operator.IN);
       default:
         throw new ConflictException(`The filter operator ${value} is invalid`);
     }
