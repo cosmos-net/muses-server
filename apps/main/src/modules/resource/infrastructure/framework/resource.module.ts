@@ -15,10 +15,18 @@ import { UpdateResourceService } from '@module-resource/application/use-cases/up
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { DisableResourceController } from '@module-resource/infrastructure/controllers/disable-resource/disable-resource.controller';
 import { DisableResourceService } from '@module-resource/application/use-cases/disable-resource/disable-resource.service';
+import { ListResourceController } from '@module-resource/infrastructure/controllers/list-resource/list-resource.controller';
+import { ListResourceService } from '@module-resource/application/use-cases/list-resource/list-resource.service';
 
 @Module({
   imports: [forwardRef(() => MainActionModule), TypeOrmModule.forFeature([ResourceEntity])],
-  controllers: [GetResourceController, CreateResourceController, UpdateResourceController, DisableResourceController],
+  controllers: [
+    ListResourceController,
+    GetResourceController,
+    CreateResourceController,
+    UpdateResourceController,
+    DisableResourceController,
+  ],
   providers: [
     EventStoreService,
     GetResourceService,
@@ -26,6 +34,7 @@ import { DisableResourceService } from '@module-resource/application/use-cases/d
     ResourceModuleFacade,
     UpdateResourceService,
     DisableResourceService,
+    ListResourceService,
     {
       provide: RESOURCE_REPOSITORY,
       useClass: TypeOrmResourceRepository,

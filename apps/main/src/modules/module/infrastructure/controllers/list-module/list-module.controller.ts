@@ -6,6 +6,7 @@ import { ListModuleQuery } from '@module-module/application/use-cases/list-modul
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
+import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('module/')
 export class ListModuleController {
@@ -49,12 +50,6 @@ export class ListModuleController {
   }
 
   private mapFilters(filterParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
-    enum IdentifierEnum {
-      FIELD = 'field',
-      VALUE = 'value',
-      OPERATOR = 'operator',
-    }
-
     const mappers: Map<string, Primitives>[] = [];
 
     for (const key in filterParams) {
