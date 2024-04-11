@@ -1,6 +1,6 @@
 import { ConflictException } from '@nestjs/common';
 
-export type Primitives = string | number | boolean | Date;
+export type Primitives = string | number | boolean | Date | string[] | number[] | boolean[];
 
 export abstract class ValueObject<T extends Primitives> {
   readonly value: T;

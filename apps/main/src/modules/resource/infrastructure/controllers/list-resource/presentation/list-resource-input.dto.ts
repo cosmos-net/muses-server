@@ -1,4 +1,5 @@
 import { EnumMethodValue } from '@app-main/modules/resource/domain/aggregate/value-objects/method.vo';
+import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
 import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
 import { Transform } from 'class-transformer';
@@ -95,12 +96,20 @@ export class ListResourceInputDto extends PaginationOptionsQuery {
   @IsNotEmpty()
   readonly method?: EnumMethodValue;
 
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
   @IsString({ each: true })
+  @IsObjectIdHex()
   @IsOptional()
   @IsNotEmpty()
   actions?: string[];
 
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
   @IsString({ each: true })
+  @IsObjectIdHex()
   @IsOptional()
   @IsNotEmpty()
   triggers?: string[];
