@@ -6,6 +6,7 @@ import { ListActionQuery } from '@module-action/application/use-cases/list-actio
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
+import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('action/')
 export class ListActionController {
@@ -49,13 +50,8 @@ export class ListActionController {
       throw ExceptionManager.createSignatureError(error);
     }
   }
-  private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
-    enum IdentifierEnum {
-      FIELD = 'field',
-      VALUE = 'value',
-      OPERATOR = 'operator',
-    }
 
+  private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
     const mappers: Map<string, Primitives>[] = [];
 
     for (const key in filtersParams) {

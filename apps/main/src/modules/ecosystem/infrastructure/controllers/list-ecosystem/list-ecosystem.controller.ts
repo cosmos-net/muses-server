@@ -6,6 +6,7 @@ import { ListEcosystemOutputDto } from '@module-eco/infrastructure/controllers/l
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
+import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('ecosystem/')
 export class ListEcosystemController {
@@ -52,12 +53,6 @@ export class ListEcosystemController {
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
-    enum IdentifierEnum {
-      FIELD = 'field',
-      VALUE = 'value',
-      OPERATOR = 'operator',
-    }
-
     const mappers: Map<string, Primitives>[] = [];
 
     for (const key in filtersParams) {

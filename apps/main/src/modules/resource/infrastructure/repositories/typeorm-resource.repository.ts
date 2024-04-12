@@ -7,6 +7,7 @@ import { MongoRepository } from 'typeorm';
 import { ListResource } from '@module-resource/domain/aggregate/list-resource';
 import { Resource } from '../../domain/aggregate/resource';
 import { ObjectId } from 'mongodb';
+import { Criteria } from '@lib-commons/domain/criteria/criteria';
 
 @Injectable()
 export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity> implements IResourceRepository {
@@ -26,7 +27,7 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
     };
   }
 
-  async searchListBy(ids: string[]): Promise<ListResource> {
+  private async listByIds(ids: string[]): Promise<ListResource> {
     const resources = await this.resourceRepository.find({
       where: {
         _id: {
@@ -38,6 +39,26 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
     const resourceCleaned = resources.map((resource) => new Resource(this.cleanData(resource)));
 
     return new ListResource(resourceCleaned, resources.length);
+  }
+
+  private async listByCriteria(criteria: Criteria): Promise<ListResource> {
+    const query = this.getQueryByCriteria(criteria);
+
+    const [resources, total] = await this.resourceRepository.findAndCount(query);
+
+    const resourceCleaned = resources.map((resource) => new Resource(this.cleanData(resource)));
+
+    return new ListResource(resourceCleaned, total);
+  }
+
+  searchListBy(criteria: Criteria): Promise<ListResource>;
+  searchListBy(ids: string[]): Promise<ListResource>;
+  async searchListBy(idsOrCriteria: string[] | Criteria): Promise<ListResource> {
+    if (idsOrCriteria instanceof Criteria) {
+      return this.listByCriteria(idsOrCriteria);
+    }
+
+    return this.listByIds(idsOrCriteria);
   }
 
   async searchOneBy(

@@ -6,6 +6,7 @@ import { ListSubModuleOutputDto } from './presentation/list-sub-module-output.dt
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { ListSubModuleQuery } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.query';
+import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('sub-module/')
 export class ListSubModuleController {
@@ -51,12 +52,6 @@ export class ListSubModuleController {
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
-    enum IdentifierEnum {
-      FIELD = 'field',
-      VALUE = 'value',
-      OPERATOR = 'operator',
-    }
-
     const mappers: Map<string, Primitives>[] = [];
 
     for (const key in filtersParams) {

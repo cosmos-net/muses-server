@@ -6,6 +6,7 @@ import { ListProjectOutputDto } from './presentation/list-project-output.dto';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { ListProjectQuery } from '@module-project/application/use-cases/list-project/list-project.query';
+import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('project/')
 export class ListProjectController {
@@ -49,12 +50,6 @@ export class ListProjectController {
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
-    enum IdentifierEnum {
-      FIELD = 'field',
-      VALUE = 'value',
-      OPERATOR = 'operator',
-    }
-
     const mappers: Map<string, Primitives>[] = [];
 
     for (const key in filtersParams) {
