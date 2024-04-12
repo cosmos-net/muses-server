@@ -34,7 +34,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
   async process<T extends UpdateResourceCommand>(command: T): Promise<Resource> {
     const { id, name, description, isEnabled, endpoint, method, triggers, actions } = command;
 
-    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: false });
+    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: true });
 
     if (!resource) {
       throw new ResourceNotFoundException();
