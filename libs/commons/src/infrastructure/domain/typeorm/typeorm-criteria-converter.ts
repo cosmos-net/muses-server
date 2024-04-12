@@ -5,6 +5,8 @@ import { Order } from '@lib-commons/domain/criteria/order';
 import { IsNull, LessThan, Like, MoreThan, Not, Document, FindOptionsOrder, FindOptionsWhere } from 'typeorm';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
+import { regexHexObjectId } from '@lib-commons/infrastructure/helpers/regex';
+import { ObjectId } from 'mongodb';
 
 type TransformerFunctionType<T, K> = (value: T) => K;
 
@@ -23,6 +25,7 @@ export class TypeormCriteriaConverter<T extends Document> {
       [Operator.ENDS_WITH, this.endsWithFilter],
       [Operator.GTE, this.greaterThanOrEqualFilter],
       [Operator.LTE, this.lessThanOrEqualFilter],
+      [Operator.IN, this.inFilter],
       [Operator.IS_NULL, this.isNullFilter],
       [Operator.NOT_NULL, this.notNullFilter],
     ]);
@@ -113,8 +116,6 @@ export class TypeormCriteriaConverter<T extends Document> {
   }
 
   private startsWithFilter(filter: Filter): FindOptionsWhere<T> {
-    // return { [filter.field.value]: Like(`${filter.getValue()}%`) } as FindOptionsWhere<T>;
-
     const field = filter.field.value as keyof T;
     const value = filter.getValue() as string;
 
@@ -127,8 +128,6 @@ export class TypeormCriteriaConverter<T extends Document> {
   }
 
   private endsWithFilter(filter: Filter): FindOptionsWhere<T> {
-    // return { [filter.field.value]: Like(`%${filter.getValue()}`) } as FindOptionsWhere<T>;
-
     const field = filter.field.value as keyof T;
     const value = filter.getValue() as string;
 
@@ -146,6 +145,42 @@ export class TypeormCriteriaConverter<T extends Document> {
 
   private lessThanFilter(filter: Filter): FindOptionsWhere<T> {
     return { [filter.field.value]: LessThan(filter.getValue()) } as FindOptionsWhere<T>;
+  }
+
+  private inFilter(filter: Filter): FindOptionsWhere<T> {
+    const filterValue = filter.getValue();
+
+    if (
+      typeof filterValue === 'string' ||
+      typeof filterValue === 'number' ||
+      typeof filterValue === 'boolean' ||
+      filterValue instanceof Date
+    ) {
+      throw new Error('The value of the filter must be an array');
+    }
+
+    if (!Array.isArray(filterValue)) {
+      throw new Error('The value of the filter must be an array');
+    }
+
+    let isValueObjectIds = true;
+    for (const key in filterValue) {
+      const value = filterValue[key];
+      if (typeof value === 'string') {
+        if (
+          !regexHexObjectId.opt1.test(value) &&
+          !regexHexObjectId.opt2.test(value) &&
+          !regexHexObjectId.opt3.test(value)
+        ) {
+          isValueObjectIds = false;
+          break;
+        }
+      }
+    }
+
+    const inFilters = isValueObjectIds ? filterValue.map((value) => new ObjectId(value)) : filterValue;
+
+    return { [filter.field.value]: { $in: inFilters } } as FindOptionsWhere<T>;
   }
 
   private greaterThanOrEqualFilter(filter: Filter): FindOptionsWhere<T> {

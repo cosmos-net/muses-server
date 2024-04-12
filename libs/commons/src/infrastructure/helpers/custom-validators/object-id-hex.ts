@@ -1,4 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
+import { regexHexObjectId } from '@lib-commons/infrastructure/helpers/regex';
 
 export function IsObjectIdHex(validationOptions?: ValidationOptions) {
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -13,13 +14,11 @@ export function IsObjectIdHex(validationOptions?: ValidationOptions) {
           if (!value) {
             return false;
           }
-          const regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-          const regex2 = /^[0-9a-f]{24}$/i;
 
           if (typeof value === 'string') {
-            return regex.test(value) || regex2.test(value);
+            return regexHexObjectId.opt1.test(value) || regexHexObjectId.opt2.test(value);
           } else {
-            return value.every((v) => regex.test(v) || regex2.test(v));
+            return value.every((v) => regexHexObjectId.opt1.test(v) || regexHexObjectId.opt2.test(v));
           }
         },
         defaultMessage() {
