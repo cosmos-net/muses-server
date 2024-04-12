@@ -8,6 +8,7 @@ export interface IActionSchema {
   isEnabled: boolean;
   modules: IModuleSchema | string[] | any;
   subModules: ISubModuleSchema | string[] | any;
+  resource: string | any;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;

@@ -9,8 +9,9 @@ import { createActionGenerator } from '@test-muses/utils/generators/action.gener
 import { createResourceGenerator } from '@test-muses/utils/generators/resource.generator';
 import * as request from 'supertest';
 import { MongoRepository } from 'typeorm';
+import { ObjectId } from 'mongodb';
 
-describe('Delete resource test persistence (e2e)', () => {
+describe('Disable resource test persistence (e2e)', () => {
   let moduleFixture: TestingModule;
   let app: INestApplication;
 
@@ -46,19 +47,22 @@ describe('Delete resource test persistence (e2e)', () => {
 
   jest.setTimeout(99999999);
 
-  describe('Given we want to delete a resource', () => {
+  describe('Given we want to disable a resource', () => {
     describe('When send a valid resource id', () => {
-      test('Then expect a deleted resource', async () => {
+      test('Then expect a disabled resource', async () => {
         const action = await createActionGenerator(actionRepository);
         const resource = await createResourceGenerator(resourceRepository, {
           actions: [action._id],
         });
 
-        const response = await request(app.getHttpServer()).delete(`/resource/${resource._id}`);
+        await actionRepository.updateOne({ _id: action._id }, { $set: { resource: resource._id } });
+
+        const response = await request(app.getHttpServer()).delete(`/resource/${resource._id.toHexString()}`);
+
         expect(response.status).toBe(200);
         expect(response.body).toEqual({
           success: true,
-          message: `Resource with id ${resource._id} has benn deleted `,
+          message: `Resource with id ${resource._id.toHexString()} has been deleted`,
         });
 
         const resourceFound = await resourceRepository.findOne({
@@ -74,7 +78,17 @@ describe('Delete resource test persistence (e2e)', () => {
           withDeleted: true,
         });
 
-        expect(actionFound).not.toHaveProperty('resource');
+        expect(actionFound).toHaveProperty('resource', null);
+      });
+
+      describe('When send a invalid resource id', () => {
+        test('Then expect an error not found', async () => {
+          const response = await request(app.getHttpServer()).delete(`/resource/${new ObjectId().toHexString()}`);
+          expect(response.body).toEqual({
+            statusCode: 404,
+            message: 'Resource not found',
+          });
+        });
       });
     });
   });
