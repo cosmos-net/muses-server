@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import { createActionGenerator } from '@test-muses/utils/generators/action.generator';
 import { createResourceGenerator } from '@test-muses/utils/generators/resource.generator';
+import { ObjectId } from 'mongodb';
 import * as request from 'supertest';
 import { MongoRepository } from 'typeorm';
 
@@ -75,11 +76,11 @@ describe('Update resource test persistence (e2e)', () => {
           withDeleted: true,
         });
 
-        if (resourceFound?.actions) {
-          expect(resourceFound.actions[0].toHexString()).toBe(action2._id.toHexString());
-        } else {
-          fail('Resource actions not found');
+        if (!resourceFound || !resourceFound.actions) {
+          fail('Resource not found');
         }
+
+        expect(resourceFound.actions[0].toHexString()).toBe(action2._id.toHexString());
       });
     });
 
@@ -112,11 +113,55 @@ describe('Update resource test persistence (e2e)', () => {
           withDeleted: true,
         });
 
-        if (resourceFound?.triggers) {
-          expect(resourceFound.triggers[0].toHexString()).toBe(resource2._id.toHexString());
-        } else {
-          fail('Resource triggers not found');
+        if (!resourceFound || !resourceFound.triggers) {
+          fail('Resource not found');
         }
+
+        expect(resourceFound.triggers[0].toHexString()).toBe(resource2._id.toHexString());
+      });
+    });
+
+    describe('When I try update a resource with invalid triggers', () => {
+      test('Then expect to return a 400 status code', async () => {
+        const resource = await createResourceGenerator(resourceRepository);
+
+        const params = {
+          id: resource._id.toHexString(),
+          triggers: [new ObjectId().toHexString()],
+        };
+
+        const response = await request(app.getHttpServer())
+          .patch('/resource')
+          .send({ id: params.id, triggers: params.triggers });
+
+        expect(response).toHaveProperty('body', {
+          response: 'Triggers not found',
+          status: 404,
+          message: 'Triggers not found',
+          name: 'TriggersNotFoundException',
+        });
+      });
+    });
+
+    describe('When I try update a resource with invalid actions', () => {
+      test('Then expect to return a 400 status code', async () => {
+        const resource = await createResourceGenerator(resourceRepository);
+
+        const params = {
+          id: resource._id.toHexString(),
+          actions: [new ObjectId().toHexString()],
+        };
+
+        const response = await request(app.getHttpServer())
+          .patch('/resource')
+          .send({ id: params.id, actions: params.actions });
+
+        expect(response).toHaveProperty('body', {
+          response: 'Action not found',
+          status: 404,
+          message: 'Action not found',
+          name: 'ActionNotFoundException',
+        });
       });
     });
   });

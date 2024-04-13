@@ -26,15 +26,13 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
   private readonly logger = new Logger(UpdateResourceService.name);
 
   private resourceModel: Resource;
-  private triggersToAdd: Resource[];
-  private triggersToRemove: Resource[];
   private actionsToAdd: Action[];
   private actionsToRemove: Action[];
 
   async process<T extends UpdateResourceCommand>(command: T): Promise<Resource> {
     const { id, name, description, isEnabled, endpoint, method, triggers, actions } = command;
 
-    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: false });
+    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: true });
 
     if (!resource) {
       throw new ResourceNotFoundException();
@@ -78,10 +76,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
         this.logger.error('Some triggers were not found');
       }
 
-      const { triggersToAdd, triggersToRemove } = this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
-
-      this.triggersToAdd = triggersToAdd;
-      this.triggersToRemove = triggersToRemove;
+      this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
     }
   }
 

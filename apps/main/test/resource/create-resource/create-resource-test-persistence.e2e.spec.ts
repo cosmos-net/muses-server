@@ -49,18 +49,30 @@ describe('Create resource test persistence (e2e)', () => {
   jest.setTimeout(99999999);
 
   describe('Given we want to create a resource', () => {
-    describe('When we send a list of actions and triggers valid', () => {
+    describe('When we send a valid params with actions and trigger', () => {
       test('Then expect an resource created', async () => {
-        const action = await createActionGenerator(actionRepository);
-        const resource = await createResourceGenerator(resourceRepository);
+        const actions: ActionEntity[] = [];
+        const triggers: ResourceEntity[] = [];
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const _ of Array(2)) {
+          const action = await createActionGenerator(actionRepository);
+          const resource = await createResourceGenerator(resourceRepository);
+
+          actions.push(action);
+          triggers.push(resource);
+        }
+
+        const parseToHexString = (values: any[]) => values.map((value) => value._id.toHexString());
+
         const params = {
           name: faker.string.alpha(10),
           description: faker.string.alpha(10),
           isEnabled: true,
           endpoint: faker.internet.url(),
           method: 'POST',
-          actions: [action._id.toHexString()],
-          triggers: [resource._id.toHexString()],
+          actions: parseToHexString(actions),
+          triggers: parseToHexString(triggers),
         };
 
         const response = await request(app.getHttpServer()).post('/resource').send(params);
@@ -69,31 +81,135 @@ describe('Create resource test persistence (e2e)', () => {
         expect(response.body.name).toBe(params.name);
         expect(response.body.description).toBe(params.description);
         expect(response.body.isEnabled).toBe(params.isEnabled);
-        expect(response.body.actions[0].id).toBe(action._id.toHexString());
-        expect(response.body.triggers[0].id).toBe(resource._id.toHexString());
+        expect(response.body.actions.length).toBe(params.actions.length);
+        expect(response.body.triggers.length).toBe(params.triggers.length);
 
         const resourceFound = await resourceRepository.findOne({
           where: { _id: new ObjectId(response.body.id) },
-          withDeleted: true,
         });
 
-        expect(resourceFound).toHaveProperty('name', params.name);
-        if (resourceFound?.actions) {
-          expect(resourceFound.actions[0].toHexString()).toBe(action._id.toHexString());
-        } else {
-          fail('Resource actions not found');
+        if (!resourceFound) {
+          throw new Error('Resource not found');
         }
 
-        const actionFound = await actionRepository.findOne({
-          where: { _id: action._id },
-          withDeleted: true,
+        if (!resourceFound.actions) {
+          throw new Error('Resource actions not found');
+        }
+
+        expect(resourceFound.actions.length).toBe(response.body.actions.length);
+        expect(resourceFound.actions.length).toBe(params.actions.length);
+
+        const actionsFound = await actionRepository.find({
+          where: { _id: { $in: response.body.actions.map((action: any) => new ObjectId(action)) } },
         });
 
-        if (actionFound?.resource) {
-          expect(actionFound.resource.toHexString()).toBe(resourceFound._id.toHexString());
-        } else {
-          fail('Action resource not found');
+        expect(actionsFound.length).toBe(response.body.actions.length);
+
+        for (const action of actionsFound) {
+          expect(action.resource.toHexString()).toBe(response.body.id);
         }
+      });
+
+      describe('When we send a valid params with actions', () => {
+        test('Then expect an resource created', async () => {
+          const actions: ActionEntity[] = [];
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          for await (const _ of Array(2)) {
+            const action = await createActionGenerator(actionRepository);
+
+            actions.push(action);
+          }
+
+          const parseToHexString = (values: any[]) => values.map((value) => value._id.toHexString());
+
+          const params = {
+            name: faker.string.alpha(10),
+            description: faker.string.alpha(10),
+            isEnabled: true,
+            endpoint: faker.internet.url(),
+            method: 'POST',
+            actions: parseToHexString(actions),
+          };
+
+          const response = await request(app.getHttpServer()).post('/resource').send(params);
+
+          expect(response.status).toBe(201);
+          expect(response.body.name).toBe(params.name);
+          expect(response.body.description).toBe(params.description);
+          expect(response.body.isEnabled).toBe(params.isEnabled);
+          expect(response.body.actions.length).toBe(params.actions.length);
+          expect(response.body.triggers).toBe(undefined);
+
+          const resourceFound = await resourceRepository.findOne({
+            where: { _id: new ObjectId(response.body.id) },
+          });
+
+          if (!resourceFound) {
+            throw new Error('Resource not found');
+          }
+
+          if (!resourceFound.actions) {
+            throw new Error('Resource actions not found');
+          }
+
+          expect(resourceFound.actions.length).toBe(response.body.actions.length);
+          expect(resourceFound.triggers?.length).toBe(undefined);
+
+          const actionsFound = await actionRepository.find({
+            where: { _id: { $in: response.body.actions.map((action: any) => new ObjectId(action)) } },
+          });
+
+          expect(actionsFound.length).toBe(response.body.actions.length);
+
+          for (const action of actionsFound) {
+            expect(action.resource.toHexString()).toBe(response.body.id);
+          }
+        });
+      });
+
+      describe('When we send a invalid params with actions faker', () => {
+        test('Then expect an error not found actions', async () => {
+          const params = {
+            name: faker.string.alpha(10),
+            description: faker.string.alpha(10),
+            isEnabled: true,
+            endpoint: faker.internet.url(),
+            method: 'POST',
+            actions: [new ObjectId().toHexString(), new ObjectId().toHexString(), new ObjectId().toHexString()],
+          };
+
+          const response = await request(app.getHttpServer()).post('/resource').send(params);
+          expect(response.status).toBe(404);
+        });
+      });
+
+      describe('When we send a invalid params with triggers faker', () => {
+        test('Then expect an error not found triggers', async () => {
+          const actions: ActionEntity[] = [];
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          for await (const _ of Array(2)) {
+            const action = await createActionGenerator(actionRepository);
+
+            actions.push(action);
+          }
+
+          const parseToHexString = (values: any[]) => values.map((value) => value._id.toHexString());
+
+          const params = {
+            name: faker.string.alpha(10),
+            description: faker.string.alpha(10),
+            isEnabled: true,
+            endpoint: faker.internet.url(),
+            method: 'POST',
+            actions: parseToHexString(actions),
+            triggers: [new ObjectId().toHexString(), new ObjectId().toHexString(), new ObjectId().toHexString()],
+          };
+
+          const response = await request(app.getHttpServer()).post('/resource').send(params);
+          expect(response.status).toBe(404);
+        });
       });
     });
   });

@@ -115,6 +115,10 @@ export class Action {
     });
   }
 
+  get resource() {
+    return this._entityRoot.resource;
+  }
+
   public describe(name: string, description: string): void {
     this._entityRoot.name = new Name(name);
     this._entityRoot.description = new Description(description);
@@ -235,6 +239,8 @@ export class Action {
       this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
     }
 
+    if (schema.resource) this._entityRoot.resource = schema.resource;
+
     this.hydrateModules(schema.modules);
     this.hydrateSubModules(schema.subModules);
   }
@@ -250,6 +256,7 @@ export class Action {
       deletedAt: this.deletedAt,
       modules: this.modules,
       subModules: this.subModules,
+      resource: this.resource,
     };
   }
 
@@ -274,6 +281,8 @@ export class Action {
 
           partialSchema[key] = value.value;
         }
+      } else {
+        partialSchema[key] = value;
       }
     }
 

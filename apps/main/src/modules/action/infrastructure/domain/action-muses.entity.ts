@@ -35,6 +35,13 @@ export class ActionEntity extends BaseEntity implements IActionSchema {
   isEnabled: boolean;
 
   @Column({
+    name: 'resource',
+    nullable: true,
+    type: 'varchar',
+  })
+  resource: ObjectId;
+
+  @Column({
     name: 'modules',
     nullable: true,
     type: 'array',

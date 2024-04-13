@@ -8,6 +8,9 @@ import { ResourceNameAlreadyUsedException } from '@module-resource/domain/except
 import { Resource } from '@module-resource/domain/aggregate/resource';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
 import { TriggersNotFoundException } from '@module-resource/domain/exceptions/triggers-not-found.exception';
+import { UpdateRelationsWithActionEventBody } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action-event-body';
+import { UpdateRelationWithActionEvent } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 
 @Injectable()
 export class CreateResourceService implements IApplicationServiceCommand<CreateResourceCommand> {
@@ -16,6 +19,7 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
     private resourceRepository: IResourceRepository,
     @Inject(FACADE_ACTION)
     private actionFacade: IActionFacade,
+    private readonly eventStoreService: EventStoreService,
   ) {}
 
   private resourceModel: Resource;
@@ -42,7 +46,11 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
     await this.populateActions(actions);
     await this.resourceRepository.persist(resource);
 
-    //TODO: handle events
+    await this.tryToEmitEvent({
+      actionsToAddResource: resource.actionsIds,
+      actionsToRemoveResource: [],
+      resourceId: resource.id,
+    });
 
     return resource;
   }
@@ -77,5 +85,10 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
 
       this.resourceModel.useActions(actions.entities());
     }
+  }
+
+  private async tryToEmitEvent(updateRelationsWithActionEventBody: UpdateRelationsWithActionEventBody): Promise<void> {
+    const event = new UpdateRelationWithActionEvent(updateRelationsWithActionEventBody);
+    await this.eventStoreService.emit(event);
   }
 }

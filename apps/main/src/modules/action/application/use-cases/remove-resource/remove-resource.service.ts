@@ -17,15 +17,17 @@ export class RemoveResourceService implements IApplicationServiceCommand<RemoveR
   async process<T extends RemoveResourceCommand>(command: T): Promise<void> {
     const { actionsIds, resourceId } = command;
 
-    const resource = await this.resourceFacade.getResourceById(resourceId);
+    if (actionsIds.length > 0) {
+      const resource = await this.resourceFacade.getResourceById(resourceId);
 
-    const actionsList = await this.actionRepository.searchListByIds(actionsIds, {
-      withDeleted: true,
-    });
+      const actionsList = await this.actionRepository.searchListByIds(actionsIds, {
+        withDeleted: true,
+      });
 
-    for await (const action of actionsList.entities()) {
-      action.removeResource(resource.id);
-      await this.actionRepository.persist(action);
+      for await (const action of actionsList.entities()) {
+        action.removeResource(resource.id);
+        await this.actionRepository.persist(action);
+      }
     }
   }
 }
