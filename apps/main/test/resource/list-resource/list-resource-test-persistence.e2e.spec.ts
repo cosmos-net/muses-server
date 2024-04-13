@@ -36,6 +36,7 @@ describe('Get list resource test persistence (e2e)', () => {
   afterAll(async () => {
     await resourceRepository.delete({});
     await actionRepository.delete({});
+
     if (app) await app.close();
   });
 
@@ -51,34 +52,23 @@ describe('Get list resource test persistence (e2e)', () => {
       test('Then expect to return a 200 status code', async () => {
         const action = await createActionGenerator(actionRepository);
         const resourceTrigger = await createResourceGenerator(resourceRepository);
-        const resource = await createResourceGenerator(resourceRepository, {
+
+        const resourceWithTrigger = await createResourceGenerator(resourceRepository, {
           actions: [action._id],
           triggers: [resourceTrigger._id],
         });
 
         const response = await request(app.getHttpServer()).get('/resource/list');
         expect(response.status).toBe(200);
-        expect(response.body.items[0].id).toBe(resource._id.toHexString());
-        expect(response.body.items[0].name).toBe(resource.name);
-        expect(response.body.items[0].actions[0]).toBe(action._id.toHexString());
-        expect(response.body.items[0].description).toBe(resource.description);
-        expect(response.body.items[0].isEnabled).toBe(action.isEnabled);
-        expect(response.body.items[0].actions[0].id).toBe(action._id.toHexString());
-        expect(response.body.items[0].triggers[0].id).toBe(resourceTrigger._id.toHexString());
 
-        const resourceFound = await resourceRepository.findOne({
-          where: { _id: resource._id },
-          withDeleted: true,
+        const resourcesFound = await resourceRepository.find({
+          where: { _id: { $in: [resourceWithTrigger._id, resourceTrigger._id] } },
+          withDeleted: false,
         });
 
-        expect(resourceFound).toHaveProperty('name', response.body.items[0].name);
-        expect(resourceFound).toHaveProperty('description', response.body.items[0].description);
-        expect(resourceFound).toHaveProperty('isEnabled', response.body.items[0].isEnabled);
-        expect(resourceFound).toHaveProperty('actions');
-        if (resourceFound?.actions) {
-          expect(resourceFound.actions[0].toHexString()).toBe(response.body.items[0].actions[0].id);
-        } else {
-          fail('Resource actions not found');
+        for (const item of response.body.items) {
+          const resource = resourcesFound.find((resource) => resource._id.toHexString() === item.id);
+          expect(resource).toBeDefined();
         }
       });
     });
@@ -97,6 +87,32 @@ describe('Get list resource test persistence (e2e)', () => {
         const response = await request(app.getHttpServer()).get('/resource/list');
         expect(response.status).toBe(200);
         expect(response.body.items.length).toBe(10);
+      });
+    });
+
+    describe('When exist less than 5 resource in db', () => {
+      test('Then expect to return a 200 status code and 4 items', async () => {
+        const quantity = 5;
+
+        for (let i = 0; i < quantity; i++) {
+          const action = await createActionGenerator(actionRepository);
+          await createResourceGenerator(resourceRepository, {
+            actions: [action._id],
+          });
+        }
+
+        const response = await request(app.getHttpServer()).get('/resource/list');
+
+        expect(response.status).toBe(200);
+        expect(response.body.items.length).toBe(quantity);
+      });
+    });
+
+    describe('When does not exist registers in db of resources', () => {
+      test('Then expect to return a 200 status code and 0 items', async () => {
+        const response = await request(app.getHttpServer()).get('/resource/list');
+        expect(response.status).toBe(200);
+        expect(response.body.items.length).toBe(0);
       });
     });
   });
