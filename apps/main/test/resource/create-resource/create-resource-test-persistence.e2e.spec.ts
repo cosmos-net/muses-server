@@ -98,6 +98,16 @@ describe('Create resource test persistence (e2e)', () => {
 
         expect(resourceFound.actions.length).toBe(response.body.actions.length);
         expect(resourceFound.actions.length).toBe(params.actions.length);
+
+        const actionsFound = await actionRepository.find({
+          where: { _id: { $in: response.body.actions.map((action: any) => new ObjectId(action)) } },
+        });
+
+        expect(actionsFound.length).toBe(response.body.actions.length);
+
+        for (const action of actionsFound) {
+          expect(action.resource.toHexString()).toBe(response.body.id);
+        }
       });
 
       describe('When we send a valid params with actions', () => {
@@ -145,11 +155,21 @@ describe('Create resource test persistence (e2e)', () => {
 
           expect(resourceFound.actions.length).toBe(response.body.actions.length);
           expect(resourceFound.triggers?.length).toBe(undefined);
+
+          const actionsFound = await actionRepository.find({
+            where: { _id: { $in: response.body.actions.map((action: any) => new ObjectId(action)) } },
+          });
+
+          expect(actionsFound.length).toBe(response.body.actions.length);
+
+          for (const action of actionsFound) {
+            expect(action.resource.toHexString()).toBe(response.body.id);
+          }
         });
       });
 
       describe('When we send a invalid params with actions faker', () => {
-        test('Then expect an error not found actions', () => {
+        test('Then expect an error not found actions', async () => {
           const params = {
             name: faker.string.alpha(10),
             description: faker.string.alpha(10),
