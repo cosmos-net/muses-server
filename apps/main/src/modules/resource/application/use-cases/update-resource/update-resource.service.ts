@@ -26,8 +26,6 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
   private readonly logger = new Logger(UpdateResourceService.name);
 
   private resourceModel: Resource;
-  private triggersToAdd: Resource[];
-  private triggersToRemove: Resource[];
   private actionsToAdd: Action[];
   private actionsToRemove: Action[];
 
@@ -78,10 +76,11 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
         this.logger.error('Some triggers were not found');
       }
 
-      const { triggersToAdd, triggersToRemove } = this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
+      this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
 
-      this.triggersToAdd = triggersToAdd;
-      this.triggersToRemove = triggersToRemove;
+      this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
+    } else {
+      this.resourceModel.removeTriggers();
     }
   }
 

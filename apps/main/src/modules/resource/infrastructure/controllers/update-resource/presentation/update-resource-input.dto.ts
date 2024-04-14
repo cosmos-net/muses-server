@@ -1,6 +1,16 @@
 import { EnumMethodValue } from '@module-resource/domain/aggregate/value-objects/method.vo';
 import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
-import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl, Length } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class UpdateResourceInputDto {
@@ -48,6 +58,7 @@ export class UpdateResourceInputDto {
   @IsObjectIdHex()
   @IsString({ each: true })
   @IsArray()
+  @ArrayMinSize(1)
   @IsOptional()
   readonly actions?: string[] = [];
 }
