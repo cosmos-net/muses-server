@@ -33,6 +33,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       ...actionFound,
       ...(actionFound.modules && { modules: actionFound.modules.map((module) => module.toHexString()) }),
       ...(actionFound.subModules && { subModules: actionFound.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(actionFound.resource && { resource: actionFound.resource.toHexString() }),
       id: actionFound._id.toHexString(),
     });
 
@@ -65,12 +66,20 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       };
     }
 
+    if (partialSchema.resource) {
+      const resource = new ObjectId(partialSchema.resource);
+
+      partialSchema = {
+        ...partialSchema,
+        resource,
+      };
+    }
+
     if (partialSchema.id) {
       const actionId = new ObjectId(partialSchema.id);
 
       partialSchema = {
         ...partialSchema,
-        id: actionId,
         _id: actionId,
       };
 
@@ -85,6 +94,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       ...action,
       ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.resource && { resource: action.resource.toHexString() }),
       id: action._id.toHexString(),
     });
 
@@ -100,6 +110,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       ...action,
       ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.resource && { resource: action.resource.toHexString() }),
       id: action._id.toHexString(),
     }));
 
@@ -150,6 +161,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
       ...action,
       ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
       ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.resource && { resource: action.resource.toHexString() }),
       id: action._id.toHexString(),
     }));
 
