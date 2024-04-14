@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ModuleFactory } from '@test-muses/utils/config/module-factory';
 import { createActionGenerator } from '@test-muses/utils/generators/action.generator';
 import { createResourceGenerator } from '@test-muses/utils/generators/resource.generator';
+import { ObjectId } from 'mongodb';
 import * as request from 'supertest';
 import { MongoRepository } from 'typeorm';
 
@@ -78,45 +79,124 @@ describe('Update resource test persistence (e2e)', () => {
         if (resourceFound?.actions) {
           expect(resourceFound.actions[0].toHexString()).toBe(action2._id.toHexString());
         } else {
-          fail('Resource actions not found');
+          if (!resourceFound?.actions) {
+            fail('Resource not found');
+          }
         }
       });
-    });
 
-    describe('When we send a list of triggers valid', () => {
-      test('Then expect to update the resource', async () => {
-        //const action = await createActionGenerator(actionRepository);
-        const resourceTrigger = await createResourceGenerator(resourceRepository);
-        const resource = await createResourceGenerator(resourceRepository, {
-          triggers: [resourceTrigger._id],
-        });
+      describe('When we send a list of triggers valid', () => {
+        test('Then expect to update the resource', async () => {
+          const action = await createActionGenerator(actionRepository);
+          const resourceTrigger = await createResourceGenerator(resourceRepository);
+          const resource = await createResourceGenerator(resourceRepository, {
+            triggers: [resourceTrigger._id],
+          });
 
-        const resource2 = await createResourceGenerator(resourceRepository);
+          const resource2 = await createResourceGenerator(resourceRepository);
 
-        const params = {
-          id: resource._id.toHexString(),
-          triggers: [resource2._id.toHexString()],
-        };
+          const params = {
+            id: resource._id.toHexString(),
+            triggers: [resource2._id.toHexString()],
+            actions: [action._id.toHexString()],
+          };
 
-        const response = await request(app.getHttpServer())
-          .patch('/resource')
-          .send({ id: params.id, triggers: params.triggers });
+          const response = await request(app.getHttpServer()).patch('/resource').send(params);
 
-        expect(response.status).toBe(200);
-        expect(response.body.name).toBe(resource.name);
-        expect(response.body.description).toBe(resource.description);
-        expect(response.body.triggers[0].id).toBe(resource2._id.toHexString());
+          expect(response.status).toBe(200);
+          expect(response.body.name).toBe(resource.name);
+          expect(response.body.description).toBe(resource.description);
+          expect(response.body.triggers[0].id).toBe(resource2._id.toHexString());
 
-        const resourceFound = await resourceRepository.findOne({
-          where: { _id: resource._id },
-          withDeleted: true,
-        });
+          const resourceFound = await resourceRepository.findOne({
+            where: { _id: resource._id },
+            withDeleted: true,
+          });
 
-        if (resourceFound?.triggers) {
+          if (!resourceFound?.triggers) {
+            fail('Resource not found');
+          }
+
           expect(resourceFound.triggers[0].toHexString()).toBe(resource2._id.toHexString());
-        } else {
-          fail('Resource triggers not found');
-        }
+        });
+      });
+
+      describe('When we send a list of triggers empty', () => {
+        test('Then expect to update the resource with triggers empty', async () => {
+          const action = await createActionGenerator(actionRepository);
+          const resourceTrigger = await createResourceGenerator(resourceRepository);
+          const resource = await createResourceGenerator(resourceRepository, {
+            triggers: [resourceTrigger._id],
+          });
+
+          const params = {
+            id: resource._id.toHexString(),
+            actions: [action._id.toHexString()],
+            triggers: [],
+          };
+
+          const response = await request(app.getHttpServer()).patch('/resource').send(params);
+
+          expect(response.status).toBe(200);
+          expect(response.body.name).toBe(resource.name);
+          expect(response.body.description).toBe(resource.description);
+          expect(response.body.triggers).toBeUndefined();
+
+          const resourceFound = await resourceRepository.findOne({
+            where: { _id: resource._id },
+            withDeleted: true,
+          });
+
+          if (!resourceFound) {
+            fail('Resource not found');
+          }
+
+          expect(resourceFound.triggers).toBeNull();
+        });
+      });
+
+      describe('When I try update a resource with invalid triggers', () => {
+        test('Then expect to return a 400 status code', async () => {
+          const resource = await createResourceGenerator(resourceRepository);
+          const action = await createActionGenerator(actionRepository);
+
+          const params = {
+            id: resource._id.toHexString(),
+            actions: [action._id.toHexString()],
+            triggers: [new ObjectId().toHexString()],
+          };
+
+          const response = await request(app.getHttpServer()).patch('/resource').send(params);
+
+          expect(response).toHaveProperty('body', {
+            response: 'Triggers not found',
+            status: 404,
+            message: 'Triggers not found',
+            name: 'TriggersNotFoundException',
+          });
+        });
+      });
+
+      describe('When I try update a resource with invalid actions', () => {
+        test('Then expect to return a 400 status code', async () => {
+          const resource = await createResourceGenerator(resourceRepository);
+
+          const params = {
+            id: resource._id.toHexString(),
+            actions: [new ObjectId().toHexString()],
+          };
+
+          const response = await request(app.getHttpServer())
+            .patch('/resource')
+            .send({ id: params.id, actions: params.actions });
+
+          expect(response).toHaveProperty('body', {
+            response: 'Action not found',
+            status: 404,
+            message: 'Action not found',
+            name: 'ActionNotFoundException',
+          });
+        });
       });
     });
   });
