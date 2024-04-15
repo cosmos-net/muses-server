@@ -21,5 +21,5 @@ export interface IActionSchemaAggregate {
   actions: Action[] & string[];
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
-  deletedAt?: DeletedAt;
+  deletedAt?: DeletedAt | null;
 }

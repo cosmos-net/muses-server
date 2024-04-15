@@ -106,11 +106,12 @@ export class Resource {
   }
 
   public enable(): void {
-    if (this._entityRoot.isEnabled) {
+    if (this.isEnabled) {
       throw new ResourcePropertyWithSameValueException('isEnabled', true);
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
+    this._entityRoot.deletedAt = null;
   }
 
   public disable(): void {
