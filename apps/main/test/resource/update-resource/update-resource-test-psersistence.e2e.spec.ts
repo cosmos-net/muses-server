@@ -155,6 +155,40 @@ describe('Update resource test persistence (e2e)', () => {
         });
       });
 
+      describe('When we send a isEnabled true to resource disable', () => {
+        test('Then I expect a resource with isEnabled property false', async () => {
+          const action = await createActionGenerator(actionRepository);
+          const resource = await createResourceGenerator(resourceRepository, {
+            isEnabled: false,
+            deletedAt: new Date(),
+            actions: [action._id],
+          });
+
+          const params = {
+            id: resource._id.toHexString(),
+            isEnabled: true,
+          };
+
+          const response = await request(app.getHttpServer()).patch('/resource').send(params);
+
+          expect(response.status).toBe(200);
+          expect(response.body.isEnabled).toBe(true);
+          expect(response.body.deletedAt).toBeUndefined();
+
+          const resourceFound = await resourceRepository.findOne({
+            where: { _id: resource._id },
+            withDeleted: true,
+          });
+
+          if (!resourceFound) {
+            fail('Resource not found');
+          }
+
+          expect(resourceFound.isEnabled).toBe(true);
+          expect(resourceFound.deletedAt).toBeNull();
+        });
+      });
+
       describe('When I try update a resource with invalid triggers', () => {
         test('Then expect to return a 400 status code', async () => {
           const resource = await createResourceGenerator(resourceRepository);
