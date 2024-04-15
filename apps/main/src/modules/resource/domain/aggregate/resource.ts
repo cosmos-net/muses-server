@@ -430,9 +430,15 @@ export class Resource {
 
           partialSchema[key] = value.value;
         }
+      } else {
+        partialSchema[key] = value;
       }
     }
 
     return partialSchema;
+  }
+
+  public removeTriggers(): void {
+    this._entityRoot.triggers = null;
   }
 }
