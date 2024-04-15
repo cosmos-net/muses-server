@@ -32,7 +32,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
   async process<T extends UpdateResourceCommand>(command: T): Promise<Resource> {
     const { id, name, description, isEnabled, endpoint, method, triggers, actions } = command;
 
-    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: true });
+    const resource = await this.resourceRepository.searchOneBy(id, { withDeleted: false });
 
     if (!resource) {
       throw new ResourceNotFoundException();
@@ -77,6 +77,10 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
       }
 
       this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
+
+      this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
+    } else {
+      this.resourceModel.removeTriggers();
     }
   }
 
