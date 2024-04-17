@@ -17,6 +17,10 @@ export class Resource {
   private _entityRoot = {} as IActionSchemaAggregate;
 
   constructor(schema?: IResourceSchema) {
+    if (!schema) {
+      this._entityRoot.isEnabled = new IsEnabled(true);
+    }
+
     if (schema) this.hydrate(schema);
   }
 
@@ -106,7 +110,7 @@ export class Resource {
   }
 
   public enable(): void {
-    if (this.isEnabled) {
+    if (this.isEnabled !== undefined && this.isEnabled === false) {
       throw new ResourcePropertyWithSameValueException('isEnabled', true);
     }
 

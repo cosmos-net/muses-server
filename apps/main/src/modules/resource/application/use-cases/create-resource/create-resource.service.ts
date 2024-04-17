@@ -37,7 +37,7 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
     const resource = new Resource();
 
     resource.describe(name, description);
-    isEnabled ? resource.enable() : resource.disable();
+    isEnabled === false && resource.disable();
     resource.configNetwork(endpoint, method);
 
     this.resourceModel = resource;
