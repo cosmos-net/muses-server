@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEcosystemInputDto {
   @IsString()
@@ -7,15 +7,18 @@ export class UpdateEcosystemInputDto {
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsString()
   @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @IsBoolean()
   @IsNotEmpty()
-  isEnabled: boolean;
+  @IsOptional()
+  isEnabled?: boolean;
 
   constructor(props: Partial<UpdateEcosystemInputDto>) {
     Object.assign(this, props);

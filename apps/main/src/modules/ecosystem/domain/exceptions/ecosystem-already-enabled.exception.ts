@@ -1,8 +1,8 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-export class EcosystemNameAlreadyUsedException extends ExceptionManager {
+export class EcosystemAlreadyEnabledException extends ExceptionManager {
   constructor() {
-    const message = 'Ecosystem name already used';
+    const message = 'Ecosystem already enabled';
     super(message, 'BAD_REQUEST');
   }
 }

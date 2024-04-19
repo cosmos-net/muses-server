@@ -12,6 +12,7 @@ export class CreateEcosystemInputDto {
   readonly description?: string;
 
   @IsBoolean()
+  @IsOptional()
   @IsNotEmpty()
-  readonly enabled: boolean;
+  readonly isEnabled?: boolean;
 }

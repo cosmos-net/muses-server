@@ -23,7 +23,7 @@ export class UpdateEcosystemController {
         id: domain.id,
         name: domain.name,
         description: domain.description,
-        enabled: domain.isEnabled,
+        isEnabled: domain.isEnabled,
         createdAt: domain.createdAt,
         updatedAt: domain.updatedAt,
         deletedAt: domain.deletedAt,
