@@ -10,6 +10,7 @@ export class EcosystemModuleFacadeService implements IEcosystemModuleFacade {
   async getEcosystemById(id: string): Promise<Ecosystem> {
     const ecosystem = await this.ecosystemModuleFacade.retrieveEcosystem({
       id,
+      withDeleted: true,
     });
 
     return ecosystem;

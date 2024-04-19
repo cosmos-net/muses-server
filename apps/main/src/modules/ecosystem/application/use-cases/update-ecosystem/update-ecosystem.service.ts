@@ -14,9 +14,8 @@ export class UpdateEcosystemService implements IApplicationServiceCommand<Update
 
   async process<T extends UpdateEcosystemCommand>(command: T): Promise<Ecosystem> {
     const { id, name, description, isEnabled } = command;
-    const withDeleted = isEnabled === false;
 
-    const ecosystem = await this.ecosystemRepository.byIdOrFail(id, withDeleted);
+    const ecosystem = await this.ecosystemRepository.byIdOrFail(id, true);
 
     ecosystem.redescribe(name, description);
 
