@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
 import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
@@ -58,10 +58,10 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
     return model;
   }
 
-  async byIdOrFail(id: string): Promise<Ecosystem> {
+  async byIdOrFail(id: string, withDeleted: boolean): Promise<Ecosystem> {
     const ecosystem = await this.ecosystemRepository.findOne({
       where: { _id: new ObjectId(id) },
-      withDeleted: true,
+      withDeleted,
     });
 
     if (!ecosystem) {
@@ -163,21 +163,6 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
     const listEcosystem = new ListEcosystem(ecosystems, total);
 
     return listEcosystem;
-  }
-
-  async softDeleteBy(id: string): Promise<number | undefined> {
-    const ecosystem = await this.byIdOrFail(id);
-    ecosystem.disable();
-
-    const partialEntity = ecosystem.entityRootWithoutIdentifier();
-
-    const result = await this.ecosystemRepository.update(new ObjectId(id), partialEntity);
-
-    if (result.affected === 0) {
-      throw new InternalServerErrorException('The ecosystem could not be deleted');
-    }
-
-    return result.affected;
   }
 
   async matching(criteria: Criteria): Promise<ListEcosystem> {

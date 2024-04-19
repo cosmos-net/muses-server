@@ -22,6 +22,7 @@ export class ListEcosystemController {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
+      const withDeleted = filtersParams.isEnabled === false;
 
       const query = new ListEcosystemQuery({
         orderBy,
@@ -29,6 +30,7 @@ export class ListEcosystemController {
         limit,
         offset,
         filters,
+        withDeleted,
       });
 
       const ecosystems = await this.listEcosystemService.process(query);
