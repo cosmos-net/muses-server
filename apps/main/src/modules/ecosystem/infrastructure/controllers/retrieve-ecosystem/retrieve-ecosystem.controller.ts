@@ -1,8 +1,9 @@
-import { Controller, Get, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
 import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
+import { RetrieveEcosystemInputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';
 
 @Controller('ecosystem/')
 export class RetrieveEcosystemController {
@@ -10,9 +11,15 @@ export class RetrieveEcosystemController {
   constructor(private readonly retrieveEcosystemService: RetrieveEcosystemService) {}
 
   @Get('/:id')
-  async retrieve(@Param('id') id: string): Promise<RetrieveEcosystemOutputDto> {
+  async retrieve(
+    @Param('id') idEcosystem: string,
+    @Query() dto: RetrieveEcosystemInputDto,
+  ): Promise<RetrieveEcosystemOutputDto> {
     try {
-      const query = new RetrieveEcosystemQuery({ id });
+      dto.setId = idEcosystem;
+      const { id, withDeleted } = dto;
+
+      const query = new RetrieveEcosystemQuery({ id, withDeleted });
 
       const ecosystem = await this.retrieveEcosystemService.process(query);
 

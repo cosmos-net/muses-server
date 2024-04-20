@@ -6,10 +6,9 @@ import { IPaginationOrder } from '@lib-commons/domain/list/pagination-order-filt
 export interface IEcosystemRepository {
   persist(model: Ecosystem): Promise<void>;
   byNameOrFail(name: string): Promise<Ecosystem>;
-  byIdOrFail(id: string): Promise<Ecosystem>;
+  byIdOrFail(id: string, withDeleted: boolean): Promise<Ecosystem>;
   isNameAvailable(name: string): Promise<boolean>;
   list(): Promise<ListEcosystem>;
   list(options: IPaginationOrder): Promise<ListEcosystem>;
-  softDeleteBy(id: string): Promise<number | undefined>;
   matching(criteria: Criteria): Promise<ListEcosystem>;
 }

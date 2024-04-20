@@ -14,7 +14,7 @@ export class CreateEcosystemService implements IApplicationServiceCommand<Create
   ) {}
 
   async process<T extends CreateEcosystemCommand>(command: T): Promise<Ecosystem> {
-    const { name, description, enabled } = command;
+    const { name, description, isEnabled } = command;
 
     const isNameAvailable = await this.ecosystemRepository.isNameAvailable(name);
 
@@ -22,12 +22,7 @@ export class CreateEcosystemService implements IApplicationServiceCommand<Create
       throw new EcosystemNameAlreadyUsedException();
     }
 
-    const ecosystem = new Ecosystem();
-    ecosystem.describe(name, description);
-
-    if (enabled === false) {
-      ecosystem.disable();
-    }
+    const ecosystem = new Ecosystem(name, description, isEnabled);
 
     await this.ecosystemRepository.persist(ecosystem);
 
