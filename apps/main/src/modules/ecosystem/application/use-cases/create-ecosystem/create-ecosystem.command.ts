@@ -5,7 +5,7 @@ export class CreateEcosystemCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled: boolean;
+  readonly isEnabled?: boolean;
 
   constructor(props: Partial<CreateEcosystemCommand>) {
     if (props) {

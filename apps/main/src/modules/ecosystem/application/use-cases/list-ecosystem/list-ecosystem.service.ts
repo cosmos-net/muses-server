@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
 import { ListEcosystemQuery } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.query';
 import { IApplicationServiceQuery } from '@lib-commons/application/application-service-query';
@@ -10,20 +10,18 @@ import { Criteria } from '@lib-commons/domain/criteria/criteria';
 
 @Injectable()
 export class ListEcosystemService implements IApplicationServiceQuery<ListEcosystemQuery> {
-  private logger = new Logger(ListEcosystemService.name);
-
   constructor(
     @Inject(ECOSYSTEM_REPOSITORY)
     private ecosystemRepository: IEcosystemRepository,
   ) {}
 
   async process<T extends ListEcosystemQuery>(query: T): Promise<ListEcosystem> {
-    const { limit, offset } = query;
+    const { limit, offset, withDeleted } = query;
 
     const filters = Filters.fromValues(query.filters);
     const order = Order.fromValues(query.orderBy, query.orderType);
 
-    const criteria = new Criteria(filters, order, limit, offset);
+    const criteria = new Criteria(filters, order, limit, offset, withDeleted);
 
     const ecosystems = await this.ecosystemRepository.matching(criteria);
 

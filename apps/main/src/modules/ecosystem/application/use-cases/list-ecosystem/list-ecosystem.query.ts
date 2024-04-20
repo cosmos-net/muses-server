@@ -12,6 +12,8 @@ export class ListEcosystemQuery implements IQuery {
 
   readonly offset?: number;
 
+  readonly withDeleted?: boolean = false;
+
   constructor(props: Partial<ListEcosystemQuery>) {
     if (props) {
       Object.assign(this, props);

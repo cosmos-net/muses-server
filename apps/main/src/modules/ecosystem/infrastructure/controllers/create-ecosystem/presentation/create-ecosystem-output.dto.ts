@@ -1,4 +1,4 @@
-interface ICreateEcosystemOutputDto {
+export interface ICreateEcosystemOutputDto {
   id: string;
   name: string;
   description: string;
