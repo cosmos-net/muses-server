@@ -5,7 +5,7 @@ export class CreateProjectCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled: boolean;
+  readonly isEnabled?: boolean;
 
   readonly ecosystem?: string;
 

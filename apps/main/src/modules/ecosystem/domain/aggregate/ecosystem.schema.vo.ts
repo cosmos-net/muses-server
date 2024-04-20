@@ -11,7 +11,8 @@ export interface IEcosystemSchemaValueObject {
   name: Name;
   description: Description;
   isEnabled: IsEnabled;
+  projects: string[] | any[];
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
-  deletedAt?: DeletedAt;
+  deletedAt?: DeletedAt | null;
 }

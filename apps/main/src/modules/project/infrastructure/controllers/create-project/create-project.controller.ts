@@ -16,7 +16,7 @@ export class CreateProjectController {
       const command = new CreateProjectCommand({
         name: dto.name,
         description: dto.description,
-        enabled: dto.enabled,
+        isEnabled: dto.isEnabled,
         ecosystem: dto.ecosystem,
       });
 
