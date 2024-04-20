@@ -27,9 +27,14 @@ import { ModuleModuleFacadeService } from '@module-project/infrastructure/domain
 import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { OverwriteModuleOnProjectEventHandler } from '@module-project/application/event-handlers/overwrite-module-on-project-event.handler';
 import { ExchangeModuleProjectsService } from '@module-project/application/use-cases/exchange-module-projects/exchange-module-projects.service';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 
 @Module({
-  imports: [MainEcosystemModule, forwardRef(() => MainModuleModule), TypeOrmModule.forFeature([ProjectEntity])],
+  imports: [
+    forwardRef(() => MainEcosystemModule),
+    forwardRef(() => MainModuleModule),
+    TypeOrmModule.forFeature([ProjectEntity]),
+  ],
   controllers: [
     CreateProjectController,
     DeleteProjectController,
@@ -38,6 +43,7 @@ import { ExchangeModuleProjectsService } from '@module-project/application/use-c
     GetProjectController,
   ],
   providers: [
+    EventStoreService,
     CreateProjectService,
     DeleteProjectService,
     ListProjectService,

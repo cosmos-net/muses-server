@@ -7,6 +7,9 @@ import { IEcosystemModuleFacade } from '@module-project/domain/contracts/ecosyst
 import { ECOSYSTEM_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/application/constants/injection-token';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
 import { ProjectAlreadyRelatedWithEcosystem } from '@module-project/domain/exceptions/project-already-related-with-ecosystem.exception';
+import { UpdateRelationsWithEcosystemEventBody } from '@app-main/modules/project/domain/events/update-relation-with-ecosystem-event/update-relation-with-ecosystem-event-body';
+import { UpdateRelationWithEcosystemEvent } from '@app-main/modules/project/domain/events/update-relation-with-ecosystem-event/update-relation-with-ecosystem.event';
+import { EventStoreService } from '@lib-commons/application/event-store.service';
 
 @Injectable()
 export class UpdateProjectService implements IApplicationServiceCommand<UpdateProjectCommand> {
@@ -15,6 +18,7 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     private ecosystemModuleFacade: IEcosystemModuleFacade,
     @Inject(PROJECT_REPOSITORY)
     private projectRepository: IProjectRepository,
+    private readonly eventStoreService: EventStoreService,
   ) {}
 
   async process<T extends UpdateProjectCommand>(command: T): Promise<Project> {
@@ -25,6 +29,9 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     if (!project) {
       throw new ProjectNotFoundException();
     }
+
+    const currentEcosystem = project.ecosystemId;
+    const isEcosystemChanged = ecosystem !== currentEcosystem;
 
     if (ecosystem) {
       if (project.ecosystemId === ecosystem) {
@@ -38,9 +45,6 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
       project.removeEcosystem();
     }
 
-    // TODO: Remove project from ecosystem only if project has a ecosystem related
-    // TODO: Check if the project is related to other ecosystems
-
     if (name || description) {
       project.redescribe(name, description);
     }
@@ -51,6 +55,21 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
 
     await this.projectRepository.persist(project);
 
+    if (isEcosystemChanged) {
+      await this.tryToEmitEvent({
+        projectId: project.id,
+        ecosystemToRelateProject: ecosystem ?? '',
+        ecosystemToUnRelateProject: currentEcosystem ?? '',
+      });
+    }
+
     return project;
+  }
+
+  private async tryToEmitEvent(
+    updateRelationsWithEcosystemEventBody: UpdateRelationsWithEcosystemEventBody,
+  ): Promise<void> {
+    const event = new UpdateRelationWithEcosystemEvent(updateRelationsWithEcosystemEventBody);
+    await this.eventStoreService.emit(event);
   }
 }
