@@ -13,6 +13,8 @@ import { IProjectAggregate } from '@module-project/domain/aggregate/project.aggr
 import { Module } from '@module-module/domain/aggregate/module';
 import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain/exceptions/module-already-related-with-project.exception';
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
+import { ProjectIsAlreadyEnabledException } from '@module-project/domain/exceptions/project-is-already-enabled.exception';
+import { removePropertyFromObject } from '@lib-commons/domain/helpers/utils';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;
@@ -61,11 +63,19 @@ export class Project {
     return this._entityRoot.ecosystem?.toPrimitives();
   }
 
-  enable(): void {
+  public enable(): void {
+    if (this._entityRoot.isEnabled.value === true) {
+      throw new ProjectIsAlreadyEnabledException();
+    }
+
     this._entityRoot.isEnabled = new IsEnabled(true);
+
+    if (this._entityRoot.deletedAt) {
+      this._entityRoot.deletedAt = undefined;
+    }
   }
 
-  disable(): void {
+  public disable(): void {
     if (this._entityRoot.isEnabled.value === false) {
       throw new ProjectIsAlreadyDisabledException();
     }
@@ -136,7 +146,7 @@ export class Project {
   }
 
   public removeEcosystem(): void {
-    delete this._entityRoot.ecosystem;
+    this._entityRoot = removePropertyFromObject<IProjectAggregate, 'ecosystem'>(this._entityRoot, 'ecosystem');
   }
 
   public addModule(module: Module): void {

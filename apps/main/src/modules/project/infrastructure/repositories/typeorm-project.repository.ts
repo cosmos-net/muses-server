@@ -127,9 +127,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const result = await this.projectRepository.findOne({
-      where: { name },
-    });
+    const result = await this.projectRepository.findOne({ where: { name }, withDeleted: true });
 
     return !result;
   }
