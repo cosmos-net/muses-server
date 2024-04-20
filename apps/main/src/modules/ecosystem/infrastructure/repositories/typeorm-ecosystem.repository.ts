@@ -33,6 +33,10 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
         _id: objectId,
         id: objectId,
       };
+
+      await this.ecosystemRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+
+      return;
     }
 
     const ecosystem = await this.ecosystemRepository.save(partialSchema);
@@ -176,7 +180,7 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const result = await this.ecosystemRepository.findOneBy({ name });
+    const result = await this.ecosystemRepository.findOne({ where: { name }, withDeleted: true });
 
     return !result;
   }

@@ -11,6 +11,8 @@ import UpdatedAt from '@module-eco/domain/aggregate/value-objects/updated-at.vo'
 import DeletedAt from '@module-eco/domain/aggregate/value-objects/deleted-at.vo';
 import { EcosystemPropertyWithSameValue } from '@module-eco/domain/exceptions/ecosystem-property-with-same-value.exception';
 import { EcosystemAlreadyEnabledException } from '@module-eco/domain/exceptions/ecosystem-already-enabled.exception';
+import { EcosystemAlreadyHasProjectAddedException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-already-has-project-add.exception';
+import { EcosystemDoesNotHaveProjectAddedException } from '../exceptions/ecosystem-does-not-have-project-add-exception';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchemaValueObject;
@@ -46,6 +48,10 @@ export class Ecosystem {
 
   get isEnabled(): boolean {
     return this._entityRoot.isEnabled.value;
+  }
+
+  get projects(): string[] {
+    return this._entityRoot.projects;
   }
 
   get createdAt(): Date {
@@ -106,10 +112,7 @@ export class Ecosystem {
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
-
-    if (this._entityRoot.deletedAt) {
-      this._entityRoot.deletedAt = undefined;
-    }
+    this._entityRoot.deletedAt = null;
   }
 
   public disable(): void {
@@ -126,6 +129,7 @@ export class Ecosystem {
       name: this._entityRoot.name.value,
       description: this._entityRoot.description.value,
       isEnabled: this._entityRoot.isEnabled.value,
+      projects: this._entityRoot.projects,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
       deletedAt: this._entityRoot.deletedAt?.value,
@@ -142,6 +146,7 @@ export class Ecosystem {
       name: this._entityRoot.name.value,
       description: this._entityRoot.description.value,
       isEnabled: this._entityRoot.isEnabled.value,
+      projects: this._entityRoot.projects,
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
       deletedAt: this._entityRoot.deletedAt?.value,
@@ -158,9 +163,31 @@ export class Ecosystem {
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         partialSchema[key] = value.value;
+      } else {
+        partialSchema[key] = value;
       }
     }
 
     return partialSchema;
+  }
+
+  public addProject(projectId: string): void {
+    const isProjectAlreadyAdded = this._entityRoot.projects.includes(projectId);
+
+    if (isProjectAlreadyAdded) {
+      throw new EcosystemAlreadyHasProjectAddedException();
+    }
+
+    this._entityRoot.projects.push(projectId);
+  }
+
+  public removeProject(projectId: string): void {
+    const projectIndex = this._entityRoot.projects.findIndex((id) => id === projectId);
+
+    if (projectIndex !== -1) {
+      throw new EcosystemDoesNotHaveProjectAddedException();
+    }
+
+    this._entityRoot.projects.splice(projectIndex, 1);
   }
 }

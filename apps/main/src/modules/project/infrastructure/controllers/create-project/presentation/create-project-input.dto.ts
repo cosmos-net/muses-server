@@ -19,5 +19,6 @@ export class CreateProjectInputDto {
 
   @IsBoolean()
   @IsNotEmpty()
-  readonly enabled: boolean;
+  @IsOptional()
+  readonly isEnabled?: boolean;
 }
