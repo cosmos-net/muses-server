@@ -7,7 +7,7 @@ export class UpdateProjectCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   readonly ecosystem?: string;
 

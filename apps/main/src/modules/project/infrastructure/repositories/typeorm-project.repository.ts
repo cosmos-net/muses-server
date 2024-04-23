@@ -48,7 +48,15 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
         _id: objectId,
       };
 
-      await this.projectRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+      const project = (await this.projectRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
+        returnDocument: 'after',
+      })) as ProjectEntity;
+
+      model.fromPrimitives({
+        ...project,
+        ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
+        id: project._id.toHexString(),
+      });
 
       return model;
     }
@@ -90,10 +98,10 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     return result.modifiedCount;
   }
 
-  async searchOneBy(id: string, options: { withDeleted: false }): Promise<Project | null> {
+  async searchOneBy(id: string, withDeleted: boolean): Promise<Project | null> {
     const projectFound = await this.projectRepository.findOne({
       where: { _id: new ObjectId(id) },
-      withDeleted: options.withDeleted,
+      withDeleted,
     });
 
     if (!projectFound) {

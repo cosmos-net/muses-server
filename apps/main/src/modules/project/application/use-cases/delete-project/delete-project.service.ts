@@ -19,15 +19,14 @@ export class DeleteProjectService implements IApplicationServiceCommand<DeletePr
   async process<T extends DeleteProjectCommand>(command: T): Promise<number> {
     const { id } = command;
 
-    const project = await this.projectRepository.searchOneBy(id, {
-      withDeleted: true,
-    });
+    const project = await this.projectRepository.searchOneBy(id, true);
 
     if (!project) {
       throw new ProjectNotFoundException();
     }
 
     project.disable();
+
     await this.projectRepository.persist(project);
 
     if (project.ecosystemId) {

@@ -1,3 +1,4 @@
+import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
 import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
 import { Transform } from 'class-transformer';
@@ -42,7 +43,7 @@ export class ListProjectInputDto extends PaginationOptionsQuery {
   @IsString()
   @IsOptional()
   @IsNotEmpty()
-  readonly orderBy: 'name' | 'description' | 'enabled' | 'createdAt' = 'createdAt';
+  readonly orderBy?: 'name' | 'description' | 'enabled' | 'createdAt' = 'createdAt';
 
   @Length(1, 50)
   @IsString()
@@ -64,10 +65,19 @@ export class ListProjectInputDto extends PaginationOptionsQuery {
   @IsISO8601()
   @IsOptional()
   @IsNotEmpty()
-  readonly createdAtFrom: string;
+  readonly createdAtFrom?: string;
 
   @IsISO8601()
   @IsOptional()
   @IsNotEmpty()
-  readonly createdAtTo: string;
+  readonly createdAtTo?: string;
+
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsString({ each: true })
+  @IsObjectIdHex()
+  @IsOptional()
+  @IsNotEmpty()
+  readonly ecosystems?: string[];
 }

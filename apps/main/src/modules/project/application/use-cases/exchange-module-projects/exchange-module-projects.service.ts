@@ -26,9 +26,7 @@ export class ExchangeModuleProjectsService implements IApplicationServiceCommand
       throw new ModuleDisabledException();
     }
 
-    const previousProject = await this.projectRepository.searchOneBy(previousProjectId, {
-      withDeleted: true,
-    });
+    const previousProject = await this.projectRepository.searchOneBy(previousProjectId, true);
 
     if (previousProject === null) {
       throw new ProjectNotFoundException();
@@ -38,9 +36,7 @@ export class ExchangeModuleProjectsService implements IApplicationServiceCommand
       throw new ProjectDisabledException();
     }
 
-    const newProject = await this.projectRepository.searchOneBy(newProjectId, {
-      withDeleted: true,
-    });
+    const newProject = await this.projectRepository.searchOneBy(newProjectId, true);
 
     if (newProject === null) {
       throw new ProjectNotFoundException();

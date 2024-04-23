@@ -1,13 +1,20 @@
+import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
+import { Transform } from 'class-transformer';
 import { IsString, IsNotEmpty, IsBoolean, IsOptional } from 'class-validator';
 
-// TODO: Validate id with custom validation, validating the id with a regex pattern will fail if the id is not a string and a with hex object id value
 export class GetProjectInputDto {
   @IsString()
   @IsNotEmpty()
-  readonly id: string;
+  @IsOptional()
+  id: string;
 
+  @Transform(({ obj, key }) => tryToTransformBooleanStringToBoolean(obj[key]))
   @IsBoolean()
   @IsNotEmpty()
   @IsOptional()
-  readonly withDisabled: boolean = false;
+  readonly withDisabled: boolean = true;
+
+  set setId(value: string) {
+    this.id = value;
+  }
 }
