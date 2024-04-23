@@ -82,7 +82,7 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const resource = await this.resourceRepository.findOneBy({ name });
+    const resource = await this.resourceRepository.findOne({ where: { name }, withDeleted: true });
 
     return !resource;
   }
