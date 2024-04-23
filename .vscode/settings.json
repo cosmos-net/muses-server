@@ -8,6 +8,7 @@
     "module-management",
     "sub-module-management",
     "action-module-management",
-    "resource-module-management"
+    "resource-module-management",
+    "commons"
   ]
 }
