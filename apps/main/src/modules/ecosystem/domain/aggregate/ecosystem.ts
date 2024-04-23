@@ -13,6 +13,7 @@ import { EcosystemPropertyWithSameValue } from '@module-eco/domain/exceptions/ec
 import { EcosystemAlreadyEnabledException } from '@module-eco/domain/exceptions/ecosystem-already-enabled.exception';
 import { EcosystemAlreadyHasProjectAddedException } from '@app-main/modules/ecosystem/domain/exceptions/ecosystem-already-has-project-add.exception';
 import { EcosystemDoesNotHaveProjectAddedException } from '../exceptions/ecosystem-does-not-have-project-add-exception';
+import { removePropertyFromObject } from '@lib-commons/domain/helpers/utils';
 
 export class Ecosystem {
   private _entityRoot = {} as IEcosystemSchemaValueObject;
@@ -112,7 +113,7 @@ export class Ecosystem {
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
-    this._entityRoot.deletedAt = null;
+    this._entityRoot = removePropertyFromObject(this._entityRoot, 'deletedAt');
   }
 
   public disable(): void {

@@ -31,10 +31,21 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
       partialSchema = {
         ...restParams,
         _id: objectId,
-        id: objectId,
       };
 
-      await this.ecosystemRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+      const ecosystem = (await this.ecosystemRepository.findOneAndReplace(
+        { _id: objectId },
+        partialSchema,
+      )) as EcosystemEntity;
+
+      if (!ecosystem) {
+        throw new BadRequestException('The ecosystem does not exist');
+      }
+
+      model.fromPrimitives({
+        ...ecosystem,
+        id: ecosystem._id.toHexString(),
+      });
 
       return;
     }
