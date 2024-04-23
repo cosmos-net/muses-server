@@ -78,7 +78,14 @@ export class Ecosystem {
     this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
     this._entityRoot.createdAt = new CreatedAt(schema.createdAt);
     this._entityRoot.updatedAt = new UpdatedAt(schema.updatedAt);
-    this._entityRoot.deletedAt = schema.deletedAt ? new DeletedAt(schema.deletedAt) : undefined;
+
+    if (schema.deletedAt) {
+      this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
+    }
+
+    if (schema.projects) {
+      this._entityRoot.projects = schema.projects;
+    }
   }
 
   public describe(name: string, description?: string): void {
@@ -158,11 +165,13 @@ export class Ecosystem {
     this.hydrate(schema);
   }
 
-  public partialEcosystemSchema(): Partial<IEcosystemSchema> {
+  public partialSchema(): Partial<IEcosystemSchema> {
     const partialSchema: Partial<IEcosystemSchema> = {};
 
     for (const [key, value] of Object.entries(this._entityRoot)) {
-      if (value instanceof Object) {
+      if (Array.isArray(value)) {
+        partialSchema[key] = value;
+      } else if (value instanceof Object) {
         partialSchema[key] = value.value;
       } else {
         partialSchema[key] = value;
@@ -173,6 +182,8 @@ export class Ecosystem {
   }
 
   public addProject(projectId: string): void {
+    if (!this._entityRoot.projects) this._entityRoot.projects = [];
+
     const isProjectAlreadyAdded = this._entityRoot.projects.includes(projectId);
 
     if (isProjectAlreadyAdded) {
@@ -183,6 +194,10 @@ export class Ecosystem {
   }
 
   public removeProject(projectId: string): void {
+    if (!this._entityRoot.projects) {
+      throw new EcosystemDoesNotHaveProjectAddedException();
+    }
+
     const projectIndex = this._entityRoot.projects.findIndex((id) => id === projectId);
 
     if (projectIndex !== -1) {
