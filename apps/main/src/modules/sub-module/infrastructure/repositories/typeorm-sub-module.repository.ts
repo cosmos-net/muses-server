@@ -40,7 +40,7 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const subModuleFound = await this.subModuleRepository.findOne({ where: { name } });
+    const subModuleFound = await this.subModuleRepository.findOne({ where: { name }, withDeleted: true });
 
     return !subModuleFound;
   }
