@@ -17,9 +17,9 @@ export class RetrieveEcosystemController {
   ): Promise<RetrieveEcosystemOutputDto> {
     try {
       dto.setId = idEcosystem;
-      const { id, withDeleted } = dto;
+      const { id, withDisabled } = dto;
 
-      const query = new RetrieveEcosystemQuery({ id, withDeleted });
+      const query = new RetrieveEcosystemQuery({ id, withDisabled });
 
       const ecosystem = await this.retrieveEcosystemService.process(query);
 

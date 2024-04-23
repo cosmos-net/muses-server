@@ -8,10 +8,5 @@ export interface IProjectRepository {
   searchListBy(criteria: Criteria): Promise<ListProject>;
   isNameAvailable(name: string): Promise<boolean>;
   removeEcosystem(projectId: string, ecosystem: string): Promise<void>;
-  searchOneBy(
-    id: string,
-    options?: {
-      withDeleted: boolean;
-    },
-  ): Promise<Project | null>;
+  searchOneBy(id: string, withDeleted: boolean): Promise<Project | null>;
 }

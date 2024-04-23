@@ -17,7 +17,7 @@ export class UpdateProjectInputDto {
 
   @IsBoolean()
   @IsOptional()
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   @IsString()
   @IsOptional()

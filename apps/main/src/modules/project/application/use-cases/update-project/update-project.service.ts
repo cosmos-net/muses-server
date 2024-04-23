@@ -22,9 +22,9 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
   ) {}
 
   async process<T extends UpdateProjectCommand>(command: T): Promise<Project> {
-    const { id, name, description, enabled, ecosystem } = command;
+    const { id, name, description, isEnabled, ecosystem } = command;
 
-    const project = await this.projectRepository.searchOneBy(id);
+    const project = await this.projectRepository.searchOneBy(id, true);
 
     if (!project) {
       throw new ProjectNotFoundException();
@@ -49,8 +49,8 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
       project.redescribe(name, description);
     }
 
-    if (enabled !== undefined) {
-      project.changeStatus(enabled);
+    if (isEnabled !== undefined) {
+      isEnabled ? project.enable() : project.disable();
     }
 
     await this.projectRepository.persist(project);

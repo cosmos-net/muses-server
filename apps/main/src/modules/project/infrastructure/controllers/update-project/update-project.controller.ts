@@ -20,7 +20,7 @@ export class UpdateProjectController {
         id: dto.id,
         name: dto.name,
         description: dto.description,
-        enabled: dto.enabled,
+        isEnabled: dto.isEnabled,
         ecosystem: dto.ecosystem,
       });
 

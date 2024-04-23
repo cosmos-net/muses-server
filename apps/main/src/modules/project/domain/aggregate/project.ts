@@ -78,10 +78,7 @@ export class Project {
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
-
-    if (this._entityRoot.deletedAt) {
-      this._entityRoot.deletedAt = undefined;
-    }
+    this._entityRoot = removePropertyFromObject<IProjectAggregate, 'deletedAt'>(this._entityRoot, 'deletedAt');
   }
 
   public disable(): void {
@@ -135,16 +132,6 @@ export class Project {
       }
 
       this._entityRoot.description = new Description(description);
-    }
-  }
-
-  public changeStatus(isEnabled?: boolean): void {
-    if (isEnabled !== undefined) {
-      if (this._entityRoot.isEnabled.value === isEnabled) {
-        throw new ProjectPropertyWithSameValue('isEnabled', isEnabled);
-      }
-
-      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
     }
   }
 

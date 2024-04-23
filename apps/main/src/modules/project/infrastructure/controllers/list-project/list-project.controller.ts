@@ -19,6 +19,7 @@ export class ListProjectController {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
+      const withDeleted = filtersParams.isEnabled === false;
 
       const query = new ListProjectQuery({
         orderBy,
@@ -26,6 +27,7 @@ export class ListProjectController {
         limit,
         offset,
         filters,
+        withDeleted,
       });
 
       const projects = await this.listProjectService.process(query);
@@ -69,6 +71,10 @@ export class ListProjectController {
             case 'isEnabled':
               map.set(IdentifierEnum.FIELD, key);
               map.set(IdentifierEnum.OPERATOR, Operator.EQUAL);
+              break;
+            case 'ecosystems':
+              map.set(IdentifierEnum.FIELD, 'ecosystem');
+              map.set(IdentifierEnum.OPERATOR, Operator.IN);
               break;
             case 'createdAtFrom':
               map.set(IdentifierEnum.FIELD, 'createdAt');

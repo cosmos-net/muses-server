@@ -33,10 +33,9 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
         _id: objectId,
       };
 
-      const ecosystem = (await this.ecosystemRepository.findOneAndReplace(
-        { _id: objectId },
-        partialSchema,
-      )) as EcosystemEntity;
+      const ecosystem = (await this.ecosystemRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
+        returnDocument: 'after',
+      })) as EcosystemEntity;
 
       if (!ecosystem) {
         throw new BadRequestException('The ecosystem does not exist');
