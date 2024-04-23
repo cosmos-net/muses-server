@@ -11,7 +11,8 @@ import DeletedAt from '@module-action/domain/aggregate/value-objects/deleted-at.
 import UpdatedAt from '@module-action/domain/aggregate/value-objects/updated-at.vo';
 import { Module } from '@module-module/domain/aggregate/module';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
-import { ActionPropertyWithSameValueException } from '../exceptions/action-property-with-same-value.exception';
+import { ActionPropertyWithSameValueException } from '@module-action/domain/exceptions/action-property-with-same-value.exception';
+import { ActionAlreadyEnabledException } from '@module-action/domain/exceptions/action-already-enabled.exception';
 
 export class Action {
   private _entityRoot = {} as IActionSchemaAggregate;
@@ -125,7 +126,12 @@ export class Action {
   }
 
   public enable(): void {
+    if (this._entityRoot.isEnabled.value === true) {
+      throw new ActionAlreadyEnabledException();
+    }
+
     this._entityRoot.isEnabled = new IsEnabled(true);
+    this._entityRoot.deletedAt = undefined;
   }
 
   public disable(): void {

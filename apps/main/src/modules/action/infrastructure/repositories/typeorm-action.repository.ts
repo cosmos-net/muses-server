@@ -41,7 +41,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const actionFound = await this.actionRepository.findOne({ where: { name } });
+    const actionFound = await this.actionRepository.findOne({ where: { name }, withDeleted: true });
 
     return !actionFound;
   }
