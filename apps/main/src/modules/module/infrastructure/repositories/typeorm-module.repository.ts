@@ -66,7 +66,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
   }
 
   async isNameAvailable(name: string): Promise<boolean> {
-    const module = await this.moduleRepository.findOne({ where: { name } });
+    const module = await this.moduleRepository.findOne({ where: { name }, withDeleted: true });
 
     return !module;
   }
