@@ -22,7 +22,7 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialEcosystemSchema();
+    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialSchema();
 
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;

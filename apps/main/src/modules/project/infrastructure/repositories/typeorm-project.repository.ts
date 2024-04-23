@@ -22,9 +22,8 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
   async persist(model: Project): Promise<Project> {
     let partialSchema: Partial<IProjectSchema & ProjectEntity> = model.entityRootPartial();
 
-    if (partialSchema?.ecosystem?.id) {
-      const { id } = partialSchema.ecosystem;
-      const objectId = new ObjectId(id);
+    if (partialSchema?.ecosystem) {
+      const objectId = new ObjectId(partialSchema.ecosystem);
 
       partialSchema = {
         ...partialSchema,
