@@ -41,13 +41,10 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
       const ecosystemModel = await this.ecosystemModuleFacade.getEcosystemById(ecosystem);
       project.useEcosystem(ecosystemModel);
     } else if (ecosystem === null && project.ecosystemId) {
-      await this.projectRepository.removeEcosystem(project.id, project.ecosystemId);
       project.removeEcosystem();
     }
 
-    if (name || description) {
-      project.redescribe(name, description);
-    }
+    project.redescribe(name, description);
 
     if (isEnabled !== undefined) {
       isEnabled ? project.enable() : project.disable();

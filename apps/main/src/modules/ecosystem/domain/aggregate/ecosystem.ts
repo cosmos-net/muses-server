@@ -200,7 +200,7 @@ export class Ecosystem {
 
     const projectIndex = this._entityRoot.projects.findIndex((id) => id === projectId);
 
-    if (projectIndex !== -1) {
+    if (projectIndex === -1) {
       throw new EcosystemDoesNotHaveProjectAddedException();
     }
 
