@@ -22,7 +22,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
   ) {}
 
   async process<T extends CreateModuleCommand>(command: T): Promise<Module> {
-    const { name, description, project, enabled } = command;
+    const { name, description, project, isEnabled } = command;
 
     const isNameAvailable = await this.moduleRepository.isNameAvailable(name);
 
@@ -34,9 +34,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
 
     module.describe(name, description);
 
-    if (enabled === false) {
-      module.disable();
-    }
+    isEnabled === false && module.disable();
 
     if (project) {
       const projectModel = await this.projectModuleFacade.getProjectById(project);
@@ -45,15 +43,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
         throw new ProjectToRelateIsDisabledException();
       }
 
-      module.useProject({
-        id: projectModel.id,
-        name: projectModel.name,
-        description: projectModel.description,
-        isEnabled: projectModel.isEnabled,
-        createdAt: projectModel.createdAt,
-        updatedAt: projectModel.updatedAt,
-        deletedAt: projectModel.deletedAt,
-      });
+      module.useProject(projectModel);
     }
 
     await this.moduleRepository.persist(module);
@@ -74,7 +64,7 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
       await this.eventStoreService.emit(event);
     } catch (err) {
       await this.moduleRepository.delete(relateModuleWithProjectEventBody.moduleId);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(err);
     }
   }
 }
