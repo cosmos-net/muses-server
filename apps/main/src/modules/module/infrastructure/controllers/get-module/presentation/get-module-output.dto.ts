@@ -2,7 +2,7 @@ export interface IGetModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  projectId: string;
+  project: object | string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -13,7 +13,7 @@ export class GetModuleOutputDto implements IGetModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  projectId: string;
+  project: object | string;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
@@ -24,7 +24,7 @@ export class GetModuleOutputDto implements IGetModuleOutputDto {
     this.id = root.id;
     this.name = root.name;
     this.description = root.description;
-    this.projectId = root.projectId;
+    this.project = root.project;
     this.isEnabled = root.isEnabled;
     this.createdAt = root.createdAt instanceof Date ? root.createdAt.toISOString() : root.createdAt;
     this.updatedAt = root.updatedAt instanceof Date ? root.updatedAt.toISOString() : root.updatedAt;

@@ -21,9 +21,8 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
   async persist(model: Module): Promise<Module> {
     let partialSchema: Partial<IModuleSchema & ModuleEntity> = model.entityRootPartial();
 
-    if (partialSchema.project.id) {
-      const { id } = partialSchema.project;
-      const objectId = new ObjectId(id);
+    if (partialSchema.project) {
+      const objectId = new ObjectId(partialSchema.project);
 
       partialSchema = {
         ...partialSchema,
@@ -48,7 +47,16 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
         _id: objectId,
       };
 
-      await this.moduleRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+      const module = (await this.moduleRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
+        returnDocument: 'after',
+      })) as ModuleEntity;
+
+      model.fromPrimitives({
+        ...module,
+        ...(module.project && { project: module.project.toHexString() }),
+        ...(module.subModules && { subModules: module.subModules.map((subModule) => subModule.toHexString()) }),
+        id: module._id.toHexString(),
+      });
 
       return model;
     }

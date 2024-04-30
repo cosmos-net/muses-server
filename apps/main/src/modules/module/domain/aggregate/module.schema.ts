@@ -1,10 +1,10 @@
-import { IProject } from '@module-module/domain/aggregate/value-objects/project.vo';
+import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
 
 export interface IModuleSchema {
   id: string | any;
   name: string;
   description: string;
-  project: IProject | any;
+  project: IProjectSchema | any;
   subModules: IModuleSchema[] | string[] | any;
   actions: string[] | any;
   isEnabled: boolean;
