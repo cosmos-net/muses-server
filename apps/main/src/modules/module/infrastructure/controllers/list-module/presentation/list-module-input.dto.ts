@@ -70,6 +70,22 @@ export class ListModuleInputDto extends PaginationOptionsQuery {
   @IsOptional()
   readonly projects?: string[];
 
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsObjectIdHex()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly subModules?: string[];
+
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsObjectIdHex()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly actions?: string[];
+
   @IsISO8601()
   @IsOptional()
   @IsNotEmpty()
