@@ -54,6 +54,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
 
       model.fromPrimitives({
         ...project,
+        ...(project.modules && { modules: project.modules.map((module) => module.toHexString()) }),
         ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
         id: project._id.toHexString(),
       });
@@ -65,6 +66,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
 
     model.fromPrimitives({
       ...project,
+      ...(project.modules && { modules: project.modules.map((module) => module.toHexString()) }),
       ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
       id: project._id.toHexString(),
     });
@@ -110,6 +112,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
 
     const project = new Project({
       ...projectFound,
+      ...(projectFound.modules && { modules: projectFound.modules.map((module) => module.toHexString()) }),
       ...(projectFound.ecosystem && { ecosystem: projectFound.ecosystem.toHexString() }),
       id: projectFound._id.toHexString(),
     });
@@ -124,6 +127,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
 
     const projectsClean = projects.map((project) => ({
       ...project,
+      ...(project.modules && { modules: project.modules.map((module) => module.toHexString()) }),
       ...(project.ecosystem && { ecosystem: project.ecosystem.toHexString() }),
       id: project._id.toHexString(),
     }));
