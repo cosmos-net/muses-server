@@ -12,7 +12,7 @@ export class RetrieveEcosystemService implements IApplicationServiceQuery<Retrie
   ) {}
 
   async process<T extends RetrieveEcosystemQuery>(query: T): Promise<Ecosystem> {
-    const { id, withDeleted } = query;
+    const { id, withDisabled: withDeleted } = query;
 
     const ecosystem = await this.ecosystemRepository.byIdOrFail(id, withDeleted);
 

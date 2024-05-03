@@ -6,7 +6,7 @@ interface IListProjectOutputDto {
   id?: string;
   name: string;
   description: string;
-  ecosystemId?: string;
+  ecosystem?: string | object;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -29,7 +29,7 @@ export class ListProjectOutputDto {
         name: item.name,
         description: item.description,
         isEnabled: item.isEnabled,
-        ecosystemId: item.ecosystemId,
+        ecosystem: item.ecosystem,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
         deletedAt: item.deletedAt,

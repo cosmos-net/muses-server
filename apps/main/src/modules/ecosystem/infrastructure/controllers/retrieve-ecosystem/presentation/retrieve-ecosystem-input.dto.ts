@@ -12,7 +12,7 @@ export class RetrieveEcosystemInputDto {
   @IsBoolean()
   @IsNotEmpty()
   @IsOptional()
-  readonly withDeleted: boolean = true;
+  readonly withDisabled: boolean = true;
 
   set setId(value: string) {
     this.id = value;

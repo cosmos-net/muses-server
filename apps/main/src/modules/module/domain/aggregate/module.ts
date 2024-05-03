@@ -5,7 +5,6 @@ import CreatedAt from '@module-module/domain/aggregate/value-objects/created-at.
 import DeletedAt from '@module-module/domain/aggregate/value-objects/deleted-at.vo';
 import UpdatedAt from '@module-module/domain/aggregate/value-objects/updated-at.vo';
 import IsEnabled from '@module-module/domain/aggregate/value-objects/is-enabled.vo';
-import Project, { IProject } from '@module-module/domain/aggregate/value-objects/project.vo';
 import { ModuleIsAlreadyDisabledUsedException } from '@module-module/domain/exceptions/module-is-already-disabled.exception';
 import { IModuleSchemaAggregate } from '@module-module/domain/aggregate/module.schema.vo';
 import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
@@ -14,13 +13,14 @@ import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
 import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
+import { EcosystemAlreadyEnabledException } from '@module-eco/domain/exceptions/ecosystem-already-enabled.exception';
+import { Project } from '@module-project/domain/aggregate/project';
+import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
   constructor(schema?: IModuleSchema | Partial<IModuleSchema> | string | null) {
-    if (!this._entityRoot.subModules?.length) this._entityRoot.subModules = [];
-
     if (schema) {
       let isPartialSchema: boolean = false;
 
@@ -39,9 +39,11 @@ export class Module {
           if (schema.isEnabled) this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
         }
       }
-    } else {
-      this._entityRoot.isEnabled = new IsEnabled(true);
+
+      return;
     }
+
+    this._entityRoot.isEnabled = new IsEnabled(true);
   }
 
   get id(): string {
@@ -57,7 +59,19 @@ export class Module {
   }
 
   get projectId(): string {
-    return this._entityRoot.project.id;
+    if (this._entityRoot.project instanceof Project) {
+      return this._entityRoot.project.id;
+    }
+
+    return this._entityRoot.project;
+  }
+
+  get project(): string | IProjectSchema {
+    if (this._entityRoot.project instanceof Project) {
+      return this._entityRoot.project.toPrimitives();
+    }
+
+    return this._entityRoot.project;
   }
 
   get isEnabled(): boolean {
@@ -76,10 +90,6 @@ export class Module {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get project(): IProject {
-    return this._entityRoot.project.toPrimitives();
-  }
-
   get subModules(): ISubModuleSchema[] {
     return this._entityRoot.subModules;
   }
@@ -92,11 +102,16 @@ export class Module {
     this._entityRoot.id = new Id(id);
   }
 
-  enable(): void {
+  public enable(): void {
+    if (this._entityRoot.isEnabled.value === true) {
+      throw new EcosystemAlreadyEnabledException();
+    }
+
     this._entityRoot.isEnabled = new IsEnabled(true);
+    this._entityRoot.deletedAt = undefined;
   }
 
-  disable(): void {
+  public disable(): void {
     if (this._entityRoot.isEnabled.value === false) {
       throw new ModuleIsAlreadyDisabledUsedException();
     }
@@ -118,13 +133,9 @@ export class Module {
     }
 
     if (typeof schema.project === 'string') {
-      if (this._entityRoot.project instanceof Project) {
-        this._entityRoot.project.id = schema.project;
-      } else if (this._entityRoot.project === undefined) {
-        this._entityRoot.project = new Project(schema.project);
+      if (!this._entityRoot.project) {
+        this._entityRoot.project = schema.project;
       }
-    } else if (this._entityRoot.project === undefined && schema.project instanceof Object) {
-      this._entityRoot.project = new Project(schema.project);
     }
 
     if (schema.subModules) {
@@ -143,22 +154,22 @@ export class Module {
     this._entityRoot.description = new Description(description);
   }
 
-  public useProject(project: IProject): void {
-    this._entityRoot.project = new Project(project);
+  public useProject(project: Project): void {
+    this._entityRoot.project = project;
   }
 
   public toPrimitives(): IModuleSchema {
     return {
-      id: this._entityRoot.id.value,
-      name: this._entityRoot.name.value,
-      description: this._entityRoot.description.value,
-      project: this._entityRoot.project.toPrimitives(),
-      subModules: this._entityRoot.subModules,
-      actions: this._entityRoot.actions,
-      isEnabled: this._entityRoot.isEnabled.value,
-      createdAt: this._entityRoot.createdAt.value,
-      updatedAt: this._entityRoot.updatedAt.value,
-      deletedAt: this._entityRoot.deletedAt?.value,
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      subModules: this.subModules,
+      actions: this.actions,
+      isEnabled: this.isEnabled,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
+      project: this.project,
     };
   }
 
@@ -174,6 +185,11 @@ export class Module {
           if (key === 'subModules') {
             partialSchema[key] = value.map((subModule) => subModule.id);
             continue;
+          } else if (key === 'project') {
+            if (value instanceof Project) {
+              partialSchema[key] = value.id;
+              continue;
+            }
           }
 
           partialSchema[key] = value.value;
@@ -217,6 +233,12 @@ export class Module {
   }
 
   public addSubModule(subModule: SubModule): void {
+    if (!this._entityRoot.subModules) {
+      this._entityRoot.subModules = [];
+      this._entityRoot.subModules.push(subModule);
+      return;
+    }
+
     if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
       const isSubmoduleAlreadyAdded = this._entityRoot.subModules.find((s) => s.id === subModule.id);
 

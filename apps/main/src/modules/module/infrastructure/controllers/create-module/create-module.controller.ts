@@ -13,12 +13,7 @@ export class CreateModuleController {
   @Post()
   async create(@Body() dto: CreateModuleInputDto): Promise<CreateModuleOutputDto> {
     try {
-      const command = new CreateModuleCommand({
-        name: dto.name,
-        description: dto.description,
-        project: dto.project,
-        enabled: dto.enabled,
-      });
+      const command = new CreateModuleCommand(dto);
 
       const module = await this.createModuleService.process(command);
 

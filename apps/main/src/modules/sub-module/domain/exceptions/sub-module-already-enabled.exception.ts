@@ -1,8 +1,8 @@
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 
-export class ModuleIsAlreadyDisabledUsedException extends ExceptionManager {
+export class SubModuleAlreadyEnabledException extends ExceptionManager {
   constructor() {
-    const message = 'Module is already disabled';
+    const message = 'SubModule already enabled';
     super(message, 'BAD_REQUEST');
   }
 }

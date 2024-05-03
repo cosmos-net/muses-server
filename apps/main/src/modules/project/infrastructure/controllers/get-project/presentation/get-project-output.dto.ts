@@ -2,7 +2,7 @@ export interface IGetProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystemId?: string;
+  ecosystem?: string | object;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -13,7 +13,7 @@ export class GetProjectOutputDto implements IGetProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystemId?: string;
+  ecosystem?: string | object;
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
@@ -23,7 +23,7 @@ export class GetProjectOutputDto implements IGetProjectOutputDto {
     this.id = root.id;
     this.name = root.name;
     this.description = root.description;
-    this.ecosystemId = root.ecosystemId;
+    this.ecosystem = root.ecosystem;
     this.isEnabled = root.isEnabled;
     this.createdAt = root.createdAt instanceof Date ? root.createdAt.toISOString() : root.createdAt;
     this.updatedAt = root.updatedAt instanceof Date ? root.updatedAt.toISOString() : root.updatedAt;

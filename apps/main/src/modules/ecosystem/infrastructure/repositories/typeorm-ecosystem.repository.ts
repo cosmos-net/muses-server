@@ -22,7 +22,7 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialEcosystemSchema();
+    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialSchema();
 
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;
@@ -31,10 +31,20 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
       partialSchema = {
         ...restParams,
         _id: objectId,
-        id: objectId,
       };
 
-      await this.ecosystemRepository.updateOne({ _id: objectId }, { $set: partialSchema });
+      const ecosystem = (await this.ecosystemRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
+        returnDocument: 'after',
+      })) as EcosystemEntity;
+
+      if (!ecosystem) {
+        throw new BadRequestException('The ecosystem does not exist');
+      }
+
+      model.fromPrimitives({
+        ...ecosystem,
+        id: ecosystem._id.toHexString(),
+      });
 
       return;
     }

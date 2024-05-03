@@ -2,15 +2,17 @@ export interface IUpdateProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystem?: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  ecosystem?:
+    | string
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      };
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -21,15 +23,17 @@ export class UpdateProjectOutputDto implements IUpdateProjectOutputDto {
   id: string;
   name: string;
   description: string;
-  ecosystem?: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  ecosystem?:
+    | string
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      };
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;

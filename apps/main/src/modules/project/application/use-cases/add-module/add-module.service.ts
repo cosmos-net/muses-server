@@ -26,9 +26,7 @@ export class AddModuleService implements IApplicationServiceCommand<AddModuleCom
       throw new ModuleDisabledException();
     }
 
-    const project = await this.projectRepository.searchOneBy(projectId, {
-      withDeleted: true,
-    });
+    const project = await this.projectRepository.searchOneBy(projectId, true);
 
     if (project === null) {
       throw new ProjectNotFoundException();

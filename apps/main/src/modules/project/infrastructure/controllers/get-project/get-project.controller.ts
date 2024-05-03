@@ -1,5 +1,5 @@
 import { GetProjectService } from '@module-project/application/use-cases/get-project/get-project.service';
-import { Controller, Get, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { GetProjectInputDto } from './presentation/get-project-input.dto';
 import { GetProjectQuery } from '@module-project/application/use-cases/get-project/get-project.query';
@@ -14,8 +14,9 @@ export class GetProjectController {
   constructor(private readonly getProjectService: GetProjectService) {}
 
   @Get('/:id')
-  async Get(@Param() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
+  async Get(@Param('id') idProject: string, @Query() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
     try {
+      dto.setId = idProject;
       const { id, withDisabled } = dto;
 
       const query = new GetProjectQuery({

@@ -6,7 +6,7 @@ interface IListModuleOutputDto {
   id?: string;
   name: string;
   description: string;
-  projectId: string;
+  project: object | string;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -28,7 +28,7 @@ export class ListModuleOutputDto {
         id: item.id,
         name: item.name,
         description: item.description,
-        projectId: item.projectId,
+        project: item.project,
         isEnabled: item.isEnabled,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,

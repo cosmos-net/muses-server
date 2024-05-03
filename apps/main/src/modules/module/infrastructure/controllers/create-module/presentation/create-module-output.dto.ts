@@ -2,15 +2,17 @@ export interface ICreateModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  project: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  project:
+    | string
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      };
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -21,15 +23,17 @@ export class CreateModuleOutputDto implements ICreateModuleOutputDto {
   id: string;
   name: string;
   description: string;
-  project: {
-    id: string;
-    name: string;
-    description: string;
-    isEnabled: boolean;
-    createdAt: string | Date;
-    updatedAt: string | Date;
-    deletedAt?: string | Date;
-  };
+  project:
+    | string
+    | {
+        id: string;
+        name: string;
+        description: string;
+        isEnabled: boolean;
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        deletedAt?: string | Date;
+      };
   isEnabled: boolean;
   createdAt: string;
   updatedAt: string;
