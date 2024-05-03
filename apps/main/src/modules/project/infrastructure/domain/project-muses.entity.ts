@@ -30,10 +30,6 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
   })
   isEnabled: boolean;
 
-  // @ManyToOne(() => EcosystemEntity, (ecosystem) => ecosystem.project)
-  // @ObjectIdColumn()
-  // ecosystem: EcosystemEntity | ObjectId;
-
   @Column({
     type: 'string',
     name: 'ecosystem',
@@ -47,10 +43,4 @@ export class ProjectEntity extends BaseEntity implements IProjectSchema {
     nullable: true,
   })
   modules?: ObjectId[] | null;
-
-  // This field gets created automatically by TypeORM
-  // in the document. We need to add it here in order to
-  // access it in our code.
-  // @Column()
-  // ecosystemId?: string;
 }

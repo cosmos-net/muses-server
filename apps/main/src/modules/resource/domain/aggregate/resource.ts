@@ -12,6 +12,7 @@ import { IActionSchemaAggregate } from '@module-resource/domain/aggregate/resour
 import { Action } from '@module-action/domain/aggregate/action';
 import { ResourcePropertyWithSameValueException } from '@module-resource/domain/exceptions/resource-property-with-same-value.exception';
 import { IActionSchema } from '@app-main/modules/action/domain/aggregate/action.schema';
+import { ResourceAlreadyEnabledException } from '@module-resource/domain/exceptions/resource-already-enabled.exception';
 
 export class Resource {
   private _entityRoot = {} as IActionSchemaAggregate;
@@ -110,12 +111,15 @@ export class Resource {
   }
 
   public enable(): void {
-    if (this.isEnabled !== undefined && this.isEnabled === false) {
-      throw new ResourcePropertyWithSameValueException('isEnabled', true);
+    if (this._entityRoot.isEnabled.value === true) {
+      throw new ResourceAlreadyEnabledException();
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
-    this._entityRoot.deletedAt = null;
+
+    if (this._entityRoot.deletedAt) {
+      this._entityRoot.deletedAt = undefined;
+    }
   }
 
   public disable(): void {

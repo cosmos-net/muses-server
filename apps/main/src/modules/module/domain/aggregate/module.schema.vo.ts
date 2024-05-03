@@ -5,14 +5,14 @@ import CreatedAt from '@module-module/domain/aggregate/value-objects/created-at.
 import DeletedAt from '@module-module/domain/aggregate/value-objects/deleted-at.vo';
 import UpdatedAt from '@module-module/domain/aggregate/value-objects/updated-at.vo';
 import IsEnabled from '@module-module/domain/aggregate/value-objects/is-enabled.vo';
-import Project from '@module-module/domain/aggregate/value-objects/project.vo';
+import { Project } from '@module-project/domain/aggregate/project';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 
 export interface IModuleSchemaAggregate {
   id: Id;
   name: Name;
   description: Description;
-  project: Project;
+  project: string | Project;
   subModules: SubModule[] & string[];
   actions?: string[];
   isEnabled: IsEnabled;

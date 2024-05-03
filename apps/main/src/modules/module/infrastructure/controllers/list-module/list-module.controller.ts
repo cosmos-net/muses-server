@@ -19,6 +19,7 @@ export class ListModuleController {
       const { page, limit, offset, sort: orderType, orderBy, ...filterParams } = dto;
 
       const filters = this.mapFilters(filterParams);
+      const withDeleted = filterParams.isEnabled === false;
 
       const query = new ListModuleQuery({
         orderBy,
@@ -26,6 +27,7 @@ export class ListModuleController {
         limit,
         offset,
         filters,
+        withDeleted,
       });
 
       const modules = await this.listModuleService.process(query);
@@ -69,6 +71,10 @@ export class ListModuleController {
             case 'isEnabled':
               map.set(IdentifierEnum.FIELD, key);
               map.set(IdentifierEnum.OPERATOR, Operator.EQUAL);
+              break;
+            case 'projects':
+              map.set(IdentifierEnum.FIELD, 'project');
+              map.set(IdentifierEnum.OPERATOR, Operator.IN);
               break;
             case 'createdAtFrom':
               map.set(IdentifierEnum.FIELD, 'createdAt');

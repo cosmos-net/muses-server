@@ -7,7 +7,7 @@ export class CreateModuleCommand implements ICommand {
 
   readonly project: string;
 
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   constructor(props: Partial<CreateModuleCommand>) {
     if (props) {

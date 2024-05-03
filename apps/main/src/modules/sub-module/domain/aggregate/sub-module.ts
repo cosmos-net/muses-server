@@ -11,6 +11,7 @@ import UpdatedAt from '@module-sub-module/domain/aggregate/value-objects/updated
 import { Module } from '@module-module/domain/aggregate/module';
 import { SubModuleIsAlreadyDisabledUsedException } from '@module-sub-module/domain/exceptions/sub-module-is-already-disabled.exception';
 import { SubModulePropertyWithSameValueException } from '@module-sub-module/domain/exceptions/sub-module-property-with-same-value.exception';
+import { SubModuleAlreadyEnabledException } from '@module-sub-module/domain/exceptions/sub-module-already-enabled.exception';
 
 export class SubModule {
   private _entityRoot = {} as ISubModuleSchemaAggregate;
@@ -80,7 +81,15 @@ export class SubModule {
   }
 
   public enable(): void {
+    if (this._entityRoot.isEnabled.value === true) {
+      throw new SubModuleAlreadyEnabledException();
+    }
+
     this._entityRoot.isEnabled = new IsEnabled(true);
+
+    if (this._entityRoot.deletedAt) {
+      this._entityRoot.deletedAt = undefined;
+    }
   }
 
   public disable(): void {

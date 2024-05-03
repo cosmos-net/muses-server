@@ -54,7 +54,6 @@ import { MainResourceModule } from '@module-resource/infrastructure/framework/re
     ModuleFacadeService,
     SubModuleFacadeService,
     ActionFacade,
-    EventStoreService,
     ListActionService,
     DisableActionService,
     GetAllActionByIds,

@@ -1,10 +1,10 @@
-import { IEcosystem } from '@module-project/domain/aggregate/value-objects/ecosystem.vo';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 
 export interface IProjectSchema {
   id: string | any;
   name: string;
   description: string;
-  ecosystem?: IEcosystem | any;
+  ecosystem?: IEcosystemSchema | any;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;

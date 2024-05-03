@@ -1,7 +1,6 @@
 import Id from '@module-project/domain/aggregate/value-objects/id.vo';
 import Name from '@module-project/domain/aggregate/value-objects/name.vo';
 import Description from '@module-project/domain/aggregate/value-objects/description.vo';
-import { Ecosystem, IEcosystem } from '@module-project/domain/aggregate/value-objects/ecosystem.vo';
 import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled.vo';
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
@@ -15,6 +14,8 @@ import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { ProjectIsAlreadyEnabledException } from '@module-project/domain/exceptions/project-is-already-enabled.exception';
 import { removePropertyFromObject } from '@lib-commons/domain/helpers/utils';
+import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;
@@ -40,6 +41,10 @@ export class Project {
   }
 
   get ecosystemId(): string | undefined {
+    if (typeof this._entityRoot.ecosystem === 'string') {
+      return this._entityRoot.ecosystem;
+    }
+
     return this._entityRoot.ecosystem?.id;
   }
 
@@ -59,7 +64,11 @@ export class Project {
     return this._entityRoot?.deletedAt?.value;
   }
 
-  get ecosystem(): IEcosystem | undefined {
+  get ecosystem(): string | IEcosystemSchema | undefined {
+    if (typeof this._entityRoot.ecosystem === 'string') {
+      return this._entityRoot.ecosystem;
+    }
+
     return this._entityRoot.ecosystem?.toPrimitives();
   }
 
@@ -69,10 +78,7 @@ export class Project {
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
-
-    if (this._entityRoot.deletedAt) {
-      this._entityRoot.deletedAt = undefined;
-    }
+    this._entityRoot = removePropertyFromObject<IProjectAggregate, 'deletedAt'>(this._entityRoot, 'deletedAt');
   }
 
   public disable(): void {
@@ -97,10 +103,8 @@ export class Project {
     }
 
     if (typeof schema.ecosystem === 'string') {
-      if (this._entityRoot.ecosystem instanceof Ecosystem) {
-        this._entityRoot.ecosystem.id = schema.ecosystem;
-      } else if (this._entityRoot.ecosystem === undefined) {
-        this._entityRoot.ecosystem = new Ecosystem(schema.ecosystem);
+      if (this._entityRoot.ecosystem === undefined) {
+        this._entityRoot.ecosystem = schema.ecosystem;
       }
     }
   }
@@ -131,18 +135,8 @@ export class Project {
     }
   }
 
-  public changeStatus(isEnabled?: boolean): void {
-    if (isEnabled !== undefined) {
-      if (this._entityRoot.isEnabled.value === isEnabled) {
-        throw new ProjectPropertyWithSameValue('isEnabled', isEnabled);
-      }
-
-      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
-    }
-  }
-
-  public useEcosystem(ecosystem: IEcosystem): void {
-    this._entityRoot.ecosystem = new Ecosystem(ecosystem);
+  public useEcosystem(ecosystem: Ecosystem): void {
+    this._entityRoot.ecosystem = ecosystem;
   }
 
   public removeEcosystem(): void {
@@ -190,7 +184,7 @@ export class Project {
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
       deletedAt: this._entityRoot.deletedAt?.value,
-      ecosystem: this._entityRoot.ecosystem?.toPrimitives(),
+      ecosystem: this._entityRoot.ecosystem,
     };
   }
 
@@ -205,6 +199,11 @@ export class Project {
         if (value.value !== null) {
           if (key === 'modules') {
             partialSchema[key] = value.map((module) => module.id);
+            continue;
+          }
+
+          if (key === 'ecosystem') {
+            partialSchema[key] = value.id;
             continue;
           }
 
