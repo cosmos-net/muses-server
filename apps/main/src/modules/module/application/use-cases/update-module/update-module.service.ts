@@ -24,7 +24,7 @@ export class UpdateModuleService implements IApplicationServiceCommand<UpdateMod
   ) {}
 
   async process<T extends UpdateModuleCommand>(command: T): Promise<Module> {
-    const { id, name, description, enabled, project } = command;
+    const { id, name, description, isEnabled, project } = command;
 
     const module = await this.moduleRepository.searchOneBy(id, { withDeleted: true });
 
@@ -51,8 +51,8 @@ export class UpdateModuleService implements IApplicationServiceCommand<UpdateMod
       module.redescribe(name, description);
     }
 
-    if (enabled !== undefined) {
-      module.changeStatus(enabled);
+    if (isEnabled !== undefined) {
+      isEnabled === true ? module.enable() : module.disable();
     }
 
     await this.moduleRepository.persist(module);

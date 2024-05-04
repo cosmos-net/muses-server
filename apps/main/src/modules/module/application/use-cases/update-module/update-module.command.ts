@@ -7,7 +7,7 @@ export class UpdateModuleCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   readonly project?: string;
 
