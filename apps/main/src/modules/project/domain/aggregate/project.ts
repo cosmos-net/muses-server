@@ -192,7 +192,7 @@ export class Project {
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
       deletedAt: this._entityRoot.deletedAt?.value,
-      ecosystem: this._entityRoot.ecosystem,
+      ecosystem: this.ecosystem,
     };
   }
 

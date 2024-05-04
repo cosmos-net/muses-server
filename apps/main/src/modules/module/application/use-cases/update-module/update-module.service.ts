@@ -58,13 +58,11 @@ export class UpdateModuleService implements IApplicationServiceCommand<UpdateMod
     await this.moduleRepository.persist(module);
 
     if (isProjectChanged) {
-      const eventBody = new OverwriteModuleOnProjectEventBody({
+      await this.tryToEmitEvent({
         moduleId: module.id,
         previousProjectId: this.backup.projectId,
         newProjectId: module.projectId,
       });
-
-      await this.tryToEmitEvent(eventBody);
     }
 
     return module;

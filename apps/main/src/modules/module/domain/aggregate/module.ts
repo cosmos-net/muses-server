@@ -13,9 +13,9 @@ import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
 import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
-import { EcosystemAlreadyEnabledException } from '@module-eco/domain/exceptions/ecosystem-already-enabled.exception';
 import { Project } from '@module-project/domain/aggregate/project';
 import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
+import { ModuleIsAlreadyEnabledUsedException } from '../exceptions/module-is-already-enabled.exception';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
@@ -104,7 +104,7 @@ export class Module {
 
   public enable(): void {
     if (this._entityRoot.isEnabled.value === true) {
-      throw new EcosystemAlreadyEnabledException();
+      throw new ModuleIsAlreadyEnabledUsedException();
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
