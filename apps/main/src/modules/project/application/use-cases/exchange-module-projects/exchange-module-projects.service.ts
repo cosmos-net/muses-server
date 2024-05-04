@@ -5,8 +5,6 @@ import { MODULE_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/applic
 import { ExchangeModuleProjectsCommand } from '@module-project/application/use-cases/exchange-module-projects/exchange-module-projects.command';
 import { IModuleModuleFacadeService } from '@module-project/domain/contracts/module-module-facade';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
-import { ProjectDisabledException } from '@module-project/domain/exceptions/project-disabled-exception';
-import { ModuleDisabledException } from '@module-project/domain/exceptions/module-disabled.exception';
 
 @Injectable()
 export class ExchangeModuleProjectsService implements IApplicationServiceCommand<ExchangeModuleProjectsCommand> {
@@ -22,28 +20,16 @@ export class ExchangeModuleProjectsService implements IApplicationServiceCommand
 
     const module = await this.moduleModuleFacadeService.getModuleById(moduleId);
 
-    if (!module.isEnabled) {
-      throw new ModuleDisabledException();
-    }
-
     const previousProject = await this.projectRepository.searchOneBy(previousProjectId, true);
 
     if (previousProject === null) {
       throw new ProjectNotFoundException();
     }
 
-    if (!previousProject.isEnabled) {
-      throw new ProjectDisabledException();
-    }
-
     const newProject = await this.projectRepository.searchOneBy(newProjectId, true);
 
     if (newProject === null) {
       throw new ProjectNotFoundException();
-    }
-
-    if (!newProject.isEnabled) {
-      throw new ProjectDisabledException();
     }
 
     previousProject.removeModule(module);
