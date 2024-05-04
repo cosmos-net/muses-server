@@ -20,7 +20,7 @@ export class UpdateModuleController {
         id: dto.id,
         name: dto.name,
         description: dto.description,
-        enabled: dto.enabled,
+        isEnabled: dto.isEnabled,
         project: dto.project,
       });
 
