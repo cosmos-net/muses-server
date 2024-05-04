@@ -41,10 +41,12 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     }
 
     if (partialSchema.id) {
-      const objectId = new ObjectId(partialSchema.id);
+      const { id, ...restParams } = partialSchema;
+
+      const objectId = new ObjectId(id);
 
       partialSchema = {
-        ...partialSchema,
+        ...restParams,
         _id: objectId,
       };
 
