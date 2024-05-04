@@ -194,6 +194,12 @@ export class Module {
 
           partialSchema[key] = value.value;
         }
+
+        continue;
+      }
+
+      if (value) {
+        partialSchema[key] = value;
       }
     }
 
