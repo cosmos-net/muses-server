@@ -16,13 +16,7 @@ export class UpdateProjectController {
   @Patch()
   async update(@Body() dto: UpdateProjectInputDto): Promise<IUpdateProjectOutputDto> {
     try {
-      const command = new UpdateProjectCommand({
-        id: dto.id,
-        name: dto.name,
-        description: dto.description,
-        isEnabled: dto.isEnabled,
-        ecosystem: dto.ecosystem,
-      });
+      const command = new UpdateProjectCommand(dto);
 
       const project = await this.updateProjectService.process(command);
 

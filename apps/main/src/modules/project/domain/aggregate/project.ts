@@ -214,13 +214,23 @@ export class Project {
           }
 
           if (key === 'ecosystem') {
-            partialSchema[key] = value.id;
+            const value = partialSchema[key];
+            if (value instanceof Object) {
+              partialSchema[key] = value.id;
+            }
+
+            partialSchema[key] = value;
+
             continue;
           }
 
           partialSchema[key] = value.value;
         }
+
+        continue;
       }
+
+      partialSchema[key] = value;
     }
 
     return partialSchema;
