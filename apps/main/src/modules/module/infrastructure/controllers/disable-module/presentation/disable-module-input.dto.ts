@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class DeleteModuleInputDto {
+export class DisableModuleInputDto {
   @IsString()
   @IsNotEmpty()
   readonly id: string;
