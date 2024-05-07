@@ -13,7 +13,7 @@ export interface IModuleSchemaAggregate {
   name: Name;
   description: Description;
   project: string | Project;
-  subModules: SubModule[] & string[];
+  subModules: (SubModule | string)[];
   actions?: string[];
   isEnabled: IsEnabled;
   createdAt: CreatedAt;
