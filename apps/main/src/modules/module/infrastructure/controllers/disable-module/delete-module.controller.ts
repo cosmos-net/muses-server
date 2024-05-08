@@ -1,11 +1,11 @@
 import { Controller, Delete, Logger, Param } from '@nestjs/common';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
 import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
-import { DeleteModuleInputDto } from '@module-module/infrastructure/controllers/delete-module/presentation/delete-module-input.dto';
+import { DisableModuleInputDto } from '@app-main/modules/module/infrastructure/controllers/disable-module/presentation/disable-module-input.dto';
 import {
-  DeleteModuleOutputDto,
-  IDeleteModuleOutputDto,
-} from '@module-module/infrastructure/controllers/delete-module/presentation/delete-module-output.dto';
+  DisableModuleOutputDto,
+  IDisableModuleOutputDto,
+} from '@app-main/modules/module/infrastructure/controllers/disable-module/presentation/disable-module-output.dto';
 import { DeleteModuleCommand } from '@module-module/application/use-cases/delete-module/delete-module.command';
 
 @Controller('module/')
@@ -14,17 +14,15 @@ export class DeleteModuleController {
   constructor(private readonly deleteModuleService: DeleteModuleService) {}
 
   @Delete('/:id')
-  async delete(@Param() dto: DeleteModuleInputDto): Promise<IDeleteModuleOutputDto> {
+  async delete(@Param() dto: DisableModuleInputDto): Promise<IDisableModuleOutputDto> {
     try {
-      const command = new DeleteModuleCommand({
-        id: dto.id,
-      });
+      const command = new DeleteModuleCommand(dto);
 
       const result = await this.deleteModuleService.process(command);
 
       const success = result ? (result ? true : false) : false;
 
-      const mapper = new DeleteModuleOutputDto({
+      const mapper = new DisableModuleOutputDto({
         success,
         id: dto.id,
       });

@@ -16,13 +16,7 @@ export class UpdateModuleController {
   @Patch()
   async update(@Body() dto: UpdateModuleInputDto): Promise<IUpdateModuleOutputDto> {
     try {
-      const command = new UpdateModuleCommand({
-        id: dto.id,
-        name: dto.name,
-        description: dto.description,
-        enabled: dto.enabled,
-        project: dto.project,
-      });
+      const command = new UpdateModuleCommand(dto);
 
       const module = await this.updateModuleService.process(command);
 

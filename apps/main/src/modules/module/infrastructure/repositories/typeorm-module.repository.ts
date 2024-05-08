@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { MongoRepository } from 'typeorm';
@@ -40,10 +40,11 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     }
 
     if (partialSchema.id) {
-      const objectId = new ObjectId(partialSchema.id);
+      const { id, ...restParams } = partialSchema;
+      const objectId = new ObjectId(id);
 
       partialSchema = {
-        ...partialSchema,
+        ...restParams,
         _id: objectId,
       };
 
@@ -118,32 +119,6 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
     const list = new ListModule(modulesClean, total);
 
     return list;
-  }
-
-  async softDeleteBy(model: Module): Promise<number | undefined> {
-    model.disable();
-
-    let partialSchema: Partial<IModuleSchema & ModuleEntity> = model.entityRootPartial();
-
-    if (partialSchema?.project?.id) {
-      const { id } = partialSchema.project;
-      const objectId = new ObjectId(id);
-
-      partialSchema = {
-        ...partialSchema,
-        project: objectId,
-      };
-    }
-
-    const { id, ...partialParams } = partialSchema;
-
-    const result = await this.moduleRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
-
-    if (result.modifiedCount === 0) {
-      throw new InternalServerErrorException('The project could not be deleted');
-    }
-
-    return result.modifiedCount;
   }
 
   async getListByIds(ids: string[]): Promise<ListModule> {

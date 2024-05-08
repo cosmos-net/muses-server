@@ -48,12 +48,10 @@ export class CreateModuleService implements IApplicationServiceCommand<CreateMod
 
     await this.moduleRepository.persist(module);
 
-    await this.tryToEmitEvent(
-      new RelateModuleWithProjectEventBody({
-        moduleId: module.id,
-        projectId: project,
-      }),
-    );
+    await this.tryToEmitEvent({
+      moduleId: module.id,
+      projectId: project,
+    });
 
     return module;
   }

@@ -17,7 +17,7 @@ export class GetProjectService implements IApplicationServiceQuery<GetProjectQue
   ) {}
 
   async process<T extends GetProjectQuery>(query: T): Promise<Project> {
-    const { id, withDisabled: withDeleted } = query;
+    const { id, withDisabled: withDeleted, withEcosystem } = query;
 
     const project = await this.projectRepository.searchOneBy(id, withDeleted);
 
@@ -25,7 +25,7 @@ export class GetProjectService implements IApplicationServiceQuery<GetProjectQue
       throw new ProjectNotFoundException();
     }
 
-    if (project.ecosystemId) {
+    if (withEcosystem && project.ecosystemId) {
       const ecosystem = await this.ecosystemModuleFacade.getEcosystemById(project.ecosystemId);
 
       project.useEcosystem(ecosystem);

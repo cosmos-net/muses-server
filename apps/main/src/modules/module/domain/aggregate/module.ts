@@ -11,35 +11,17 @@ import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
 import { ModulePropertyWithSameValue } from '@module-module/domain/exceptions/module-property-with-same-value.exception';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { SubModuleAlreadyRelatedWithModuleException } from '@module-sub-module/domain/exceptions/sub-module-already-related-with-module.exception';
-import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
-import { EcosystemAlreadyEnabledException } from '@module-eco/domain/exceptions/ecosystem-already-enabled.exception';
 import { Project } from '@module-project/domain/aggregate/project';
 import { IProjectSchema } from '@module-project/domain/aggregate/project.schema';
+import { ModuleIsAlreadyEnabledUsedException } from '../exceptions/module-is-already-enabled.exception';
 
 export class Module {
   private _entityRoot = {} as IModuleSchemaAggregate;
 
-  constructor(schema?: IModuleSchema | Partial<IModuleSchema> | string | null) {
+  constructor(schema?: IModuleSchema | null) {
     if (schema) {
-      let isPartialSchema: boolean = false;
-
-      if (typeof schema !== 'string' && Object.keys(schema).length === 2) {
-        isPartialSchema = true;
-      }
-
-      if (typeof schema === 'string') {
-        this._entityRoot.id = new Id(schema);
-        this._entityRoot.isEnabled = new IsEnabled(true);
-      } else if (!isPartialSchema) {
-        this.hydrate(schema as IModuleSchema);
-      } else if (isPartialSchema) {
-        if (Object.keys(schema).length === 2) {
-          if (schema.id) this._entityRoot.id = new Id(schema.id);
-          if (schema.isEnabled) this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
-        }
-      }
-
+      this.hydrate(schema);
       return;
     }
 
@@ -90,7 +72,7 @@ export class Module {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get subModules(): ISubModuleSchema[] {
+  get subModules(): (SubModule | string)[] {
     return this._entityRoot.subModules;
   }
 
@@ -104,7 +86,7 @@ export class Module {
 
   public enable(): void {
     if (this._entityRoot.isEnabled.value === true) {
-      throw new EcosystemAlreadyEnabledException();
+      throw new ModuleIsAlreadyEnabledUsedException();
     }
 
     this._entityRoot.isEnabled = new IsEnabled(true);
@@ -118,6 +100,24 @@ export class Module {
 
     this._entityRoot.isEnabled = new IsEnabled(false);
     this._entityRoot.deletedAt = new DeletedAt(new Date());
+  }
+
+  public hydrateSubModules(subModules?: string[]): void {
+    if (subModules) {
+      if (!this._entityRoot.subModules) {
+        this._entityRoot.subModules = [];
+      }
+
+      for (const subModule of subModules) {
+        const isSubModuleAlreadyAdded = this._entityRoot.subModules.find(
+          (s) => s instanceof SubModule && s.id === subModule,
+        );
+
+        if (!isSubModuleAlreadyAdded) {
+          this._entityRoot.subModules.push(subModule);
+        }
+      }
+    }
   }
 
   public hydrate(schema: IModuleSchema): void {
@@ -138,15 +138,7 @@ export class Module {
       }
     }
 
-    if (schema.subModules) {
-      for (const subModule of schema.subModules) {
-        if (typeof subModule === 'string') {
-          this._entityRoot.subModules.push(subModule);
-        } else if (subModule instanceof SubModule) {
-          this._entityRoot.subModules.push(new SubModule(subModule));
-        }
-      }
-    }
+    this.hydrateSubModules(schema.subModules);
   }
 
   public describe(name: string, description: string): void {
@@ -194,6 +186,12 @@ export class Module {
 
           partialSchema[key] = value.value;
         }
+
+        continue;
+      }
+
+      if (value) {
+        partialSchema[key] = value;
       }
     }
 
@@ -240,7 +238,9 @@ export class Module {
     }
 
     if (this._entityRoot.subModules && this._entityRoot.subModules.length > 0) {
-      const isSubmoduleAlreadyAdded = this._entityRoot.subModules.find((s) => s.id === subModule.id);
+      const isSubmoduleAlreadyAdded = this._entityRoot.subModules.find(
+        (s) => s instanceof SubModule && s.id === subModule.id,
+      );
 
       if (isSubmoduleAlreadyAdded) {
         throw new SubModuleAlreadyRelatedWithModuleException();

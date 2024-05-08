@@ -20,7 +20,7 @@ import { GetModuleService } from '@module-module/application/use-cases/get-modul
 import { ListModuleController } from '@module-module/infrastructure/controllers/list-module/list-module.controller';
 import { ListModuleService } from '@module-module/application/use-cases/list-module/list-module.service';
 import { GetModuleController } from '@module-module/infrastructure/controllers/get-module/get-module.controller';
-import { DeleteModuleController } from '@module-module/infrastructure/controllers/delete-module/delete-module.controller';
+import { DeleteModuleController } from '@app-main/modules/module/infrastructure/controllers/disable-module/delete-module.controller';
 import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
 import { ModuleListener } from '@module-module/infrastructure/domain/listeners/module.listener';
 import { OverwriteSubModuleOnModuleEventHandler } from '@module-module/application/event-handlers/overwrite-sub-module-on-module-event.handler';

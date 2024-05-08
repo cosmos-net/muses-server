@@ -23,8 +23,10 @@ export class DeleteModuleService implements IApplicationServiceCommand<DeleteMod
       throw new ModuleNotFoundException();
     }
 
-    const result = await this.moduleRepository.softDeleteBy(module);
+    module.disable();
 
-    return result;
+    await this.moduleRepository.persist(module);
+
+    return 1;
   }
 }

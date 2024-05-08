@@ -17,5 +17,5 @@ export interface IProjectAggregate {
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
   deletedAt?: DeletedAt;
-  modules: Module[];
+  modules: (string | Module)[];
 }

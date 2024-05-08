@@ -5,8 +5,6 @@ import { MODULE_MODULE_FACADE, PROJECT_REPOSITORY } from '@module-project/applic
 import { AddModuleCommand } from '@module-project/application/use-cases/add-module/add-module.command';
 import { IModuleModuleFacadeService } from '@module-project/domain/contracts/module-module-facade';
 import { ProjectNotFoundException } from '@module-project/domain/exceptions/project-not-found.exception';
-import { ProjectDisabledException } from '@module-project/domain/exceptions/project-disabled-exception';
-import { ModuleDisabledException } from '@module-project/domain/exceptions/module-disabled.exception';
 
 @Injectable()
 export class AddModuleService implements IApplicationServiceCommand<AddModuleCommand> {
@@ -22,18 +20,10 @@ export class AddModuleService implements IApplicationServiceCommand<AddModuleCom
 
     const module = await this.moduleModuleFacadeService.getModuleById(moduleId);
 
-    if (!module.isEnabled) {
-      throw new ModuleDisabledException();
-    }
-
     const project = await this.projectRepository.searchOneBy(projectId, true);
 
     if (project === null) {
       throw new ProjectNotFoundException();
-    }
-
-    if (!project.isEnabled) {
-      throw new ProjectDisabledException();
     }
 
     project.addModule(module);
