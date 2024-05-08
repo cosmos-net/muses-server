@@ -5,6 +5,8 @@ export class GetProjectQuery implements IQuery {
 
   readonly withDisabled: boolean = false;
 
+  readonly withEcosystem?: boolean = true;
+
   constructor(props: Partial<GetProjectQuery>) {
     if (props) {
       Object.assign(this, props);

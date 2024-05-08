@@ -107,6 +107,10 @@ export class Project {
         this._entityRoot.ecosystem = schema.ecosystem;
       }
     }
+
+    if (Array.isArray(schema.modules)) {
+      this._entityRoot.modules = schema.modules;
+    }
   }
 
   public describe(name: string, description?: string): void {
@@ -145,7 +149,9 @@ export class Project {
 
   public addModule(module: Module): void {
     if (this._entityRoot.modules && this._entityRoot.modules.length > 0) {
-      const isModuleAlreadyAdded = this._entityRoot.modules.find((m) => m.id === module.id);
+      const isModuleAlreadyAdded = this._entityRoot.modules.find((m) => {
+        return typeof m === 'string' ? m === module.id : m.id === module.id;
+      });
 
       if (isModuleAlreadyAdded) {
         throw new ModuleAlreadyRelatedWithProjectException();
@@ -161,7 +167,9 @@ export class Project {
 
   public removeModule(module: Module): void {
     if (this._entityRoot.modules && this._entityRoot.modules.length > 0) {
-      const moduleIndex = this._entityRoot.modules.findIndex((m) => m.id === module.id);
+      const moduleIndex = this._entityRoot.modules.findIndex((m) => {
+        return typeof m === 'string' ? m === module.id : m.id === module.id;
+      });
 
       if (moduleIndex === -1) {
         throw new ModuleNotFoundException();
@@ -184,7 +192,7 @@ export class Project {
       createdAt: this._entityRoot.createdAt.value,
       updatedAt: this._entityRoot.updatedAt.value,
       deletedAt: this._entityRoot.deletedAt?.value,
-      ecosystem: this._entityRoot.ecosystem,
+      ecosystem: this.ecosystem,
     };
   }
 
@@ -198,18 +206,31 @@ export class Project {
       if (value instanceof Object) {
         if (value.value !== null) {
           if (key === 'modules') {
-            partialSchema[key] = value.map((module) => module.id);
+            partialSchema[key] = value.map((module) => {
+              return typeof module === 'string' ? module : module.id;
+            });
+
             continue;
           }
 
           if (key === 'ecosystem') {
-            partialSchema[key] = value.id;
+            const value = partialSchema[key];
+            if (value instanceof Object) {
+              partialSchema[key] = value.id;
+            }
+
+            partialSchema[key] = value;
+
             continue;
           }
 
           partialSchema[key] = value.value;
         }
+
+        continue;
       }
+
+      partialSchema[key] = value;
     }
 
     return partialSchema;

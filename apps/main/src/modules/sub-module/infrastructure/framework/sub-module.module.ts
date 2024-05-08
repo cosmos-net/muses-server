@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubModuleEntity } from '@module-sub-module/infrastructure/domain/sub-module-muses.entity';
 import { CreateSubModuleController } from '@module-sub-module/infrastructure/controllers/create-sub-module/create-sub-module.controller';
 import { CreateSubModuleService } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.service';
-import { ModuleFacadeService } from '@module-sub-module/infrastructure/domain/services/sub-module-module-facade.service';
+import { ModuleFacadeService } from '@app-main/modules/sub-module/infrastructure/domain/services/module-facade.service';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { MainModuleModule } from '@module-module/infrastructure/framework/module.module';
 import { ListSubModuleController } from '@module-sub-module/infrastructure/controllers/list-sub-module/list-sub-module.controller';

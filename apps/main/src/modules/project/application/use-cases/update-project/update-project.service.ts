@@ -31,7 +31,7 @@ export class UpdateProjectService implements IApplicationServiceCommand<UpdatePr
     }
 
     const currentEcosystem = project.ecosystemId;
-    const isEcosystemChanged = ecosystem !== currentEcosystem;
+    const isEcosystemChanged = ecosystem && ecosystem !== currentEcosystem;
 
     if (ecosystem) {
       if (project.ecosystemId === ecosystem) {
