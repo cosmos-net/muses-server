@@ -21,7 +21,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
   ) {}
 
   async process<T extends CreateSubModuleCommand>(command: T): Promise<SubModule> {
-    const { name, description, module, enabled } = command;
+    const { name, description, module, isEnabled } = command;
 
     const isNameAvailable = await this.subModuleRepository.isNameAvailable(name);
 
@@ -33,7 +33,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
 
     subModule.describe(name, description);
 
-    if (enabled === false) {
+    if (isEnabled === false) {
       subModule.disable();
     }
 
@@ -43,18 +43,7 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
       throw new ModuleToRelateIsDisabledException();
     }
 
-    subModule.useModule({
-      id: moduleModel.id,
-      name: moduleModel.name,
-      description: moduleModel.description,
-      project: moduleModel.project,
-      isEnabled: moduleModel.isEnabled,
-      createdAt: moduleModel.createdAt,
-      updatedAt: moduleModel.updatedAt,
-      deletedAt: moduleModel.deletedAt,
-      subModules: moduleModel.subModules,
-      actions: moduleModel.actions,
-    });
+    subModule.useModule(moduleModel);
 
     await this.subModuleRepository.persist(subModule);
 

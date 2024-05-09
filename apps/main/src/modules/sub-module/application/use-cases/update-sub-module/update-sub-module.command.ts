@@ -7,7 +7,7 @@ export class UpdateSubModuleCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   readonly module?: string;
 
