@@ -127,14 +127,8 @@ export class SubModule {
       this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
     }
 
-    if (typeof schema.module === 'string') {
-      if (this._entityRoot.module instanceof Module) {
-        this._entityRoot.module.id = schema.module;
-      } else if (this._entityRoot.module === undefined) {
-        this._entityRoot.module = schema.module;
-      }
-    } else if (this._entityRoot.module === undefined && schema.module instanceof Object) {
-      this._entityRoot.module = new Module(schema.module);
+    if (typeof schema.module === 'string' && this._entityRoot.module === undefined) {
+      this._entityRoot.module = schema.module;
     }
 
     if (Array.isArray(schema.actions)) {
@@ -200,16 +194,6 @@ export class SubModule {
       }
 
       this._entityRoot.description = new Description(description);
-    }
-  }
-
-  public changeStatus(isEnabled: boolean): void {
-    if (isEnabled !== undefined) {
-      if (this._entityRoot.isEnabled.value === isEnabled) {
-        throw new SubModulePropertyWithSameValueException('isEnabled', isEnabled);
-      }
-
-      this._entityRoot.isEnabled = new IsEnabled(isEnabled);
     }
   }
 

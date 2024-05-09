@@ -31,22 +31,10 @@ export class ListSubModuleService implements IApplicationServiceQuery<ListSubMod
 
     const populatedSubModules: SubModule[] = [];
 
-    // TODO: Mejorar esta shiet con una mejor definición de semantica
-    for (const subModule of subModules.items) {
+    for await (const subModule of subModules.items) {
       const moduleModel = await this.moduleFacade.getModuleById(subModule.moduleId);
 
-      subModule.useModule({
-        id: moduleModel.id,
-        name: moduleModel.name,
-        description: moduleModel.description,
-        project: moduleModel.project,
-        isEnabled: moduleModel.isEnabled,
-        createdAt: moduleModel.createdAt,
-        updatedAt: moduleModel.updatedAt,
-        deletedAt: moduleModel.deletedAt,
-        subModules: moduleModel.subModules,
-        actions: moduleModel.actions,
-      });
+      subModule.useModule(moduleModel);
 
       populatedSubModules.push(subModule);
     }

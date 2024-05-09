@@ -24,7 +24,7 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
   ) {}
 
   async process<T extends UpdateSubModuleCommand>(command: T): Promise<SubModule> {
-    const { id, name, description, enabled, module } = command;
+    const { id, name, description, isEnabled, module } = command;
 
     const submodule = await this.subModuleRepository.searchOneBy(id, { withDeleted: true });
 
@@ -63,8 +63,8 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
       submodule.redescribe(name, description);
     }
 
-    if (enabled !== undefined) {
-      submodule.changeStatus(enabled);
+    if (isEnabled !== undefined) {
+      isEnabled ? submodule.enable() : submodule.disable();
     }
 
     await this.subModuleRepository.persist(submodule);
