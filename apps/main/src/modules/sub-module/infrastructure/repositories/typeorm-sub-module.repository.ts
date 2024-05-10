@@ -49,11 +49,11 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
     let partialSchema: Partial<ISubModuleSchema & SubModuleEntity> = model.entityRootPartial();
 
     if (partialSchema.module) {
-      const { id } = partialSchema.module;
-      const moduleId = new ObjectId(id);
+      const { module, ...restParams } = partialSchema;
+      const moduleId = new ObjectId(module);
 
       partialSchema = {
-        ...partialSchema,
+        ...restParams,
         module: moduleId,
       };
     }
@@ -88,7 +88,7 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
 
     model.fromPrimitives({
       ...subModule,
-      ...(subModule.module && { module: { id: subModule.module.toHexString() } }),
+      ...(subModule.module && { module: subModule.module.toHexString() }),
       id: subModule._id.toHexString(),
     });
 

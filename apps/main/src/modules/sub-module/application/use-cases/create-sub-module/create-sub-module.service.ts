@@ -9,7 +9,7 @@ import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { RelateSubModuleWithModuleEventBody } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module-event-body';
 import { RelateSubModuleWithModuleEvent } from '@module-sub-module/domain/events/relate-sub-module-with-module-event/relate-sub-module-with-module.event';
 import { SubModuleNameAlreadyUsedException } from '@module-sub-module/domain/exceptions/sub-module-name-already-used.exception';
-import { ModuleToRelateIsDisabledException } from '@module-sub-module/domain/exceptions/module-to-relate-is-disabled.exception';
+
 @Injectable()
 export class CreateSubModuleService implements IApplicationServiceCommand<CreateSubModuleCommand> {
   constructor(
@@ -38,11 +38,6 @@ export class CreateSubModuleService implements IApplicationServiceCommand<Create
     }
 
     const moduleModel = await this.moduleFacade.getModuleById(module);
-
-    if (!moduleModel.isEnabled) {
-      throw new ModuleToRelateIsDisabledException();
-    }
-
     subModule.useModule(moduleModel);
 
     await this.subModuleRepository.persist(subModule);

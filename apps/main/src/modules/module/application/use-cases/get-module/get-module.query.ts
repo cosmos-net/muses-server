@@ -5,6 +5,8 @@ export class GetModuleQuery implements IQuery {
 
   readonly withDisabled: boolean = false;
 
+  readonly withProject: boolean = false;
+
   constructor(props?: Partial<GetModuleQuery>) {
     if (props) {
       Object.assign(this, props);

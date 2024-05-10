@@ -4,8 +4,6 @@ import { IApplicationServiceCommand } from '@lib-commons/application/application
 import { AddSubModuleCommand } from './add-submodule.command';
 import { ISubModuleModuleFacade } from '@module-module/domain/contracts/sub-module-facade';
 import { MODULE_REPOSITORY, SUB_MODULE_MODULE_FACADE } from '@module-module/application/constants/injection-tokens';
-import { SubModuleDisabledException } from '@module-sub-module/domain/exceptions/submodule-disabled.exception';
-import { ModuleDisabledException } from '@module-module/domain/exceptions/module-disabled.exception';
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 
 @Injectable()
@@ -22,18 +20,10 @@ export class AddSubModuleService implements IApplicationServiceCommand<AddSubMod
 
     const subModule = await this.subModuleFacade.getSubModuleBy(subModuleId);
 
-    if (!subModule.isEnabled) {
-      throw new SubModuleDisabledException();
-    }
-
     const module = await this.moduleRepository.searchOneBy(moduleId, { withDeleted: true });
 
     if (module === null) {
       throw new ModuleNotFoundException();
-    }
-
-    if (!module.isEnabled) {
-      throw new ModuleDisabledException();
     }
 
     module.addSubModule(subModule);

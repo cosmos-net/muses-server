@@ -17,7 +17,7 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
   ) {}
 
   async process<T extends GetSubModuleQuery>(query: T): Promise<SubModule> {
-    const { id, withDisabled } = query;
+    const { id, withDisabled, withModules } = query;
 
     const subModule = await this.subModuleRepository.searchOneBy(id, {
       withDeleted: withDisabled,
@@ -27,25 +27,10 @@ export class GetSubModuleService implements IApplicationServiceQuery<GetSubModul
       throw new SubModuleNotFoundException();
     }
 
-    const moduleModel = await this.moduleFacade.getModuleById(subModule.moduleId);
-
-    if (!moduleModel.isEnabled) {
-      // TODO: create a exception
-      throw new Error('Module is disabled');
+    if (withModules === true) {
+      const moduleModel = await this.moduleFacade.getModuleById(subModule.moduleId);
+      subModule.useModule(moduleModel);
     }
-
-    subModule.useModule({
-      id: moduleModel.id,
-      name: moduleModel.name,
-      description: moduleModel.description,
-      project: moduleModel.project,
-      isEnabled: moduleModel.isEnabled,
-      createdAt: moduleModel.createdAt,
-      updatedAt: moduleModel.updatedAt,
-      deletedAt: moduleModel.deletedAt,
-      subModules: moduleModel.subModules,
-      actions: moduleModel.actions,
-    });
 
     return subModule;
   }
