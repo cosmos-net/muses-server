@@ -202,6 +202,7 @@ export class Project {
 
   public entityRootPartial(): Partial<IProjectSchema> {
     const partialSchema: Partial<IProjectSchema> = {};
+
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
         if (value.value !== null) {
@@ -214,13 +215,7 @@ export class Project {
           }
 
           if (key === 'ecosystem') {
-            const value = partialSchema[key];
-            if (value instanceof Object) {
-              partialSchema[key] = value.id;
-            }
-
-            partialSchema[key] = value;
-
+            partialSchema[key] = value.id;
             continue;
           }
 

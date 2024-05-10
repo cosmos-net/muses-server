@@ -16,9 +16,7 @@ export class DeleteSubModuleController {
   @Delete('/:id')
   async delete(@Param() dto: DeleteSubModuleInputDto): Promise<IDeleteSubModuleOutputDto> {
     try {
-      const command = new DeleteSubModuleCommand({
-        id: dto.id,
-      });
+      const command = new DeleteSubModuleCommand(dto);
 
       const result = await this.deleteSubModuleService.process(command);
 

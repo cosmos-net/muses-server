@@ -4,7 +4,7 @@ export class CreateSubModuleCommand implements ICommand {
   readonly name: string;
   readonly description: string;
   readonly module: string;
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   constructor(props: Partial<CreateSubModuleCommand>) {
     if (props) {

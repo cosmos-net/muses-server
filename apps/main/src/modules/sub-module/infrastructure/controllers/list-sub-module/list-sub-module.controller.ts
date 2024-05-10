@@ -5,7 +5,6 @@ import { ListSubModuleInputDto } from './presentation/list-sub-module-input.dto'
 import { ListSubModuleOutputDto } from './presentation/list-sub-module-output.dto';
 import { Primitives } from '@lib-commons/domain/value-object/value-object';
 import { Operator } from '@lib-commons/domain/criteria/filter-operator';
-import { ListSubModuleQuery } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.query';
 import { IdentifierEnum } from '@module-common/domain/enums';
 
 @Controller('sub-module/')
@@ -21,7 +20,7 @@ export class ListSubModuleController {
       const filters = this.mapFilters(filtersParams);
       const withDeleted = filtersParams.isEnabled === false;
 
-      const query = new ListSubModuleQuery({
+      const projects = await this.listSubModuleService.process({
         orderBy,
         orderType,
         limit,
@@ -29,8 +28,6 @@ export class ListSubModuleController {
         filters,
         withDeleted,
       });
-
-      const projects = await this.listSubModuleService.process(query);
 
       const mapper = new ListSubModuleOutputDto(
         {

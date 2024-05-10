@@ -19,5 +19,5 @@ export class CreateSubModuleInputDto {
 
   @IsBoolean()
   @IsOptional()
-  readonly enabled?: boolean = true;
+  readonly isEnabled?: boolean = true;
 }
