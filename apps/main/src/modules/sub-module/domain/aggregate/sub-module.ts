@@ -162,18 +162,18 @@ export class SubModule {
     const partialSchema: Partial<IModuleSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
-        if (value.value !== null) {
+        if (value.value !== null && value.value !== undefined) {
           partialSchema[key] = value.value;
           continue;
         }
 
         if (key === 'module') {
-          partialSchema[key] = value;
+          partialSchema[key] = value.id;
           continue;
         }
 
         if (key === 'actions') {
-          partialSchema[key] = value;
+          partialSchema[key] = value.map((action) => action);
           continue;
         }
       }

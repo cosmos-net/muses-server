@@ -8,5 +8,4 @@ export interface IActionRepository {
   isNameAvailable(name: string): Promise<boolean>;
   persist(model: Action): Promise<Action>;
   searchListBy(criteria: Criteria): Promise<ListAction>;
-  softDeleteBy(model: Action): Promise<number | undefined>;
 }

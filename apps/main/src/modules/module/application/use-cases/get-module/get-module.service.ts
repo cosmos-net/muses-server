@@ -16,7 +16,7 @@ export class GetModuleService implements IApplicationServiceQuery<GetModuleQuery
     private projectModuleFacade: IProjectModuleFacade,
   ) {}
   async process<T extends GetModuleQuery>(query: T): Promise<Module> {
-    const { id, withDisabled } = query;
+    const { id, withDisabled, withProject } = query;
 
     const module = await this.moduleRepository.searchOneBy(id, {
       withDeleted: withDisabled,
@@ -26,8 +26,10 @@ export class GetModuleService implements IApplicationServiceQuery<GetModuleQuery
       throw new ModuleNotFoundException();
     }
 
-    const project = await this.projectModuleFacade.getProjectById(module.projectId);
-    module.useProject(project);
+    if (withProject) {
+      const project = await this.projectModuleFacade.getProjectById(module.projectId);
+      module.useProject(project);
+    }
 
     return module;
   }
