@@ -33,7 +33,7 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
         _id: objectId,
       };
 
-      const ecosystem = (await this.ecosystemRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
+      const ecosystem = (await this.ecosystemRepository.findOneAndReplace({ _id: objectId }, restParams, {
         returnDocument: 'after',
       })) as EcosystemEntity;
 

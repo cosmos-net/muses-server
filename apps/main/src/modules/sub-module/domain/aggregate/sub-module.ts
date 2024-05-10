@@ -164,16 +164,21 @@ export class SubModule {
       if (value instanceof Object) {
         if (value.value !== null) {
           partialSchema[key] = value.value;
+          continue;
         }
 
         if (key === 'module') {
           partialSchema[key] = value;
+          continue;
         }
 
         if (key === 'actions') {
           partialSchema[key] = value;
+          continue;
         }
       }
+
+      partialSchema[key] = value;
     }
 
     return partialSchema;

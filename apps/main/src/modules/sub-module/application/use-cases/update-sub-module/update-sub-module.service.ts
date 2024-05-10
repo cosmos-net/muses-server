@@ -43,18 +43,7 @@ export class UpdateSubModuleService implements IApplicationServiceCommand<Update
 
       const moduleModel = await this.moduleFacade.getModuleById(module);
 
-      submodule.useModule({
-        id: moduleModel.id,
-        name: moduleModel.name,
-        description: moduleModel.description,
-        project: moduleModel.project,
-        isEnabled: moduleModel.isEnabled,
-        createdAt: moduleModel.createdAt,
-        updatedAt: moduleModel.updatedAt,
-        deletedAt: moduleModel.deletedAt,
-        subModules: moduleModel.subModules,
-        actions: moduleModel.actions,
-      });
+      submodule.useModule(moduleModel);
 
       isSubModuleChanged = true;
     }
