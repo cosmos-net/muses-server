@@ -68,7 +68,7 @@ export class Action {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get subModules(): ISubModuleSchema[] | string[] | undefined {
+  get subModules(): (ISubModuleSchema | string)[] | undefined {
     if (!this._entityRoot.subModules) return undefined;
 
     return this._entityRoot.subModules.map((subModule) => {
@@ -80,7 +80,7 @@ export class Action {
     });
   }
 
-  get modules(): IModuleSchema[] | string[] | undefined {
+  get modules(): (IModuleSchema | string)[] | undefined {
     if (!this._entityRoot.modules) return undefined;
 
     return this._entityRoot.modules.map((module) => {
@@ -274,18 +274,14 @@ export class Action {
     const partialSchema: Partial<IActionSchema> = {};
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
-        if (value.value !== null) {
-          if (key === 'subModules') {
-            partialSchema[key] = value.map((subModule) => subModule.id);
-            continue;
-          }
-
-          if (key === 'modules') {
-            partialSchema[key] = value.map((module) => module.id);
-            continue;
-          }
-
+        if (value.value !== null && value.value !== undefined) {
           partialSchema[key] = value.value;
+        } else if (Array.isArray(value)) {
+          if (key === 'subModules') {
+            partialSchema[key] = value.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule));
+          } else if (key === 'modules') {
+            partialSchema[key] = value.map((module) => (typeof module === 'object' ? module.id : module));
+          }
         }
       } else {
         partialSchema[key] = value;
@@ -311,7 +307,7 @@ export class Action {
     }
   }
 
-  public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): IModuleSchema[] {
+  public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): string[] {
     if (this._entityRoot.modules === undefined) {
       this._entityRoot.modules = [];
 
@@ -334,12 +330,15 @@ export class Action {
       if (typeof module === 'object') {
         return !modules.map((module) => module.id).includes(module.id);
       } else {
-        return !modules.includes(module);
+        return !modules.map((module) => module.id).includes(module);
       }
     });
 
     if (modulesToAdd.length === 0 && modulesToRemove.length === 0) {
-      throw new ActionPropertyWithSameValueException('modules', this._entityRoot.modules);
+      throw new ActionPropertyWithSameValueException(
+        'modules',
+        this._entityRoot.modules.map((module) => (typeof module === 'object' ? module.id : module)),
+      );
     }
 
     this._entityRoot.modules = [];
@@ -348,10 +347,10 @@ export class Action {
       this._entityRoot.modules.push(new Module(module));
     }
 
-    return modulesToRemove;
+    return modulesToRemove.map((module) => (typeof module === 'object' ? module.id : module));
   }
 
-  public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): ISubModuleSchema[] {
+  public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): string[] {
     if (this._entityRoot.subModules === undefined) {
       this._entityRoot.subModules = [];
 
@@ -375,7 +374,10 @@ export class Action {
     );
 
     if (subModulesToAdd.length === 0 && subModulesToRemove.length === 0) {
-      throw new ActionPropertyWithSameValueException('subModules', this._entityRoot.subModules);
+      throw new ActionPropertyWithSameValueException(
+        'subModules',
+        this._entityRoot.subModules.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule)),
+      );
     }
 
     this._entityRoot.subModules = [];
@@ -384,7 +386,7 @@ export class Action {
       this._entityRoot.subModules.push(new SubModule(subModule));
     }
 
-    return subModulesToRemove;
+    return subModulesToRemove.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule));
   }
 
   public addResource(resourceId: string): void {

@@ -14,14 +14,7 @@ export class UpdateActionController {
   @Patch()
   async update(@Body() dto: UpdateActionInputDto): Promise<UpdateActionOutputDto> {
     try {
-      const command = new UpdateActionCommand({
-        id: dto.id,
-        name: dto.name,
-        description: dto.description,
-        enabled: dto.isEnabled,
-        modules: dto.modules,
-        subModules: dto.subModules,
-      });
+      const command = new UpdateActionCommand(dto);
 
       const action = await this.updateActionService.process(command);
 

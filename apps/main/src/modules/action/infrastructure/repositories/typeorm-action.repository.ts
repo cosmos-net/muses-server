@@ -83,7 +83,17 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
         _id: actionId,
       };
 
-      await this.actionRepository.updateOne({ _id: actionId }, { $set: partialSchema });
+      const action = (await this.actionRepository.findOneAndReplace({ _id: actionId }, partialSchema, {
+        returnDocument: 'after',
+      })) as ActionEntity;
+
+      model.hydrate({
+        ...action,
+        ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
+        ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+        ...(action.resource && { resource: action.resource.toHexString() }),
+        id: action._id.toHexString(),
+      });
 
       return model;
     }
