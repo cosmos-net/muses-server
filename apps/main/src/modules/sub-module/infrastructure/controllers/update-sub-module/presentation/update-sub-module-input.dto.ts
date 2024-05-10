@@ -19,7 +19,7 @@ export class UpdateSubModuleInputDto {
 
   @IsBoolean()
   @IsOptional()
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   @IsObjectIdHex()
   @IsString()

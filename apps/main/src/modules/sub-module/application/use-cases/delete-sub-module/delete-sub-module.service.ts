@@ -28,23 +28,25 @@ export class DeleteSubModuleService implements IApplicationServiceCommand<Delete
       throw new SubModuleNotFoundException();
     }
 
-    const result = await this.subModuleRepository.softDeleteBy(subModule);
+    subModule.disable();
+
+    await this.subModuleRepository.persist(subModule);
 
     await this.tryToEmitEvent(subModule, {
       subModuleId: subModule.id,
       moduleId: subModule.moduleId,
     });
 
-    return result;
+    return 1;
   }
 
   private async tryToEmitEvent(
     subModule: SubModule,
     removeDisabledSubModuleFromModuleEventBody: RemoveDisabledSubModuleFromModuleEventBody,
-  ): Promise<any[]> {
+  ): Promise<void> {
     try {
       const event = new RemoveDisabledSubModuleFromModuleEvent(removeDisabledSubModuleFromModuleEventBody);
-      return await this.eventStoreService.emit(event);
+      await this.eventStoreService.emit(event);
     } catch (err) {
       subModule.restore();
       await this.subModuleRepository.persist(subModule);
