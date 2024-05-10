@@ -8,8 +8,8 @@ interface IListActionOutputDto {
   id?: string;
   name: string;
   description: string;
-  modules: IModuleSchema[] | string[] | undefined;
-  subModules: ISubModuleSchema[] | string[] | undefined;
+  modules: (IModuleSchema | string)[] | undefined;
+  subModules: (ISubModuleSchema | string)[] | undefined;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
