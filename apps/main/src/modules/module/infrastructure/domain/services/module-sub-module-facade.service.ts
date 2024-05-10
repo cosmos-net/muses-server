@@ -11,6 +11,7 @@ export class SubModuleFacadeService implements ISubModuleModuleFacade {
     const subModule = await this.moduleModulesFacade.retrieveSubModule({
       id,
       withDisabled: true,
+      withModules: false,
     });
 
     return subModule;

@@ -21,10 +21,6 @@ export class ExchangeActionModulesService implements IApplicationServiceCommand<
 
     const action = await this.actionFacade.getActionById(actionId);
 
-    if (!action.isEnabled) {
-      throw new Error('Action is disabled');
-    }
-
     await this.updateLegacyModules(action.id, newModules);
 
     await this.updateNewModules(action.id, legacyModules);

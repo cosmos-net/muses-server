@@ -13,7 +13,6 @@ import { ListAction } from '@module-action/domain/aggregate/list-action';
 import { Filters } from '@lib-commons/domain/criteria/filters';
 import { Order } from '@lib-commons/domain/criteria/order';
 import { Criteria } from '@lib-commons/domain/criteria/criteria';
-import { Action } from '@module-action/domain/aggregate/action';
 
 @Injectable()
 export class ListActionService implements IApplicationServiceQuery<ListActionQuery> {
@@ -36,8 +35,6 @@ export class ListActionService implements IApplicationServiceQuery<ListActionQue
 
     const actions = await this.actionRepository.searchListBy(criteria);
 
-    const populatedActions: Action[] = [];
-
     for await (const action of actions.items) {
       const modulesIds = action.modulesIds;
       const subModulesIds = action.subModulesIds;
@@ -47,11 +44,7 @@ export class ListActionService implements IApplicationServiceQuery<ListActionQue
 
       const subModules = await this.subModuleFacade.getSubModuleByIds(subModulesIds);
       action.useSubModules(subModules.entities());
-
-      populatedActions.push(action);
     }
-
-    actions.items = populatedActions;
 
     return actions;
   }

@@ -10,8 +10,6 @@ import { IActionRepository } from '@module-action/domain/contracts/action-reposi
 import { IModuleFacade } from '@module-action/domain/contracts/module-facade';
 import { ISubModuleFacade } from '@module-action/domain/contracts/sub-module-facade';
 import { Action } from '@module-action/domain/aggregate/action';
-import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
-import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { EventStoreService } from '@lib-commons/application/event-store.service';
 import { UpdateRelationsWithModulesEventBody } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules-event.body';
 import { UpdateRelationsWithModulesEvent } from '@module-action/domain/events/update-relations-with-modules/update-relations-with-modules.event';
@@ -23,9 +21,6 @@ import { ActionNotFoundException } from '@module-action/domain/exceptions/action
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
-  private modulesLegacy: IModuleSchema[] = [];
-  private subModulesLegacy: ISubModuleSchema[] = [];
-
   constructor(
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
@@ -37,7 +32,7 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
   ) {}
 
   async process<T extends UpdateActionCommand>(command: T): Promise<Action> {
-    const { id, name, description, enabled, modules, subModules } = command;
+    const { id, name, description, isEnabled, modules, subModules } = command;
 
     const action = await this.actionRepository.searchOneBy(id, { withDeleted: true });
 
@@ -46,7 +41,10 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     }
 
     action.redescribe(name, description);
-    action.changeStatus(enabled);
+
+    if (isEnabled !== undefined) {
+      isEnabled ? action.enable() : action.disable();
+    }
 
     if (modules && modules.length > 0) {
       const modulesFound = await this.moduleFacade.getModuleByIds(modules);
@@ -55,12 +53,12 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
         throw new ModuleNotFoundException();
       }
 
-      this.modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
+      const modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
 
       await this.tryToEmitEventToUpdateRelationWithModules({
         actionId: action.id,
-        legacyModules: this.modulesLegacy.map((module) => module.id),
-        newModules: action.modules?.map((module) => module.id) || [],
+        legacyModules: modulesLegacy,
+        newModules: action.modulesIds,
       });
     }
 
@@ -71,12 +69,12 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
         throw new SubModuleNotFoundException();
       }
 
-      this.subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
+      const subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
 
       await this.tryToEmitEventToUpdateRelationWithSubModules({
         actionId: action.id,
-        legacySubModules: this.subModulesLegacy.map((subModule) => subModule.id),
-        newSubModules: action.subModules?.map((subModule) => subModule.id) || [],
+        legacySubModules: subModulesLegacy,
+        newSubModules: action.subModulesIds,
       });
     }
 
