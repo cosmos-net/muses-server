@@ -1,5 +1,5 @@
 import { TypeormRepository } from '@lib-commons/infrastructure/domain/typeorm/typeorm-repository';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ActionEntity } from '@module-action/infrastructure/domain/action-muses.entity';
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -83,7 +83,17 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
         _id: actionId,
       };
 
-      await this.actionRepository.updateOne({ _id: actionId }, { $set: partialSchema });
+      const action = (await this.actionRepository.findOneAndReplace({ _id: actionId }, partialSchema, {
+        returnDocument: 'after',
+      })) as ActionEntity;
+
+      model.hydrate({
+        ...action,
+        ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
+        ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+        ...(action.resource && { resource: action.resource.toHexString() }),
+        id: action._id.toHexString(),
+      });
 
       return model;
     }
@@ -116,39 +126,6 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const list = new ListAction(actionsMapped, total);
     return list;
-  }
-
-  async softDeleteBy(model: Action): Promise<number | undefined> {
-    model.disable();
-
-    let partialSchema: Partial<IActionSchema & ActionEntity> = model.entityRootPartial();
-
-    if (partialSchema.modules) {
-      const modules = partialSchema.modules.map((module) => new ObjectId(module));
-
-      partialSchema = {
-        ...partialSchema,
-        modules,
-      };
-    }
-
-    if (partialSchema.subModules) {
-      const subModules = partialSchema.subModules.map((subModule) => new ObjectId(subModule));
-      partialSchema = {
-        ...partialSchema,
-        subModules,
-      };
-    }
-
-    const { id, ...partialParams } = partialSchema;
-
-    const result = await this.actionRepository.updateOne({ _id: new ObjectId(id) }, { $set: partialParams });
-
-    if (result.modifiedCount === 0) {
-      throw new InternalServerErrorException('The action could not be deleted');
-    }
-
-    return result.modifiedCount;
   }
 
   async searchListByIds(ids: string[], options: { withDeleted: boolean }): Promise<ListAction> {

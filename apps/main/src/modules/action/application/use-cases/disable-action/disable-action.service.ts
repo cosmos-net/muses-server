@@ -30,7 +30,9 @@ export class DisableActionService implements IApplicationServiceCommand<DisableA
       throw new ActionNotFoundException();
     }
 
-    const result = await this.actionRepository.softDeleteBy(action);
+    action.disable();
+
+    await this.actionRepository.persist(action);
 
     await this.tryToEmitRemoveActionFromModulesEvent(action, {
       actionId: action.id,
@@ -42,7 +44,7 @@ export class DisableActionService implements IApplicationServiceCommand<DisableA
       subModules: action.subModulesIds,
     });
 
-    return result;
+    return 1;
   }
 
   private async tryToEmitRemoveActionFromModulesEvent(

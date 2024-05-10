@@ -11,6 +11,7 @@ export class ModuleModuleFacadeService implements IModuleModuleFacadeService {
     const module = await this.moduleModulesFacade.retrieveModule({
       id,
       withDisabled: true,
+      withProject: false,
     });
 
     return module;

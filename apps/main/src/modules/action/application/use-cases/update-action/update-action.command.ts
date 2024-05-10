@@ -7,7 +7,7 @@ export class UpdateActionCommand implements ICommand {
 
   readonly description?: string;
 
-  readonly enabled?: boolean;
+  readonly isEnabled?: boolean;
 
   readonly modules?: string[];
 

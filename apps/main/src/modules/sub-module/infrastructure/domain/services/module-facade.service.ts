@@ -7,7 +7,7 @@ export class ModuleFacadeService implements IModuleFacade {
   constructor(private readonly moduleFacade: ModuleFacade) {}
 
   async getModuleById(id: string) {
-    const module = await this.moduleFacade.retrieveModule({ id, withDisabled: true });
+    const module = await this.moduleFacade.retrieveModule({ id, withDisabled: true, withProject: false });
 
     return module;
   }

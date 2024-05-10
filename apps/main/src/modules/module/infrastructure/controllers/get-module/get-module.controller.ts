@@ -4,8 +4,8 @@ import {
   GetModuleOutputDto,
   IGetModuleOutputDto,
 } from '@module-module/infrastructure/controllers/get-module/presentation/get-module-output.dto';
-import { GetProjectQuery } from '@module-project/application/use-cases/get-project/get-project.query';
 import { ExceptionManager } from '@lib-commons/domain/exception-manager';
+import { GetModuleQuery } from '@app-main/modules/module/application/use-cases/get-module/get-module.query';
 
 @Controller('module/')
 export class GetModuleController {
@@ -15,9 +15,10 @@ export class GetModuleController {
   @Get('/:id')
   async Get(@Param('id') id: string, @Query('withDisabled') withDisabled: boolean): Promise<IGetModuleOutputDto> {
     try {
-      const query = new GetProjectQuery({
+      const query = new GetModuleQuery({
         id,
         withDisabled,
+        withProject: true,
       });
 
       const module = await this.getModuleService.process(query);
