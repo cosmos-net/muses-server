@@ -27,8 +27,9 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
     };
   }
 
-  private async listByIds(ids: string[]): Promise<ListResource> {
+  private async listByIds(ids: string[], withDeleted: boolean): Promise<ListResource> {
     const resources = await this.resourceRepository.find({
+      withDeleted,
       where: {
         _id: {
           $in: ids.map((id) => new ObjectId(id)),
@@ -51,14 +52,14 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
     return new ListResource(resourceCleaned, total);
   }
 
+  searchListBy(ids: string[], withDeleted?: boolean): Promise<ListResource>;
   searchListBy(criteria: Criteria): Promise<ListResource>;
-  searchListBy(ids: string[]): Promise<ListResource>;
-  async searchListBy(idsOrCriteria: string[] | Criteria): Promise<ListResource> {
+  async searchListBy(idsOrCriteria: string[] | Criteria, withDeleted?: boolean): Promise<ListResource> {
     if (idsOrCriteria instanceof Criteria) {
       return this.listByCriteria(idsOrCriteria);
     }
 
-    return this.listByIds(idsOrCriteria);
+    return this.listByIds(idsOrCriteria, withDeleted === undefined ? false : withDeleted);
   }
 
   async searchOneBy(
@@ -113,13 +114,15 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
 
       const _id = new ObjectId(id);
 
-      await this.resourceRepository.findOneAndReplace(
+      const resource = (await this.resourceRepository.findOneAndReplace(
         { _id },
         {
           ...restParams,
           updatedAt: new Date(),
         },
-      );
+      )) as ResourceEntity;
+
+      model.hydrate(this.cleanData(resource));
 
       return model;
     }

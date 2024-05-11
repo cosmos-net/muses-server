@@ -14,9 +14,9 @@ export class UpdateResourceCommand implements ICommand {
 
   readonly method?: EnumMethodValue;
 
-  readonly triggers?: string[] = [];
+  readonly triggers?: string[];
 
-  readonly actions?: string[] = [];
+  readonly actions?: string[];
 
   constructor(props: Partial<UpdateResourceCommand>) {
     if (props) {

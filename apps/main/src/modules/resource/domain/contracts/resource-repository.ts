@@ -6,7 +6,7 @@ export interface IResourceRepository {
   persist(resource: Resource): Promise<Resource>;
   isNameAvailable(name: string): Promise<boolean>;
   searchListBy(criteria: Criteria): Promise<ListResource>;
-  searchListBy(ids: string[]): Promise<ListResource>;
+  searchListBy(ids: string[], withDeleted?: boolean): Promise<ListResource>;
   searchOneBy(
     id: string,
     options: {

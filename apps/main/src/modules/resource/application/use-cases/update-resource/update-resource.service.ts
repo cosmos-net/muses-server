@@ -27,7 +27,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
 
   private resourceModel: Resource;
   private actionsToAdd: Action[];
-  private actionsToRemove: Action[];
+  private actionsToRemove: (string | Action)[];
 
   async process<T extends UpdateResourceCommand>(command: T): Promise<Resource> {
     const { id, name, description, isEnabled, endpoint, method, triggers, actions } = command;
@@ -54,7 +54,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
     if (this.actionsToAdd || this.actionsToRemove) {
       await this.tryToEmitEvent({
         actionsToAddResource: this.actionsToAdd?.map((action) => action.id),
-        actionsToRemoveResource: this.actionsToRemove?.map((action) => action.id),
+        actionsToRemoveResource: this.actionsToRemove?.map((action) => (action instanceof Action ? action.id : action)),
         resourceId: resource.id,
       });
     }
@@ -66,7 +66,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
 
   private async populateTriggers(triggersIds?: string[]): Promise<void> {
     if (triggersIds && triggersIds.length > 0) {
-      const triggers = await this.resourceRepository.searchListBy(triggersIds);
+      const triggers = await this.resourceRepository.searchListBy(triggersIds, true);
 
       if (triggers.totalItems === 0) {
         throw new TriggersNotFoundException();
@@ -79,7 +79,7 @@ export class UpdateResourceService implements IApplicationServiceCommand<UpdateR
       this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
 
       this.resourceModel.useTriggersAndReturnLegacy(triggers.entities());
-    } else {
+    } else if (triggersIds && triggersIds.length === 0) {
       this.resourceModel.removeTriggers();
     }
   }
