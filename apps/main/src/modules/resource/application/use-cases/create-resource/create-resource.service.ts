@@ -57,7 +57,7 @@ export class CreateResourceService implements IApplicationServiceCommand<CreateR
 
   private async populateTriggers(triggersIds?: string[]): Promise<void> {
     if (triggersIds && triggersIds.length > 0) {
-      const triggers = await this.resourceRepository.searchListBy(triggersIds);
+      const triggers = await this.resourceRepository.searchListBy(triggersIds, true);
 
       if (triggers.totalItems === 0) {
         throw new TriggersNotFoundException();

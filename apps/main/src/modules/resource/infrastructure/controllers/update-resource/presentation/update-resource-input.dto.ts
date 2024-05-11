@@ -42,12 +42,12 @@ export class UpdateResourceInputDto {
   @IsString({ each: true })
   @IsArray()
   @IsOptional()
-  readonly triggers?: string[] = [];
+  readonly triggers?: string[];
 
   @IsObjectIdHex()
   @IsString({ each: true })
   @IsArray()
   @IsNotEmpty({ each: true, message: 'actions must not be empty' })
   @IsOptional()
-  readonly actions?: string[] = [];
+  readonly actions?: string[];
 }

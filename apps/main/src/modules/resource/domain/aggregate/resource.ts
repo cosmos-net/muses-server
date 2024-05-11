@@ -49,7 +49,7 @@ export class Resource {
     return this._entityRoot.method.value;
   }
 
-  public get triggers(): IResourceSchema[] | string[] | undefined {
+  public get triggers(): (IResourceSchema | string)[] | undefined {
     return this._entityRoot.triggers?.map((trigger) => {
       return trigger instanceof Resource ? trigger.toPrimitives() : trigger;
     });
@@ -63,7 +63,7 @@ export class Resource {
     });
   }
 
-  public get actions(): IActionSchema[] | string[] {
+  public get actions(): (IActionSchema | string)[] {
     return this._entityRoot.actions.map((action) => {
       return action instanceof Action ? action.toPrimitives() : action;
     });
@@ -277,7 +277,7 @@ export class Resource {
 
   public useTriggersAndReturnLegacy(resources: Resource[]): {
     triggersToAdd: Resource[];
-    triggersToRemove: Resource[];
+    triggersToRemove: (string | Resource)[];
   } {
     if (!this._entityRoot.triggers) {
       this._entityRoot.triggers = [];
@@ -361,7 +361,7 @@ export class Resource {
     }
   }
 
-  public useActionAndReturnLegacy(actions: Action[]): { actionsToAdd: Action[]; actionsToRemove: Action[] } {
+  public useActionAndReturnLegacy(actions: Action[]): { actionsToAdd: Action[]; actionsToRemove: (string | Action)[] } {
     if (!this._entityRoot.actions || this._entityRoot.actions.length === 0) {
       this._entityRoot.actions = [];
       this._entityRoot.actions.push(...actions);
@@ -426,7 +426,7 @@ export class Resource {
 
     for (const [key, value] of Object.entries(this._entityRoot)) {
       if (value instanceof Object) {
-        if (value.value !== null) {
+        if (value.value !== null && value.value !== undefined) {
           if (key === 'triggers') {
             partialSchema[key] = value.map((trigger) => trigger.id);
             continue;
@@ -438,6 +438,9 @@ export class Resource {
           }
 
           partialSchema[key] = value.value;
+          continue;
+        } else if (Array.isArray(value)) {
+          partialSchema[key] = value;
         }
       } else {
         partialSchema[key] = value;

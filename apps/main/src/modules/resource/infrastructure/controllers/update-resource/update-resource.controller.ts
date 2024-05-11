@@ -17,16 +17,7 @@ export class UpdateResourceController {
   @Patch()
   async update(@Body() dto: UpdateResourceInputDto): Promise<IUpdateResourceOutputDto> {
     try {
-      const command = new UpdateResourceCommand({
-        id: dto.id,
-        name: dto.name,
-        description: dto.description,
-        isEnabled: dto.isEnabled,
-        endpoint: dto.endpoint,
-        method: dto.method,
-        triggers: dto.triggers,
-        actions: dto.actions,
-      });
+      const command = new UpdateResourceCommand(dto);
 
       const action = await this.updateResourceService.process(command);
 
