@@ -39,7 +39,7 @@ export class ListResourceService implements IApplicationServiceQuery<ListResourc
 
   private async populateTriggers(resource: Resource) {
     if (resource.triggersIds.length > 0) {
-      const triggers = await this.resourceRepository.searchListBy(resource.triggersIds);
+      const triggers = await this.resourceRepository.searchListBy(resource.triggersIds, true);
 
       resource.useTriggers(triggers.entities());
     }

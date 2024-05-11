@@ -41,7 +41,7 @@ export class GetResourceService implements IApplicationServiceQuery<GetResourceQ
     if (this.resourceModel.triggers) {
       const triggersIds = this.resourceModel.triggersIds;
 
-      const triggers = await this.resourceRepository.searchListBy(triggersIds);
+      const triggers = await this.resourceRepository.searchListBy(triggersIds, true);
 
       this.resourceModel.useTriggers(triggers.entities());
     }
