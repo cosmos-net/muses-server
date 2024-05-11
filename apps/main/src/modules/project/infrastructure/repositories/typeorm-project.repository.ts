@@ -43,16 +43,18 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;
 
-      const objectId = new ObjectId(id);
+      const _id = new ObjectId(id);
 
-      partialSchema = {
-        ...restParams,
-        _id: objectId,
-      };
-
-      const project = (await this.projectRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
-        returnDocument: 'after',
-      })) as ProjectEntity;
+      const project = (await this.projectRepository.findOneAndReplace(
+        { _id },
+        {
+          ...restParams,
+          createdAt: new Date(),
+        },
+        {
+          returnDocument: 'after',
+        },
+      )) as ProjectEntity;
 
       model.fromPrimitives({
         ...project,

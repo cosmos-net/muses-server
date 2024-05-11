@@ -109,14 +109,17 @@ export class TypeOrmResourceRepository extends TypeormRepository<ResourceEntity>
     }
 
     if (partialSchema.id) {
-      const resourceId = new ObjectId(partialSchema.id);
+      const { id, ...restParams } = partialSchema;
 
-      partialSchema = {
-        ...partialSchema,
-        _id: resourceId,
-      };
+      const _id = new ObjectId(id);
 
-      await this.resourceRepository.updateOne({ _id: resourceId }, { $set: partialSchema });
+      await this.resourceRepository.findOneAndReplace(
+        { _id },
+        {
+          ...restParams,
+          updatedAt: new Date(),
+        },
+      );
 
       return model;
     }

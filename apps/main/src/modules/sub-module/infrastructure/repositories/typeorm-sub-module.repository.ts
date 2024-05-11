@@ -69,11 +69,15 @@ export class TypeOrmSubModuleRepository extends TypeormRepository<SubModuleEntit
 
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;
-      const objectId = new ObjectId(id);
+      const _id = new ObjectId(id);
 
-      const subModule = (await this.subModuleRepository.findOneAndReplace({ _id: objectId }, restParams, {
-        returnDocument: 'after',
-      })) as SubModuleEntity;
+      const subModule = (await this.subModuleRepository.findOneAndReplace(
+        { _id },
+        { ...restParams, updatedAt: new Date() },
+        {
+          returnDocument: 'after',
+        },
+      )) as SubModuleEntity;
 
       model.fromPrimitives({
         ...subModule,
