@@ -1,3 +1,4 @@
+import { IsObjectIdHex } from '@lib-commons/infrastructure/helpers/custom-validators/object-id-hex';
 import { tryToTransformBooleanStringToBoolean } from '@lib-commons/infrastructure/helpers/utils';
 import { PaginationOptionsQuery } from '@lib-commons/infrastructure/presentation/input-pagination/pagination-options.dto';
 import { Transform } from 'class-transformer';
@@ -60,6 +61,22 @@ export class ListActionInputDto extends PaginationOptionsQuery {
   @IsBoolean()
   @IsOptional()
   readonly isEnabled?: boolean = true;
+
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsObjectIdHex()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly subModules?: string[];
+
+  @Transform(({ value }) => {
+    return typeof value === 'string' ? value.split(',') : value;
+  })
+  @IsObjectIdHex()
+  @IsString({ each: true })
+  @IsOptional()
+  readonly modules?: string[];
 
   @IsISO8601()
   @IsOptional()

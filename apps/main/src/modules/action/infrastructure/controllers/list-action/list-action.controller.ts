@@ -76,6 +76,14 @@ export class ListActionController {
               map.set(IdentifierEnum.FIELD, 'createdAt');
               map.set(IdentifierEnum.OPERATOR, Operator.GTE);
               break;
+            case 'modules':
+              map.set(IdentifierEnum.FIELD, 'modules');
+              map.set(IdentifierEnum.OPERATOR, Operator.IN);
+              break;
+            case 'subModules':
+              map.set(IdentifierEnum.FIELD, 'subModules');
+              map.set(IdentifierEnum.OPERATOR, Operator.IN);
+              break;
             case 'createdAtTo':
               map.set(IdentifierEnum.FIELD, 'createdAt');
               map.set(IdentifierEnum.OPERATOR, Operator.LTE);
