@@ -41,16 +41,18 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
 
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;
-      const objectId = new ObjectId(id);
+      const _id = new ObjectId(id);
 
-      partialSchema = {
-        ...restParams,
-        _id: objectId,
-      };
-
-      const module = (await this.moduleRepository.findOneAndReplace({ _id: objectId }, partialSchema, {
-        returnDocument: 'after',
-      })) as ModuleEntity;
+      const module = (await this.moduleRepository.findOneAndReplace(
+        { _id },
+        {
+          ...restParams,
+          createdAt: new Date(),
+        },
+        {
+          returnDocument: 'after',
+        },
+      )) as ModuleEntity;
 
       model.fromPrimitives({
         ...module,

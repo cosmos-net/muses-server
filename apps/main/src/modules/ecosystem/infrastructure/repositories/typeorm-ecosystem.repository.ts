@@ -22,20 +22,19 @@ export class TypeOrmEcosystemRepository extends TypeormRepository<EcosystemEntit
   }
 
   async persist(model: Ecosystem): Promise<void> {
-    let partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialSchema();
+    const partialSchema: Partial<IEcosystemSchema & EcosystemEntity> = model.partialSchema();
 
     if (partialSchema.id) {
       const { id, ...restParams } = partialSchema;
-      const objectId = new ObjectId(id);
+      const _id = new ObjectId(id);
 
-      partialSchema = {
-        ...restParams,
-        _id: objectId,
-      };
-
-      const ecosystem = (await this.ecosystemRepository.findOneAndReplace({ _id: objectId }, restParams, {
-        returnDocument: 'after',
-      })) as EcosystemEntity;
+      const ecosystem = (await this.ecosystemRepository.findOneAndReplace(
+        { _id },
+        { ...restParams, updatedAt: new Date() },
+        {
+          returnDocument: 'after',
+        },
+      )) as EcosystemEntity;
 
       if (!ecosystem) {
         throw new BadRequestException('The ecosystem does not exist');

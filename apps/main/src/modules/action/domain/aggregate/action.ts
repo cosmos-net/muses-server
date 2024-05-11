@@ -13,6 +13,7 @@ import { Module } from '@module-module/domain/aggregate/module';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { ActionPropertyWithSameValueException } from '@module-action/domain/exceptions/action-property-with-same-value.exception';
 import { ActionAlreadyEnabledException } from '@module-action/domain/exceptions/action-already-enabled.exception';
+import { removePropertyFromObject } from '@lib-commons/domain/helpers/utils';
 
 export class Action {
   private _entityRoot = {} as IActionSchemaAggregate;
@@ -399,5 +400,13 @@ export class Action {
     }
 
     this._entityRoot.resource = null;
+  }
+
+  public removeModules(): void {
+    this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'modules'>(this._entityRoot, 'modules');
+  }
+
+  public removeSubModules(): void {
+    this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'subModules'>(this._entityRoot, 'subModules');
   }
 }

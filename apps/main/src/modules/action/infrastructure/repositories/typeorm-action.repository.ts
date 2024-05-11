@@ -76,16 +76,18 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
     }
 
     if (partialSchema.id) {
-      const actionId = new ObjectId(partialSchema.id);
+      const _id = new ObjectId(partialSchema.id);
 
-      partialSchema = {
-        ...partialSchema,
-        _id: actionId,
-      };
-
-      const action = (await this.actionRepository.findOneAndReplace({ _id: actionId }, partialSchema, {
-        returnDocument: 'after',
-      })) as ActionEntity;
+      const action = (await this.actionRepository.findOneAndReplace(
+        { _id },
+        {
+          ...partialSchema,
+          createdAt: new Date(),
+        },
+        {
+          returnDocument: 'after',
+        },
+      )) as ActionEntity;
 
       model.hydrate({
         ...action,
