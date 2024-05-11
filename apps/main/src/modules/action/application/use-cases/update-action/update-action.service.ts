@@ -46,36 +46,44 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
       isEnabled ? action.enable() : action.disable();
     }
 
-    if (modules && modules.length > 0) {
-      const modulesFound = await this.moduleFacade.getModuleByIds(modules);
+    if (modules) {
+      if (modules.length === 0) {
+        action.removeModules();
+      } else if (modules.length > 0) {
+        const modulesFound = await this.moduleFacade.getModuleByIds(modules);
 
-      if (modulesFound.totalItems === 0) {
-        throw new ModuleNotFoundException();
+        if (modulesFound.totalItems === 0) {
+          throw new ModuleNotFoundException();
+        }
+
+        const modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
+
+        await this.tryToEmitEventToUpdateRelationWithModules({
+          actionId: action.id,
+          legacyModules: modulesLegacy,
+          newModules: action.modulesIds,
+        });
       }
-
-      const modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
-
-      await this.tryToEmitEventToUpdateRelationWithModules({
-        actionId: action.id,
-        legacyModules: modulesLegacy,
-        newModules: action.modulesIds,
-      });
     }
 
-    if (subModules && subModules.length > 0) {
-      const subModulesFound = await this.subModuleFacade.getSubModuleByIds(subModules);
+    if (subModules) {
+      if (subModules.length === 0) {
+        action.removeSubModules();
+      } else if (subModules.length > 0) {
+        const subModulesFound = await this.subModuleFacade.getSubModuleByIds(subModules);
 
-      if (subModulesFound.totalItems === 0) {
-        throw new SubModuleNotFoundException();
+        if (subModulesFound.totalItems === 0) {
+          throw new SubModuleNotFoundException();
+        }
+
+        const subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
+
+        await this.tryToEmitEventToUpdateRelationWithSubModules({
+          actionId: action.id,
+          legacySubModules: subModulesLegacy,
+          newSubModules: action.subModulesIds,
+        });
       }
-
-      const subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
-
-      await this.tryToEmitEventToUpdateRelationWithSubModules({
-        actionId: action.id,
-        legacySubModules: subModulesLegacy,
-        newSubModules: action.subModulesIds,
-      });
     }
 
     return this.actionRepository.persist(action);

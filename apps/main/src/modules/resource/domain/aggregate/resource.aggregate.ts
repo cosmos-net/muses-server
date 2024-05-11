@@ -17,8 +17,8 @@ export interface IActionSchemaAggregate {
   isEnabled: IsEnabled;
   endpoint: Endpoint;
   method: Method;
-  triggers?: (Resource[] & string[]) | null;
-  actions: Action[] & string[];
+  triggers?: (Resource | string)[] | null;
+  actions: (Action | string)[];
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
   deletedAt?: DeletedAt | null;
