@@ -69,6 +69,10 @@ export class ListSubModuleController {
               map.set(IdentifierEnum.FIELD, key);
               map.set(IdentifierEnum.OPERATOR, Operator.EQUAL);
               break;
+            case 'modules':
+              map.set(IdentifierEnum.FIELD, 'module');
+              map.set(IdentifierEnum.OPERATOR, Operator.IN);
+              break;
             case 'createdAtFrom':
               map.set(IdentifierEnum.FIELD, 'createdAt');
               map.set(IdentifierEnum.OPERATOR, Operator.GTE);
