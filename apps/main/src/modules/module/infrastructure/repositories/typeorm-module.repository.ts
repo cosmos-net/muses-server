@@ -47,7 +47,7 @@ export class TypeOrmModuleRepository extends TypeormRepository<ModuleEntity> imp
         { _id },
         {
           ...restParams,
-          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           returnDocument: 'after',
