@@ -49,7 +49,7 @@ export class TypeOrmProjectRepository extends TypeormRepository<ProjectEntity> i
         { _id },
         {
           ...restParams,
-          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           returnDocument: 'after',
