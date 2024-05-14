@@ -1,5 +1,3 @@
-import { IModuleSchema } from '@module-module/domain/aggregate/module.schema';
-import { ISubModuleSchema } from '@module-sub-module/domain/aggregate/sub-module.schema';
 import { IPagination } from '@lib-commons/domain/list/pagination/pagination';
 import { PageDto } from '@lib-commons/infrastructure/presentation/output-pagination/page.dto';
 import { PaginationMetadataDto } from '@lib-commons/infrastructure/presentation/output-pagination/pagination-metadata.dto';
@@ -8,8 +6,8 @@ interface IListActionOutputDto {
   id?: string;
   name: string;
   description: string;
-  modules: (IModuleSchema | string)[] | undefined;
-  subModules: (ISubModuleSchema | string)[] | undefined;
+  modules: (object | string)[] | undefined;
+  subModules: (object | string)[] | undefined;
   isEnabled: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
