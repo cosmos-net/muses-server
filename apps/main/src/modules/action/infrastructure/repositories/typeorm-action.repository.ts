@@ -82,7 +82,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
         { _id },
         {
           ...partialSchema,
-          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           returnDocument: 'after',
