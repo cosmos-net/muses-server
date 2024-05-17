@@ -342,8 +342,6 @@ export class Action {
       );
     }
 
-    this._entityRoot.modules = [];
-
     for (const module of modulesToAdd) {
       this._entityRoot.modules.push(new Module(module));
     }
@@ -380,8 +378,6 @@ export class Action {
         this._entityRoot.subModules.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule)),
       );
     }
-
-    this._entityRoot.subModules = [];
 
     for (const subModule of subModulesToAdd) {
       this._entityRoot.subModules.push(new SubModule(subModule));
