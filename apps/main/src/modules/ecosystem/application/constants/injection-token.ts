@@ -1,2 +1,0 @@
-export const ECOSYSTEM_REPOSITORY = Symbol('ECOSYSTEM_REPOSITORY');
-export const PROJECT_FACADE = Symbol('PROJECT_FACADE');
