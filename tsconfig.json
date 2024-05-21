@@ -1,0 +1,78 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "rootDir": "./",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@core": [
+        "src/modules/core/"
+      ],
+      "@core/*": [
+        "src/modules/core/*"
+      ],
+      "@module-eco": [
+        "src/modules/ecosystem"
+      ],
+      "@module-eco/*": [
+        "src/modules/ecosystem/*"
+      ],
+      "@module-project": [
+        "src/modules/project"
+      ],
+      "@module-project/*": [
+        "src/modules/project/*"
+      ],
+      "@module-module": [
+        "src/modules/module"
+      ],
+      "@module-module/*": [
+        "src/modules/module/*"
+      ],
+      "@module-sub-module": [
+        "src/modules/sub-module"
+      ],
+      "@module-sub-module/*": [
+        "src/modules/sub-module/*"
+      ],
+      "@module-action": [
+        "src/modules/action"
+      ],
+      "@module-action/*": [
+        "src/modules/action/*"
+      ],
+      "@module-resource": [
+        "src/modules/resource"
+      ],
+      "@module-resource/*": [
+        "src/modules/resource/*"
+      ],
+      "@module-common": [
+        "src/modules/common"
+      ],
+      "@module-common/*": [
+        "src/modules/common/*"
+      ],
+      "@test-muses": [
+        "test"
+      ],
+      "@test/*": [
+        "test/*"
+      ],
+    }
+  }
+}
