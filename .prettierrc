@@ -1,0 +1,21 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "printWidth": 120,
+  "quoteProps": "as-needed",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ".editorconfig",
+      "options": { "parser": "yaml" }
+    },
+    {
+      "files": "LICENSE",
+      "options": { "parser": "markdown" }
+    }
+  ]
+}

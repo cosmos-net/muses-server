@@ -1,0 +1,14 @@
+{
+  "conventionalCommits.scopes": [
+    "eslint",
+    "ecosystem-module",
+    "main-module-muses",
+    "auth-module",
+    "project-module",
+    "module-management",
+    "sub-module-management",
+    "action-module-management",
+    "resource-module-management",
+    "commons"
+  ]
+}
