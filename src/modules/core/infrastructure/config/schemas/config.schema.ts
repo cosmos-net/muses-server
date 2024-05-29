@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 export const ConfigSchema = Joi.object({
   CLIENT_HOST: Joi.string().required(),
-  CLIENT_PORT: Joi.number().required(),
+  CLIENT_PORT: Joi.string().optional().allow(''),
   CLIENT_PROTOCOL: Joi.string().required(),
   SERVER_MAIN_HOST: Joi.string().required(),
   SERVER_MAIN_PORT: Joi.number().required(),
