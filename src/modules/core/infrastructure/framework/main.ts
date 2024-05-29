@@ -7,16 +7,15 @@ import { ServerMainType } from '@core/domain/contracts/types/var-environment-map
 import { TransformInterceptor } from '@core/infrastructure/framework/transform.interceptor';
 import { ValidationPipeWithExceptionFactory } from '@core/infrastructure/framework/global-validation.pipe';
 import { HttpExceptionFilter } from '@core/infrastructure/framework/http-exception.filter';
-// import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
 
   const configService = app.get(ConfigService);
   const client = configService.get<ClientType>('client');
-  const serverMain = configService.get<ServerMainType>('main');
+  const server = configService.get<ServerMainType>('main');
 
-  if (!serverMain) {
+  if (!server) {
     throw new Error('Server main is not defined');
   }
 
@@ -29,15 +28,17 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter(configService));
   app.setGlobalPrefix('api/v1/muses-management/');
 
+  const origin = server.host === '127.0.0.1' ? `${client.protocol}://${client.host}:${client.port}` : `${client.protocol}://${client.host}`;
+
   app.enableCors({
-    origin: `${client.protocol}://${client.host}:${client.port}`,
+    origin,
     methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
   });
 
-  const port = process.env.PORT ?? serverMain.port;
+  const port = process.env.PORT ?? server.port;
 
-  await app.listen(port, () => Logger.log(`Running on port ${port}`, serverMain.name));
+  await app.listen(port, () => Logger.log(`Running on port ${port}`, server.name));
 }
 
 bootstrap();
