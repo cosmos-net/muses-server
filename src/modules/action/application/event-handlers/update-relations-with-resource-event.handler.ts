@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateRelationWithActionEvent } from '@module-resource/domain/events/update-relation-with-action-event/update-relation-with-action.event';
-import { AddResourceService } from '@module-action/application/use-cases/add-resource/add-resource.service';
-import { RemoveResourceService } from '@module-action/application/use-cases/remove-resource/remove-resource.service';
+import { AddResourceService } from '@module-action/application/use-cases/action/add-resource/add-resource.service';
+import { RemoveResourceService } from '@module-action/application/use-cases/action/remove-resource/remove-resource.service';
 
 @Injectable()
 export class UpdateRelationsWithResourceEventHandler {
