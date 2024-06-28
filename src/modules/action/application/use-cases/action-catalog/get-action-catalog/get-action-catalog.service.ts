@@ -6,6 +6,7 @@ import { IActionCatalogRepository } from '@module-action/domain/contracts/action
 import { ActionCatalog } from '@module-action/domain/aggregate/action-catalog';
 import { GetActionCatalogQuery } from '@module-action/application/use-cases/action-catalog/get-action-catalog/get-action-catalog.command';
 import { IApplicationServiceQuery } from '@core/application/application-service-query';
+import { isObjectIdHex } from '@core/domain/helpers/utils';
 
 @Injectable()
 export class GetActionCatalogService implements IApplicationServiceQuery<GetActionCatalogQuery> {
@@ -16,6 +17,15 @@ export class GetActionCatalogService implements IApplicationServiceQuery<GetActi
 
   async process<T extends GetActionCatalogQuery>(query: T): Promise<ActionCatalog> {
     const { id, name } = query;
+
+    if (name) {
+      const isObjectHex = isObjectIdHex(name);
+
+      if (isObjectHex) {
+        throw new BadRequestException('Invalid name parameter');
+      }
+    }
+
     const parameter = id ?? name;
 
     if (!parameter) {
