@@ -9,6 +9,8 @@ export class CreateActionCommand implements ICommand {
 
   readonly subModules?: string[];
 
+  readonly actionCatalog: string;
+
   constructor(props: Partial<CreateActionCommand>) {
     if (props) {
       Object.assign(this, props);

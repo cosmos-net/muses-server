@@ -7,6 +7,7 @@ import UpdatedAt from '@module-action/domain/aggregate/value-objects/updated-at.
 import IsEnabled from '@module-action/domain/aggregate/value-objects/is-enabled.vo';
 import { Module } from '@module-module/domain/aggregate/module';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { ActionCatalog } from '@module-action/domain/aggregate/action-catalog';
 
 export interface IActionSchemaAggregate {
   id: Id;
@@ -16,6 +17,7 @@ export interface IActionSchemaAggregate {
   modules?: (Module | string)[];
   subModules?: (SubModule | string)[];
   resource: string | null;
+  actionCatalog: ActionCatalog;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
   deletedAt?: DeletedAt;

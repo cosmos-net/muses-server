@@ -5,32 +5,37 @@ export class UpdateActionInputDto {
   @IsObjectIdHex()
   @IsString()
   @IsNotEmpty()
-  id: string;
+  readonly id: string;
 
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  name: string;
+  readonly name?: string;
 
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  description: string;
+  readonly description?: string;
 
   @IsBoolean()
   @IsNotEmpty()
   @IsOptional()
-  isEnabled: boolean;
+  readonly isEnabled?: boolean;
 
   @IsObjectIdHex()
   @IsArray()
   @IsNotEmpty()
   @IsOptional()
-  subModules: string[];
+  readonly subModules?: string[];
 
   @IsObjectIdHex()
   @IsArray()
   @IsNotEmpty()
   @IsOptional()
-  modules: string[];
+  readonly modules?: string[];
+
+  @IsObjectIdHex()
+  @IsString()
+  @IsOptional()
+  readonly actionCatalog?: string;
 }

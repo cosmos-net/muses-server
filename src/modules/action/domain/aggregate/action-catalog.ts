@@ -22,4 +22,11 @@ export class ActionCatalog {
   public entityRoot(): IActionCatalogSchema {
     return this.schema;
   }
+
+  public toPrimitives(): IActionCatalogSchema {
+    return {
+      id: this.schema.id,
+      name: this.schema.name,
+    }
+  }
 }
