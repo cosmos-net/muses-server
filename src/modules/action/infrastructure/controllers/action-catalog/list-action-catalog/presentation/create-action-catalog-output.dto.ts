@@ -1,16 +1,20 @@
-export interface IListActionCatalogOutputDto {
+interface IItems {
   id?: string;
   name: string;
 }
 
-export class ListActionCatalogOutputDto {
-  items: IListActionCatalogOutputDto[];
+export interface IListActionCatalogOutputDto {
+  items: IItems[];
+}
 
-  constructor(root: IListActionCatalogOutputDto[]){
-    this.items = root.map((item) => {
+export class ListActionCatalogOutputDto implements IListActionCatalogOutputDto {
+  items: IItems[];
+
+  constructor(actionCatalogs: IItems[]) {
+    this.items = actionCatalogs.map((actionCatalog) => {
       return {
-        id: item.id,
-        name: item.name
+        id: actionCatalog.id,
+        name: actionCatalog.name
       }
     });
   }
