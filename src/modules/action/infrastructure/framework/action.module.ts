@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GetActionController } from '@module-action/infrastructure/controllers/action/get-action/get-action.controller';
 import { GetActionService } from '@module-action/application/use-cases/action/get-action/get-action.service';
 import {
+  ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
   MODULE_FACADE,
   RESOURCE_FACADE,
@@ -37,13 +38,15 @@ import { ListActionCatalogController } from '@module-action/infrastructure/contr
 import { CreateActionCatalogService } from '@module-action/application/use-cases/action-catalog/create-action-catalog/create-action-catalog.service';
 import { GetActionCatalogService } from '@module-action/application/use-cases/action-catalog/get-action-catalog/get-action-catalog.service';
 import { ListActionCatalogService } from '@module-action/application/use-cases/action-catalog/list-action-catalog/list-action-catalog.service';
+import { TypeOrmActionCatalogRepository } from '@module-action/infrastructure/repositories/typeorm-action-catalog.repository';
+import { ActionCatalogEntity } from '@module-action/infrastructure/domain/action-catalog-muses.entity';
 
 @Module({
   imports: [
     forwardRef(() => MainModuleModule),
     forwardRef(() => MainSubModuleModule),
     forwardRef(() => MainResourceModule),
-    TypeOrmModule.forFeature([ActionEntity]),
+    TypeOrmModule.forFeature([ActionEntity, ActionCatalogEntity]),
   ],
   controllers: [
     ListActionController,
@@ -76,6 +79,10 @@ import { ListActionCatalogService } from '@module-action/application/use-cases/a
     {
       provide: ACTION_REPOSITORY,
       useClass: TypeOrmActionRepository,
+    },
+    {
+      provide: ACTION_CATALOG_REPOSITORY,
+      useClass: TypeOrmActionCatalogRepository,
     },
     {
       provide: SUB_MODULE_FACADE,
