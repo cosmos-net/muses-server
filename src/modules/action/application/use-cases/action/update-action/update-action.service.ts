@@ -1,7 +1,8 @@
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateActionCommand } from '@module-action/application/use-cases/action/update-action/update-action.command';
 import {
+  ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
   MODULE_FACADE,
   SUB_MODULE_FACADE,
@@ -18,6 +19,7 @@ import { UpdateRelationsWithSubModulesEvent } from '@module-action/domain/events
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
+import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
@@ -29,10 +31,12 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     @Inject(SUB_MODULE_FACADE)
     private subModuleFacade: ISubModuleFacade,
     private readonly eventStoreService: EventStoreService,
+    @Inject(ACTION_CATALOG_REPOSITORY)
+    private actionCatalogRepository: IActionCatalogRepository,
   ) {}
 
   async process<T extends UpdateActionCommand>(command: T): Promise<Action> {
-    const { id, name, description, isEnabled, modules, subModules } = command;
+    const { id, name, description, isEnabled, modules, subModules, actionCatalog } = command;
 
     const action = await this.actionRepository.searchOneBy(id, { withDeleted: true });
 
@@ -84,6 +88,16 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
           newSubModules: action.subModulesIds,
         });
       }
+    }
+
+    if (actionCatalog) {
+      const actionCatalogFound = await this.actionCatalogRepository.oneBy(actionCatalog);
+
+      if (!actionCatalogFound) {
+        throw new NotFoundException(`Action catalog ${actionCatalog} not found`);
+      }
+
+      action.categorize(actionCatalogFound);
     }
 
     return this.actionRepository.persist(action);

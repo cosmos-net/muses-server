@@ -1,7 +1,8 @@
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateActionCommand } from '@module-action/application/use-cases/action/create-action/create-action.command';
 import {
+  ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
   MODULE_FACADE,
   SUB_MODULE_FACADE,
@@ -18,6 +19,7 @@ import { RelateActionWithModuleEventBody } from '@module-action/domain/events/re
 import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate-module-with-action/relate-action-with-module.event';
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
+import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
 
 @Injectable()
 export class CreateActionService implements IApplicationServiceCommand<CreateActionCommand> {
@@ -25,6 +27,8 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
     private readonly eventStoreService: EventStoreService,
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
+    @Inject(ACTION_CATALOG_REPOSITORY)
+    private actionCatalogRepository: IActionCatalogRepository,
     @Inject(MODULE_FACADE)
     private moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_FACADE)
@@ -32,7 +36,7 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
   ) {}
 
   async process<T extends CreateActionCommand>(command: T): Promise<Action> {
-    const { name, description, modules, subModules } = command;
+    const { name, description, modules, subModules, actionCatalog } = command;
 
     const isNameAvailable = await this.actionRepository.isNameAvailable(name);
 
@@ -40,8 +44,15 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
       throw new ActionNameAlreadyUsedException();
     }
 
+    const actionCatalogModel = await this.actionCatalogRepository.oneBy(actionCatalog);
+
+    if (!actionCatalogModel) {
+      throw new NotFoundException(`Action catalog with name ${actionCatalog} not found`);
+    }
+
     const action = new Action();
 
+    action.categorize(actionCatalogModel);
     action.describe(name, description);
 
     if (modules && modules.length > 0) {

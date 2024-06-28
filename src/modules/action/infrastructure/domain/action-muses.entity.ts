@@ -13,7 +13,6 @@ export class ActionEntity extends BaseEntity implements IActionSchema {
   id: string;
 
   @Column({
-    unique: true,
     name: 'name',
     nullable: false,
     type: 'varchar',
@@ -54,4 +53,11 @@ export class ActionEntity extends BaseEntity implements IActionSchema {
     type: 'array',
   })
   subModules: ObjectId[];
+
+  @Column({
+    name: 'actionCatalog',
+    nullable: false,
+    type: 'varchar',
+  })
+  actionCatalog: ObjectId;
 }

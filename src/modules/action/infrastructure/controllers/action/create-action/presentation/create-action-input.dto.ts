@@ -27,4 +27,9 @@ export class CreateActionInputDto {
   @IsArray()
   @ArrayMinSize(1)
   readonly subModules?: string[];
+
+  @IsObjectIdHex()
+  @IsString()
+  @IsNotEmpty()
+  readonly actionCatalog: string;
 }

@@ -13,6 +13,8 @@ export class UpdateActionCommand implements ICommand {
 
   readonly subModules?: string[];
 
+  readonly actionCatalog?: string;
+
   constructor(props: Partial<UpdateActionCommand>) {
     if (props) {
       Object.assign(this, props);

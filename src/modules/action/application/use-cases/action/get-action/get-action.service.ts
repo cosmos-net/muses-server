@@ -1,6 +1,7 @@
 import { IActionRepository } from '@module-action/domain/contracts/action-repository';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
+  ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
   MODULE_FACADE,
   SUB_MODULE_FACADE,
@@ -11,6 +12,7 @@ import { Action } from '@module-action/domain/aggregate/action';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
 import { IModuleFacade } from '@module-action/domain/contracts/module-facade';
 import { ISubModuleFacade } from '@module-action/domain/contracts/sub-module-facade';
+import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
 
 @Injectable()
 export class GetActionService implements IApplicationServiceQuery<GetActionQuery> {
@@ -21,6 +23,8 @@ export class GetActionService implements IApplicationServiceQuery<GetActionQuery
     private readonly subModuleFacade: ISubModuleFacade,
     @Inject(ACTION_REPOSITORY)
     private actionRepository: IActionRepository,
+    @Inject(ACTION_CATALOG_REPOSITORY)
+    private actionCatalogRepository: IActionCatalogRepository,
   ) {}
 
   async process<T extends GetActionQuery>(query: T): Promise<Action> {
@@ -43,6 +47,20 @@ export class GetActionService implements IApplicationServiceQuery<GetActionQuery
       const subModules = await this.subModuleFacade.getSubModuleByIds(action.subModulesIds);
       action.useSubModules(subModules.entities());
     }
+
+    const actionCatalogId = typeof action.actionCatalog === 'object' ? action.actionCatalog.id : action.actionCatalog;
+
+    if (!actionCatalogId) {
+      throw new InternalServerErrorException(`Action ${action.id} has no catalog`);
+    }
+
+      const actionCatalog = await this.actionCatalogRepository.oneBy(actionCatalogId);
+
+      if (!actionCatalog) {
+        throw new InternalServerErrorException(`Action ${action.id} has no catalog`);
+      }
+
+      action.categorize(actionCatalog);
 
     return action;
   }

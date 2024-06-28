@@ -16,12 +16,7 @@ export class CreateActionController {
   @Post()
   async create(@Body() dto: CreateActionInputDto): Promise<ICreateActionOutputDto> {
     try {
-      const command = new CreateActionCommand({
-        name: dto.name,
-        description: dto.description,
-        modules: dto.modules,
-        subModules: dto.subModules,
-      });
+      const command = new CreateActionCommand(dto);
 
       const action = await this.createSubModuleService.process(command);
 

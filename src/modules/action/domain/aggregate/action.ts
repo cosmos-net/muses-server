@@ -14,6 +14,7 @@ import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { ActionPropertyWithSameValueException } from '@module-action/domain/exceptions/action-property-with-same-value.exception';
 import { ActionAlreadyEnabledException } from '@module-action/domain/exceptions/action-already-enabled.exception';
 import { removePropertyFromObject } from '@core/domain/helpers/utils';
+import { ActionCatalog, IActionCatalogSchema } from '@module-action/domain/aggregate/action-catalog';
 
 export class Action {
   private _entityRoot = {} as IActionSchemaAggregate;
@@ -119,6 +120,14 @@ export class Action {
 
   get resource() {
     return this._entityRoot.resource;
+  }
+
+  get actionCatalog(): IActionCatalogSchema | string {
+    if (typeof this._entityRoot.actionCatalog === 'object') {
+      return this._entityRoot.actionCatalog.toPrimitives();
+    }
+
+    return this._entityRoot.actionCatalog;
   }
 
   public describe(name: string, description: string): void {
@@ -241,6 +250,11 @@ export class Action {
     this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
     this._entityRoot.createdAt = new CreatedAt(schema.createdAt);
     this._entityRoot.updatedAt = new UpdatedAt(schema.updatedAt);
+    
+
+    if (!this._entityRoot.actionCatalog) {
+      this._entityRoot.actionCatalog = schema.actionCatalog;
+    }
 
     if (schema.deletedAt && !this._entityRoot.deletedAt) {
       this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
@@ -264,6 +278,7 @@ export class Action {
       modules: this.modules,
       subModules: this.subModules,
       resource: this.resource,
+      actionCatalog: this.actionCatalog,
     };
   }
 
@@ -283,6 +298,8 @@ export class Action {
           } else if (key === 'modules') {
             partialSchema[key] = value.map((module) => (typeof module === 'object' ? module.id : module));
           }
+        } else if (value instanceof Object) {
+          partialSchema[key] = value.id;
         }
       } else {
         partialSchema[key] = value;
@@ -404,5 +421,9 @@ export class Action {
 
   public removeSubModules(): void {
     this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'subModules'>(this._entityRoot, 'subModules');
+  }
+
+  public categorize(actionCatalog: ActionCatalog): void {
+    this._entityRoot.actionCatalog = actionCatalog;
   }
 }
