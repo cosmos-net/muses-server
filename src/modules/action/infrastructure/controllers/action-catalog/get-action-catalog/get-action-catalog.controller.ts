@@ -13,12 +13,12 @@ export class GetActionCatalogController {
   @Get()
   async get(@Body() dto: GetActionCatalogInputDto): Promise<IGetActionCatalogOutputDto> {
     try {
-      const createActionCatalogQuery = new GetActionCatalogQuery(dto);
-      const actionCatalog = await this.getActionCatalogService.process(createActionCatalogQuery);
+      const getActionCatalogQuery = new GetActionCatalogQuery(dto);
+      const actionCatalog = await this.getActionCatalogService.process(getActionCatalogQuery);
 
-      const createActionCatalogOutputDto = new GetActionCatalogOutputDto(actionCatalog);
+      const getActionCatalogOutputDto = new GetActionCatalogOutputDto(actionCatalog);
 
-      return createActionCatalogOutputDto;
+      return getActionCatalogOutputDto;
     } catch (error) {
       this.logger.error(error);
       throw error;
