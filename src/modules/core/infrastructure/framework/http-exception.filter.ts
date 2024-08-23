@@ -1,20 +1,28 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { Observable, throwError } from 'rxjs';
+
+interface IError {
+  message?: string;
+  name?: string;
+  status?: number;
+}
+
+interface IBodyResponse {
+  stack?: string
+  error?: IError | string;
+}
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
-  constructor(private readonly config: ConfigService) {}
-
-  catch(exception: HttpException, host: ArgumentsHost): void {
+  catch(exception: HttpException, host: ArgumentsHost): Observable<any> {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse() as Record<string, string>;
-    const isProduction = this.config.get<string>('servers.serverEnv') === 'production';
 
     const { message, error } = exceptionResponse;
 
@@ -24,16 +32,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }`,
     );
 
-    response.status(status).json({
-      statusCode: status,
-      errors: {
-        error,
+    const bodyResponse: IBodyResponse = {
+      stack: exception.stack,
+      error: {
         message,
+        name: error,
+        status,
       },
-      data: {},
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      ...(!isProduction && { stack: exception.stack }),
-    });
+    };
+
+    return throwError(() => bodyResponse);
   }
 }
