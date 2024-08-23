@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger, Post } from '@nestjs/common';
 import { CreateEcosystemService } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.service';
 import { CreateEcosystemCommand } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.command';
 import { CreateEcosystemInputDto } from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
@@ -6,7 +6,7 @@ import {
   CreateEcosystemOutputDto,
   ICreateEcosystemOutputDto,
 } from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
-import { ExceptionManager } from '@core/domain/exception-manager';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
 @Controller('ecosystem/')
 export class CreateEcosystemController {
@@ -14,7 +14,8 @@ export class CreateEcosystemController {
   constructor(private readonly createEcosystemService: CreateEcosystemService) {}
 
   @Post()
-  async create(@Body() dto: CreateEcosystemInputDto): Promise<ICreateEcosystemOutputDto> {
+  @MessagePattern({ cmd: 'muses.ecosystem.create' })
+  async create(@Payload() dto: CreateEcosystemInputDto): Promise<ICreateEcosystemOutputDto> {
     try {
       const command = new CreateEcosystemCommand({
         name: dto.name,
@@ -28,7 +29,7 @@ export class CreateEcosystemController {
       return mapper;
     } catch (error) {
       this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
+      throw new RpcException(error);
     }
   }
 }
