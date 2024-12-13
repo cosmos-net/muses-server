@@ -20,9 +20,24 @@ import { UpdateRelationsWithProjectEventHandler } from '@module-eco/application/
 import { AddProjectService } from '@module-eco/application/use-cases/add-project-service/add-project.service';
 import { RemoveProjectService } from '@module-eco/application/use-cases/remove-project-service/remove-project.service';
 import { MainProjectModule } from '@module-project/infrastructure/framework/project.module';
+import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import { MusesClientNatsModule } from './muses-client-nats.context';
 
 @Module({
-  imports: [forwardRef(() => MainProjectModule), TypeOrmModule.forFeature([EcosystemEntity])],
+  imports: [
+    forwardRef(() => MainProjectModule),
+    TypeOrmModule.forFeature([EcosystemEntity]),
+    MusesClientNatsModule,
+    ClientsModule.register([
+      {
+        name: 'MUSES_CONTEXT_NATS_SERVICE',
+        transport: Transport.NATS,
+        options: {
+          servers: ['nats://localhost:4222'],
+        },
+      },
+    ]),
+  ],
   controllers: [
     UpdateEcosystemController,
     ListEcosystemController,
@@ -51,6 +66,9 @@ import { MainProjectModule } from '@module-project/infrastructure/framework/proj
     },
     EcosystemModuleFacade,
   ],
-  exports: [RetrieveEcosystemService, EcosystemModuleFacade],
+  exports: [
+    RetrieveEcosystemService,
+    EcosystemModuleFacade
+  ],
 })
 export class MainEcosystemModule {}
