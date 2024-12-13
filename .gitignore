@@ -45,3 +45,4 @@ lerna-debug.log*
 /dbs/hades/*
 !/dbs/hades/scripts
 !/dbs/hades/migrations
+.DS_Store
