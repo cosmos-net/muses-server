@@ -1,5 +1,5 @@
 import { ExceptionManager } from '@core/domain/exception-manager';
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ListResourceInputDto } from '@module-resource/infrastructure/controllers/list-resource/presentation/list-resource-input.dto';
 import { ListResourceOutputDto } from '@module-resource/infrastructure/controllers/list-resource/presentation/list-resource-output.dto';
 import { IdentifierEnum } from '@module-common/domain/enums';
@@ -7,14 +7,15 @@ import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { ListResourceQuery } from '@module-resource/application/use-cases/list-resource/list-resource.query';
 import { ListResourceService } from '@module-resource/application/use-cases/list-resource/list-resource.service';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('resource/')
+@Controller()
 export class ListResourceController {
   private logger = new Logger(ListResourceController.name);
   constructor(private readonly listResourceService: ListResourceService) {}
 
-  @Get('list/')
-  async list(@Query() dto: ListResourceInputDto): Promise<ListResourceOutputDto> {
+  @MessagePattern({ cmd: 'muses.resource.list' })
+  async list(@Payload() dto: ListResourceInputDto): Promise<ListResourceOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 

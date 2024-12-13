@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Patch } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { UpdateResourceInputDto } from '@module-resource/infrastructure/controllers/update-resource/presentation/update-resource-input.dto';
 import {
   IUpdateResourceOutputDto,
@@ -7,15 +7,16 @@ import {
 import { UpdateResourceService } from '@module-resource/application/use-cases/update-resource/update-resource.service';
 import { UpdateResourceCommand } from '@module-resource/application/use-cases/update-resource/update-resource.command';
 import { ExceptionManager } from '@core/domain/exception-manager';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('resource')
+@Controller()
 export class UpdateResourceController {
   private readonly logger = new Logger(UpdateResourceController.name);
 
   constructor(private readonly updateResourceService: UpdateResourceService) {}
 
-  @Patch()
-  async update(@Body() dto: UpdateResourceInputDto): Promise<IUpdateResourceOutputDto> {
+  @MessagePattern({ cmd: 'muses.resource.update' })
+  async update(@Payload() dto: UpdateResourceInputDto): Promise<IUpdateResourceOutputDto> {
     try {
       const command = new UpdateResourceCommand(dto);
 

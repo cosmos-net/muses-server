@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { CreateResourceCommand } from '@module-resource/application/use-cases/create-resource/create-resource.command';
 import { CreateResourceService } from '@module-resource/application/use-cases/create-resource/create-resource.service';
 import { ExceptionManager } from '@core/domain/exception-manager';
@@ -7,15 +7,16 @@ import {
   CreateResourceOutputDto,
   ICreateResourceOutputDto,
 } from '@module-resource/infrastructure/controllers/create-resource/presentation/create-resource-output.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('/resource')
+@Controller()
 export class CreateResourceController {
   private readonly logger = new Logger(CreateResourceController.name);
 
   constructor(private readonly createResourceService: CreateResourceService) {}
 
-  @Post()
-  async create(@Body() dto: CreateResourceInputDto): Promise<ICreateResourceOutputDto> {
+  @MessagePattern({ cmd: 'muses.resource.create' })
+  async create(@Payload() dto: CreateResourceInputDto): Promise<ICreateResourceOutputDto> {
     try {
       const command = new CreateResourceCommand({
         name: dto.name,
