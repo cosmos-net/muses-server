@@ -7,4 +7,4 @@
 dist/
 Dockerfile
 package-lock.json
-README.md
+.eslintrc.js
