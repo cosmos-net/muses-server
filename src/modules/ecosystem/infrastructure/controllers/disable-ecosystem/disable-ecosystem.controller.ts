@@ -1,20 +1,20 @@
 import { DisableEcosystemCommand } from '@module-eco/application/use-cases/disable-ecosystem/disable-ecosystem.command';
 import { DisableEcosystemService } from '@module-eco/application/use-cases/disable-ecosystem/disable-ecosystem.service';
-import { ExceptionManager } from '@core/domain/exception-manager';
-import { Controller, Delete, Logger, Param } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import {
   DisableEcosystemOutputDto,
   IDisableEcosystemOutputDto,
 } from '@module-eco/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-output.dto';
 import { DisableEcosystemInputDto } from '@module-eco/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-input.dto';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
-@Controller('ecosystem/')
+@Controller()
 export class DisableEcosystemController {
   private readonly logger = new Logger(DisableEcosystemController.name);
   constructor(private readonly disableEcosystemService: DisableEcosystemService) {}
 
-  @Delete('/:id')
-  async delete(@Param() dto: DisableEcosystemInputDto): Promise<IDisableEcosystemOutputDto> {
+  @MessagePattern({ cmd: 'muses.ecosystem.disable' })
+  async disable(@Payload() dto: DisableEcosystemInputDto): Promise<IDisableEcosystemOutputDto> {
     try {
       const { id } = dto;
 
@@ -30,7 +30,7 @@ export class DisableEcosystemController {
       return mapper;
     } catch (error) {
       this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
+      throw new RpcException(error);
     }
   }
 }

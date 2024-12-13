@@ -1,23 +1,21 @@
-import { Controller, Get, Logger, Query, ValidationPipe } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ListEcosystemQuery } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.query';
 import { ListEcosystemService } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.service';
 import { ListEcosystemInputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-input.dto';
 import { ListEcosystemOutputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-output.dto';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { IdentifierEnum } from '@module-common/domain/enums';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
-@Controller('ecosystem/')
+@Controller()
 export class ListEcosystemController {
   private logger = new Logger(ListEcosystemController.name);
 
   constructor(private readonly listEcosystemService: ListEcosystemService) {}
 
-  @Get('list')
-  async list(
-    @Query(new ValidationPipe({ transform: true })) dto: ListEcosystemInputDto,
-  ): Promise<ListEcosystemOutputDto> {
+  @MessagePattern({ cmd: 'muses.ecosystem.list' })
+    async list(@Payload() dto: ListEcosystemInputDto): Promise<ListEcosystemOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
@@ -49,8 +47,7 @@ export class ListEcosystemController {
 
       return mapper;
     } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
+      throw new RpcException(error);
     }
   }
 

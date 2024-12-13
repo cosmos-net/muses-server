@@ -1,23 +1,20 @@
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
 import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
 import { RetrieveEcosystemInputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('ecosystem/')
+@Controller()
 export class RetrieveEcosystemController {
   private readonly logger = new Logger(RetrieveEcosystemController.name);
   constructor(private readonly retrieveEcosystemService: RetrieveEcosystemService) {}
 
-  @Get('/:id')
-  async retrieve(
-    @Param('id') idEcosystem: string,
-    @Query() dto: RetrieveEcosystemInputDto,
-  ): Promise<RetrieveEcosystemOutputDto> {
+  @MessagePattern({ cmd: 'muses.ecosystem.get' })
+    async retrieve(@Payload() retrieveEcosystemInputDto: RetrieveEcosystemInputDto): Promise<RetrieveEcosystemOutputDto> {
     try {
-      dto.setId = idEcosystem;
-      const { id, withDisabled } = dto;
+      const { id, withDisabled } = retrieveEcosystemInputDto;
 
       const query = new RetrieveEcosystemQuery({ id, withDisabled });
 

@@ -1,8 +1,10 @@
+import { IsObjectIdHex } from '@core/infrastructure/helpers/custom-validators/object-id-hex';
 import { tryToTransformBooleanStringToBoolean } from '@core/infrastructure/helpers/utils';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class RetrieveEcosystemInputDto {
+  @IsObjectIdHex()
   @IsString()
   @IsNotEmpty()
   @IsOptional()
