@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Patch } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { UpdateModuleInputDto } from '@module-module/infrastructure/controllers/update-module/presentation/update-module-input.dto';
 import {
@@ -7,14 +7,15 @@ import {
 } from '@module-module/infrastructure/controllers/update-module/presentation/update-module-output.dto';
 import { UpdateModuleService } from '@module-module/application/use-cases/update-module/update-module.service';
 import { UpdateModuleCommand } from '@module-module/application/use-cases/update-module/update-module.command';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('module/')
+@Controller()
 export class UpdateModuleController {
   private readonly logger = new Logger(UpdateModuleController.name);
   constructor(private readonly updateModuleService: UpdateModuleService) {}
 
-  @Patch()
-  async update(@Body() dto: UpdateModuleInputDto): Promise<IUpdateModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.module.update' })
+  async update(@Payload() dto: UpdateModuleInputDto): Promise<IUpdateModuleOutputDto> {
     try {
       const command = new UpdateModuleCommand(dto);
 

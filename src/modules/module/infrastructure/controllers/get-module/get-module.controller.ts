@@ -1,23 +1,25 @@
 import { GetModuleService } from '@module-module/application/use-cases/get-module/get-module.service';
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import {
   GetModuleOutputDto,
   IGetModuleOutputDto,
 } from '@module-module/infrastructure/controllers/get-module/presentation/get-module-output.dto';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { GetModuleQuery } from '@module-module/application/use-cases/get-module/get-module.query';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GetModuleInputDto } from '@module-module/infrastructure/controllers/get-module/presentation/get-module-input.dto';
 
-@Controller('module/')
+@Controller()
 export class GetModuleController {
   private readonly logger = new Logger(GetModuleController.name);
   constructor(private readonly getModuleService: GetModuleService) {}
 
-  @Get('/:id')
-  async Get(@Param('id') id: string, @Query('withDisabled') withDisabled: boolean): Promise<IGetModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.module.get' })
+  async Get(@Payload() dto: GetModuleInputDto): Promise<IGetModuleOutputDto> {
     try {
       const query = new GetModuleQuery({
-        id,
-        withDisabled,
+        id: dto.id,
+        withDisabled: dto.withDisabled,
         withProject: true,
       });
 

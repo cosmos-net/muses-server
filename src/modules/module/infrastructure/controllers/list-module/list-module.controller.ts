@@ -1,5 +1,5 @@
 import { ListModuleService } from '@module-module/application/use-cases/list-module/list-module.service';
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ListModuleInputDto } from '@module-module/infrastructure/controllers/list-module/presentation/list-module-input.dto';
 import { ListModuleOutputDto } from '@module-module/infrastructure/controllers/list-module/presentation/list-module-output.dto';
 import { ListModuleQuery } from '@module-module/application/use-cases/list-module/list-module.query';
@@ -7,14 +7,15 @@ import { ExceptionManager } from '@core/domain/exception-manager';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { IdentifierEnum } from '@module-common/domain/enums';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('module/')
+@Controller()
 export class ListModuleController {
   private readonly logger = new Logger(ListModuleController.name);
   constructor(private readonly listModuleService: ListModuleService) {}
 
-  @Get('list/')
-  async list(@Query() dto: ListModuleInputDto): Promise<ListModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.module.list' })
+  async list(@Payload() dto: ListModuleInputDto): Promise<ListModuleOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filterParams } = dto;
 
