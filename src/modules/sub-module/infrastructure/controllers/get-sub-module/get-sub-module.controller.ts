@@ -1,24 +1,22 @@
 import { GetSubModuleService } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.service';
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import {
   GetSubModuleOutputDto,
   IGetSubModuleOutputDto,
 } from '@module-sub-module/infrastructure/controllers/get-sub-module/presentation/get-sub-module-output.dto';
 import { GetSubModuleQuery } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.query';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('sub-module/')
+@Controller()
 export class GetSubModuleController {
   private readonly logger = new Logger(GetSubModuleController.name);
   constructor(private readonly getSubModuleService: GetSubModuleService) {}
 
-  @Get('/:id')
-  async Get(@Param('id') id: string, @Query('withDisabled') withDisabled: boolean): Promise<IGetSubModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.sub-module.get' })
+  async Get(@Payload() dto: any): Promise<IGetSubModuleOutputDto> {
     try {
-      const query = new GetSubModuleQuery({
-        id,
-        withDisabled,
-      });
+      const query = new GetSubModuleQuery(dto);
 
       const module = await this.getSubModuleService.process(query);
 

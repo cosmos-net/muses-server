@@ -1,17 +1,18 @@
 import { CreateSubModuleService } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.service';
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { CreateSubModuleInputDto } from './presentation/create-sub-module-input.dto';
 import { CreateSubModuleOutputDto } from './presentation/create-sub-module-output.dto';
 import { CreateSubModuleCommand } from '@module-sub-module/application/use-cases/create-sub-module/create-sub-module.command';
 import { ExceptionManager } from '@core/domain/exception-manager';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('/sub-module')
+@Controller()
 export class CreateSubModuleController {
   private readonly logger = new Logger(CreateSubModuleController.name);
   constructor(private readonly createSubModuleService: CreateSubModuleService) {}
 
-  @Post()
-  async create(@Body() dto: CreateSubModuleInputDto): Promise<CreateSubModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.sub-module.create' })
+  async create(@Payload() dto: CreateSubModuleInputDto): Promise<CreateSubModuleOutputDto> {
     try {
       const command = new CreateSubModuleCommand(dto);
 

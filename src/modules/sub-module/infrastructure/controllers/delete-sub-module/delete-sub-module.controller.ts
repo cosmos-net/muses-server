@@ -1,20 +1,21 @@
 import { DeleteSubModuleCommand } from '@module-sub-module/application/use-cases/delete-sub-module/delete-sub-module.command';
 import { DeleteSubModuleService } from '@module-sub-module/application/use-cases/delete-sub-module/delete-sub-module.service';
 import { ExceptionManager } from '@core/domain/exception-manager';
-import { Controller, Logger, Delete, Param } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { DeleteSubModuleInputDto } from '@module-sub-module/infrastructure/controllers/delete-sub-module/presentation/get-sub-module-input.dto';
 import {
   DeleteSubModuleOutputDto,
   IDeleteSubModuleOutputDto,
 } from '@module-sub-module/infrastructure/controllers/delete-sub-module/presentation/get-sub-module-output.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('sub-module/')
+@Controller()
 export class DeleteSubModuleController {
   private readonly logger = new Logger(DeleteSubModuleController.name);
   constructor(private readonly deleteSubModuleService: DeleteSubModuleService) {}
 
-  @Delete('/:id')
-  async delete(@Param() dto: DeleteSubModuleInputDto): Promise<IDeleteSubModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.action.disable' })
+  async delete(@Payload() dto: DeleteSubModuleInputDto): Promise<IDeleteSubModuleOutputDto> {
     try {
       const command = new DeleteSubModuleCommand(dto);
 

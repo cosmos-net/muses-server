@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { ListSubModuleService } from '@module-sub-module/application/use-cases/list-sub-module/list-sub-module.service';
 import { ListSubModuleInputDto } from './presentation/list-sub-module-input.dto';
@@ -6,14 +6,15 @@ import { ListSubModuleOutputDto } from './presentation/list-sub-module-output.dt
 import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { IdentifierEnum } from '@module-common/domain/enums';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('sub-module/')
+@Controller()
 export class ListSubModuleController {
   private readonly logger = new Logger(ListSubModuleController.name);
   constructor(private readonly listSubModuleService: ListSubModuleService) {}
 
-  @Get('list/')
-  async list(@Query() dto: ListSubModuleInputDto): Promise<ListSubModuleOutputDto> {
+  @MessagePattern({ cmd: 'muses.sub-module.list' })
+  async list(@Payload() dto: ListSubModuleInputDto): Promise<ListSubModuleOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
