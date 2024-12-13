@@ -1,17 +1,18 @@
 import { CreateProjectService } from '@module-project/application/use-cases/create-project/create-project.service';
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { CreateProjectInputDto } from '@module-project/infrastructure/controllers/create-project/presentation/create-project-input.dto';
 import { CreateProjectCommand } from '@module-project/application/use-cases/create-project/create-project.command';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { CreateProjectOutputDto } from '@module-project/infrastructure/controllers/create-project/presentation/create-project-output.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('project/')
+@Controller()
 export class CreateProjectController {
   private readonly logger = new Logger(CreateProjectController.name);
   constructor(private readonly createProjectService: CreateProjectService) {}
 
-  @Post()
-  async create(@Body() dto: CreateProjectInputDto): Promise<CreateProjectOutputDto> {
+  @MessagePattern({ cmd: 'muses.project.create' })
+  async create(@Payload() dto: CreateProjectInputDto): Promise<CreateProjectOutputDto> {
     try {
       const command = new CreateProjectCommand({
         name: dto.name,

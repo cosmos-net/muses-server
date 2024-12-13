@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
 import { ListProjectInputDto } from './presentation/list-project-input.dto';
@@ -7,14 +7,15 @@ import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { ListProjectQuery } from '@module-project/application/use-cases/list-project/list-project.query';
 import { IdentifierEnum } from '@module-common/domain/enums';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('project/')
+@Controller()
 export class ListProjectController {
   private readonly logger = new Logger(ListProjectController.name);
   constructor(private readonly listProjectService: ListProjectService) {}
 
-  @Get('list/')
-  async list(@Query() dto: ListProjectInputDto): Promise<ListProjectOutputDto> {
+  @MessagePattern({ cmd: 'muses.project.list' })
+  async list(@Payload() dto: ListProjectInputDto): Promise<ListProjectOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 

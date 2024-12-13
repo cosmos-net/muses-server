@@ -1,5 +1,5 @@
 import { GetProjectService } from '@module-project/application/use-cases/get-project/get-project.service';
-import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { ExceptionManager } from '@core/domain/exception-manager';
 import { GetProjectInputDto } from './presentation/get-project-input.dto';
 import { GetProjectQuery } from '@module-project/application/use-cases/get-project/get-project.query';
@@ -7,16 +7,16 @@ import {
   GetProjectOutputDto,
   IGetProjectOutputDto,
 } from '@module-project/infrastructure/controllers/get-project/presentation/get-project-output.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('project/')
+@Controller()
 export class GetProjectController {
   private readonly logger = new Logger(GetProjectController.name);
   constructor(private readonly getProjectService: GetProjectService) {}
 
-  @Get('/:id')
-  async Get(@Param('id') idProject: string, @Query() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
+  @MessagePattern({ cmd: 'muses.project.get' })
+  async Get(@Payload() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
     try {
-      dto.setId = idProject;
       const { id, withDisabled } = dto;
 
       const query = new GetProjectQuery({
