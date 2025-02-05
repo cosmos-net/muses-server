@@ -40,6 +40,7 @@ import { GetActionCatalogService } from '@module-action/application/use-cases/ac
 import { ListActionCatalogService } from '@module-action/application/use-cases/action-catalog/list-action-catalog/list-action-catalog.service';
 import { TypeOrmActionCatalogRepository } from '@module-action/infrastructure/repositories/typeorm-action-catalog.repository';
 import { ActionCatalogEntity } from '@module-action/infrastructure/domain/action-catalog-muses.entity';
+import { HadesConnectionModule } from '@module-action/infrastructure/framework/hades-connection.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ActionCatalogEntity } from '@module-action/infrastructure/domain/action
     forwardRef(() => MainSubModuleModule),
     forwardRef(() => MainResourceModule),
     TypeOrmModule.forFeature([ActionEntity, ActionCatalogEntity]),
+    HadesConnectionModule,
   ],
   controllers: [
     ListActionController,
