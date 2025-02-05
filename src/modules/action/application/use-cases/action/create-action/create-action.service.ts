@@ -4,6 +4,7 @@ import { CreateActionCommand } from '@module-action/application/use-cases/action
 import {
   ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
+  HADES_SERVER_CONNECTION_PROXY_NAME,
   MODULE_FACADE,
   SUB_MODULE_FACADE,
 } from '@module-action/application/constants/injection-token';
@@ -20,19 +21,23 @@ import { RelateActionWithModuleEvent } from '@module-action/domain/events/relate
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub-module-not-found.exception';
 import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
+import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class CreateActionService implements IApplicationServiceCommand<CreateActionCommand> {
   constructor(
     private readonly eventStoreService: EventStoreService,
     @Inject(ACTION_REPOSITORY)
-    private actionRepository: IActionRepository,
+    private readonly actionRepository: IActionRepository,
     @Inject(ACTION_CATALOG_REPOSITORY)
-    private actionCatalogRepository: IActionCatalogRepository,
+    private readonly actionCatalogRepository: IActionCatalogRepository,
     @Inject(MODULE_FACADE)
-    private moduleFacade: IModuleFacade,
+    private readonly moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_FACADE)
-    private subModuleFacade: ISubModuleFacade,
+    private readonly subModuleFacade: ISubModuleFacade,
+    @Inject(HADES_SERVER_CONNECTION_PROXY_NAME)
+    private readonly clientProxy: ClientProxy,
   ) {}
 
   async process<T extends CreateActionCommand>(command: T): Promise<Action> {
@@ -94,6 +99,20 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
         }),
       );
     }
+
+    await lastValueFrom(
+      this.clientProxy.send(
+        { 
+          cmd: 'muses.action.create'
+        },
+        {
+          actionUUID: action.id,
+          actionName: action.name,
+          modules: action.modulesIds,
+          subModules: action.subModulesIds,
+        }
+      ),
+    );
 
     return action;
   }
