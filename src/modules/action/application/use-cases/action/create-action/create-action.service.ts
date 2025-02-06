@@ -102,7 +102,7 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
     await lastValueFrom(
       this.clientProxy.send(
         { 
-          cmd: 'muses.action.create'
+          cmd: 'HADES.PERMISSION.CREATE'
         },
         {
           actionUUID: action.id,
