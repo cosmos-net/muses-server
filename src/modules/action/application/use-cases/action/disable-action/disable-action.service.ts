@@ -15,7 +15,7 @@ import { RemoveActionFromSubModulesEvent } from '@module-action/domain/events/re
 export class DisableActionService implements IApplicationServiceCommand<DisableActionCommand> {
   constructor(
     @Inject(ACTION_REPOSITORY)
-    private actionRepository: IActionRepository,
+    private readonly actionRepository: IActionRepository,
     private readonly eventStoreService: EventStoreService,
   ) {}
 
@@ -36,13 +36,15 @@ export class DisableActionService implements IApplicationServiceCommand<DisableA
 
     await this.tryToEmitRemoveActionFromModulesEvent(action, {
       actionId: action.id,
-      modules: action.modulesIds,
+      modules: [action.moduleId],
     });
 
-    await this.tryToEmitRemoveActionFromSubModulesEvent(action, {
-      actionId: action.id,
-      subModules: action.subModulesIds,
-    });
+    if (action.submoduleId) {
+      await this.tryToEmitRemoveActionFromSubModulesEvent(action, {
+        actionId: action.id,
+        subModules: [action.submoduleId],
+      });
+    }
 
     return 1;
   }
