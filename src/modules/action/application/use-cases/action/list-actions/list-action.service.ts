@@ -26,7 +26,7 @@ export class ListActionService implements IApplicationServiceQuery<ListActionQue
     @Inject(ACTION_REPOSITORY)
     private readonly actionRepository: IActionRepository,
     @Inject(ACTION_CATALOG_REPOSITORY)
-    private actionCatalogRepository: IActionCatalogRepository,
+    private readonly actionCatalogRepository: IActionCatalogRepository,
   ) {}
 
   async process<T extends ListActionQuery>(query: T): Promise<ListAction> {
@@ -40,14 +40,16 @@ export class ListActionService implements IApplicationServiceQuery<ListActionQue
     const actions = await this.actionRepository.searchListBy(criteria);
 
     for await (const action of actions.items) {
-      const modulesIds = action.modulesIds;
-      const subModulesIds = action.subModulesIds;
+      const modulesId = action.moduleId
+      const subModulesIds = action.submoduleId;
 
-      const modules = await this.moduleFacade.getModuleByIds(modulesIds);
-      action.useModules(modules.entities());
+      const modules = await this.moduleFacade.getModuleByIds([modulesId]);
+      action.useModule(modules.entities()[0]);
 
-      const subModules = await this.subModuleFacade.getSubModuleByIds(subModulesIds);
-      action.useSubModules(subModules.entities());
+      if (subModulesIds) {
+        const subModules = await this.subModuleFacade.getSubModuleByIds([subModulesIds]);
+        action.useSubmodule(subModules.entities()[0]);
+      }
 
       const actionCatalogId = typeof action.actionCatalog === 'object' ? action.actionCatalog.id : action.actionCatalog;
 
