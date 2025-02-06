@@ -41,7 +41,7 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
   ) {}
 
   async process<T extends CreateActionCommand>(command: T): Promise<Action> {
-    const { name, description, modules, subModules, actionCatalog } = command;
+    const { name, description, moduleId, submoduleId, actionCatalog } = command;
 
     const isNameAvailable = await this.actionRepository.isNameAvailable(name);
 
@@ -60,42 +60,41 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
     action.categorize(actionCatalogModel);
     action.describe(name, description);
 
-    if (modules && modules.length > 0) {
-      const modulesFound = await this.moduleFacade.getModuleByIds(modules);
+    const modulesFound = await this.moduleFacade.getModuleByIds([moduleId]);
 
-      if (modulesFound.totalItems === 0) {
-        throw new ModuleNotFoundException();
-      }
-
-      action.useModules(modulesFound.entities());
+    if (modulesFound.totalItems === 0) {
+      throw new ModuleNotFoundException();
     }
 
-    if (subModules && subModules.length > 0) {
-      const subModulesFound = await this.subModuleFacade.getSubModuleByIds(subModules);
+    const module = modulesFound.entities()[0];
+    action.useModule(module);
+
+    if (submoduleId) {
+      const subModulesFound = await this.subModuleFacade.getSubModuleByIds([submoduleId]);
 
       if (subModulesFound.totalItems === 0) {
         throw new SubModuleNotFoundException();
       }
 
-      action.useSubModules(subModulesFound.entities());
+      const subModule = subModulesFound.entities()[0];
+      action.useSubmodule(subModule);
     }
 
     await this.actionRepository.persist(action);
 
-    if (action.modules && action.modules.length > 0) {
-      await this.tryToEmitModuleEvent(
-        new RelateActionWithModuleEventBody({
-          actionId: action.id,
-          modules: action.modulesIds,
-        }),
-      );
-    }
+    await this.tryToEmitModuleEvent(
+      new RelateActionWithModuleEventBody({
+        actionId: action.id,
+        modules: [moduleId],
+      }),
+    );
+    
 
-    if (action.modules && action.modules.length > 0) {
+    if (submoduleId) {
       await this.tryToEmitSubModuleEvent(
         new RelateActionWithSubModuleEventBody({
           actionId: action.id,
-          subModules: action.subModulesIds,
+          subModules: [submoduleId],
         }),
       );
     }
@@ -108,8 +107,8 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
         {
           actionUUID: action.id,
           actionName: action.name,
-          modules: action.modulesIds,
-          subModules: action.subModulesIds,
+          modules: action.moduleId,
+          subModule: action.submoduleId ?? null,
         }
       ),
     );

@@ -5,8 +5,8 @@ export interface ICreateActionOutputDto {
   id: string;
   name: string;
   description: string;
-  modules: IModuleSchema[] | string[] | any;
-  subModules: ISubModuleSchema[] | string[] | any;
+  module: IModuleSchema[] | string[] | any;
+  submodule?: ISubModuleSchema[] | string[] | any;
   actionCatalog: any;
   isEnabled: boolean;
   createdAt: string | Date;
@@ -18,8 +18,8 @@ export class CreateActionOutputDto implements ICreateActionOutputDto {
   id: string;
   name: string;
   description: string;
-  modules: IModuleSchema[] | string[] | any;
-  subModules: ISubModuleSchema[] | string[] | any;
+  module: IModuleSchema | string | any;
+  submodule?: ISubModuleSchema | string | any;
   actionCatalog: any;
   isEnabled: boolean;
   createdAt: string;
@@ -30,8 +30,8 @@ export class CreateActionOutputDto implements ICreateActionOutputDto {
     this.id = root.id;
     this.name = root.name;
     this.description = root.description;
-    this.modules = root.modules;
-    this.subModules = root.subModules;
+    this.module = root.module;
+    this.submodule = root.submodule;
     this.actionCatalog = root.actionCatalog;
     this.isEnabled = root.isEnabled;
     this.createdAt = root.createdAt instanceof Date ? root.createdAt.toISOString() : root.createdAt;
