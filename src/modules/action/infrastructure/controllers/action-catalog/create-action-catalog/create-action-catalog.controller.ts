@@ -11,7 +11,7 @@ export class CreateActionCatalogController {
 
   constructor(private readonly createActionCatalogService: CreateActionCatalogService) {}
 
-  @MessagePattern({ cmd: 'muses.action.catalog.create' })
+  @MessagePattern({ cmd: 'MUSES.ACTION.CATALOG.CREATE' })
   async create(@Payload() dto: CreateActionCatalogInputDto): Promise<ICreateActionCatalogOutputDto> {
     try {
       const createActionCatalogCommand = new CreateActionCatalogCommand(dto);

@@ -31,8 +31,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const action = new Action({
       ...actionFound,
-      ...(actionFound.modules && { modules: actionFound.modules.map((module) => module.toHexString()) }),
-      ...(actionFound.subModules && { subModules: actionFound.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(actionFound.submodule && { submodule: actionFound.submodule.toHexString() }),
       ...(actionFound.resource && { resource: actionFound.resource.toHexString() }),
       actionCatalog: actionFound.actionCatalog.toHexString(),
       id: actionFound._id.toHexString(),
@@ -50,25 +49,24 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
   async persist(model: Action): Promise<Action> {
     let partialSchema: Partial<IActionSchema & ActionEntity> = model.entityRootPartial();
 
-    if (partialSchema.modules) {
-      const modules = partialSchema.modules.map((module) => new ObjectId(module));
+    const module = ObjectId.createFromHexString(typeof partialSchema.module === 'object' ? partialSchema.module.id : partialSchema.module);
+
+    partialSchema = {
+      ...partialSchema,
+      module,
+    };
+
+    if (partialSchema.submodule) {
+      const submodule = ObjectId.createFromHexString(typeof partialSchema.submodule === 'object' ? partialSchema.submodule.id : partialSchema.submodule);
 
       partialSchema = {
         ...partialSchema,
-        modules,
-      };
-    }
-
-    if (partialSchema.subModules) {
-      const subModules = partialSchema.subModules.map((subModule) => new ObjectId(subModule));
-      partialSchema = {
-        ...partialSchema,
-        subModules,
+        submodule,
       };
     }
 
     if (partialSchema.resource) {
-      const resource = new ObjectId(partialSchema.resource);
+      const resource = ObjectId.createFromHexString(typeof partialSchema.resource === 'object' ? partialSchema.resource.id : partialSchema.resource);
 
       partialSchema = {
         ...partialSchema,
@@ -77,7 +75,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
     }
 
     if (partialSchema.actionCatalog) {
-      const actionCatalog = new ObjectId(partialSchema.actionCatalog);
+      const actionCatalog = ObjectId.createFromHexString(typeof partialSchema.actionCatalog === 'object' ? partialSchema.actionCatalog.id : partialSchema.actionCatalog);
 
       partialSchema = {
         ...partialSchema,
@@ -86,7 +84,7 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
     }
 
     if (partialSchema.id) {
-      const _id = new ObjectId(partialSchema.id);
+      const _id = ObjectId.createFromHexString(partialSchema.id);
 
       const action = (await this.actionRepository.findOneAndReplace(
         { _id },
@@ -101,8 +99,8 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
       model.hydrate({
         ...action,
-        ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
-        ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+        ...(action.module && { module: action.module.toHexString() }),
+        ...(action.submodule && { submodule: action.submodule.toHexString() }),
         ...(action.resource && { resource: action.resource.toHexString() }),
         actionCatalog: action.actionCatalog.toHexString(),
         id: action._id.toHexString(),
@@ -115,8 +113,8 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     model.hydrate({
       ...action,
-      ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
-      ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.module && { module: action.module.toHexString() }),
+      ...(action.submodule && { submodule: action.submodule.toHexString() }),
       ...(action.resource && { resource: action.resource.toHexString() }),
       actionCatalog: action.actionCatalog.toHexString(),
       id: action._id.toHexString(),
@@ -132,8 +130,8 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const actionsMapped = actions.map((action) => ({
       ...action,
-      ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
-      ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.module && { module: action.module.toHexString() }),
+      ...(action.submodule && { submodule: action.submodule.toHexString() }),
       ...(action.resource && { resource: action.resource.toHexString() }),
       actionCatalog: action.actionCatalog.toHexString(),
       id: action._id.toHexString(),
@@ -151,8 +149,8 @@ export class TypeOrmActionRepository extends TypeormRepository<ActionEntity> imp
 
     const actionsMapped = actions.map((action) => ({
       ...action,
-      ...(action.modules && { modules: action.modules.map((module) => module.toHexString()) }),
-      ...(action.subModules && { subModules: action.subModules.map((subModule) => subModule.toHexString()) }),
+      ...(action.module && { module: action.module.toHexString() }),
+      ...(action.submodule && { submodule: action.submodule.toHexString() }),
       ...(action.resource && { resource: action.resource.toHexString() }),
       actionCatalog: action.actionCatalog.toHexString(),
       id: action._id.toHexString(),

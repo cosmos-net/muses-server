@@ -7,8 +7,8 @@ export interface IActionSchema {
   name: string;
   description: string;
   isEnabled: boolean;
-  modules: IModuleSchema | string[] | any;
-  subModules: ISubModuleSchema | string[] | any;
+  module: IModuleSchema | string | any;
+  submodule?: ISubModuleSchema | string | any;
   actionCatalog: IActionCatalogSchema | string | any;
   resource: string | any;
   createdAt: Date;

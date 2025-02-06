@@ -6,8 +6,8 @@ interface IListActionOutputDto {
   id?: string;
   name: string;
   description: string;
-  modules: (object | string)[] | undefined;
-  subModules: (object | string)[] | undefined;
+  module: (object | string) | undefined;
+  submodule: (object | string) | undefined;
   actionCatalog: any;
   isEnabled: boolean;
   createdAt: string | Date;
@@ -30,8 +30,8 @@ export class ListActionOutputDto {
         id: item.id,
         name: item.name,
         description: item.description,
-        modules: item.modules,
-        subModules: item.subModules,
+        module: item.module,
+        submodule: item.submodule,
         actionCatalog: item.actionCatalog,
         isEnabled: item.isEnabled,
         createdAt: item.createdAt,

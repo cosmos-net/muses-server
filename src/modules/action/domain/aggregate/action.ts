@@ -17,7 +17,7 @@ import { removePropertyFromObject } from '@core/domain/helpers/utils';
 import { ActionCatalog, IActionCatalogSchema } from '@module-action/domain/aggregate/action-catalog';
 
 export class Action {
-  private _entityRoot = {} as IActionSchemaAggregate;
+  private readonly _entityRoot = {} as IActionSchemaAggregate;
 
   constructor(schema?: IActionSchema | Partial<IActionSchema> | string | null) {
     if (schema) {
@@ -70,52 +70,36 @@ export class Action {
     return this._entityRoot.deletedAt?.value;
   }
 
-  get subModules(): (ISubModuleSchema | string)[] | undefined {
-    if (!this._entityRoot.subModules) return undefined;
+  get module(): IModuleSchema | string {
+    if (typeof this._entityRoot.module === 'object') {
+      return this._entityRoot.module.toPrimitives();
+    }
 
-    return this._entityRoot.subModules.map((subModule) => {
-      if (typeof subModule === 'object') {
-        return subModule.toPrimitives();
-      }
-
-      return subModule;
-    });
+    return this._entityRoot.module;
   }
 
-  get modules(): (IModuleSchema | string)[] | undefined {
-    if (!this._entityRoot.modules) return undefined;
+  get moduleId(): string {
+    if (typeof this._entityRoot.module === 'object') {
+      return this._entityRoot.module.id;
+    }
 
-    return this._entityRoot.modules.map((module) => {
-      if (typeof module === 'object') {
-        return module.toPrimitives();
-      }
-
-      return module;
-    });
+    return this._entityRoot.module;
   }
 
-  get modulesIds(): string[] {
-    if (!this._entityRoot.modules) return [];
+  get submodule(): ISubModuleSchema | string | undefined {
+    if (typeof this._entityRoot.submodule === 'object') {
+      return this._entityRoot.submodule.toPrimitives();
+    }
 
-    return this._entityRoot.modules.map((module) => {
-      if (typeof module === 'object') {
-        return module.id;
-      }
-
-      return module;
-    });
+    return this._entityRoot.submodule;
   }
 
-  get subModulesIds(): string[] {
-    if (!this._entityRoot.subModules) return [];
+  get submoduleId(): string | undefined {
+    if (typeof this._entityRoot.submodule === 'object') {
+      return this._entityRoot.submodule.id;
+    }
 
-    return this._entityRoot.subModules.map((subModule) => {
-      if (typeof subModule === 'object') {
-        return subModule.id;
-      }
-
-      return subModule;
-    });
+    return this._entityRoot.submodule;
   }
 
   get resource() {
@@ -191,57 +175,7 @@ export class Action {
     }
   }
 
-  private hydrateModules(modules?: string[]): void {
-    if (modules === undefined || modules === null || modules.length === 0) return;
 
-    if (!this._entityRoot.modules) {
-      this._entityRoot.modules = [];
-
-      for (const module of modules) {
-        this._entityRoot.modules.push(module);
-      }
-    } else {
-      for (const module of modules) {
-        const isAlreadyModuleUsed = this._entityRoot.modules.some((moduleUsed) => {
-          if (typeof moduleUsed === 'object') {
-            return moduleUsed.id === module;
-          }
-
-          return moduleUsed === module;
-        });
-
-        if (!isAlreadyModuleUsed) {
-          this._entityRoot.modules.push(module);
-        }
-      }
-    }
-  }
-
-  private hydrateSubModules(subModules?: string[]): void {
-    if (subModules === undefined || subModules === null || subModules.length === 0) return;
-
-    if (!this._entityRoot.subModules) {
-      this._entityRoot.subModules = [];
-
-      for (const subModule of subModules) {
-        this._entityRoot.subModules.push(subModule);
-      }
-    } else {
-      for (const subModule of subModules) {
-        const isAlreadySubModuleUsed = this._entityRoot.subModules.find((subModuleUsed) => {
-          if (typeof subModuleUsed === 'object') {
-            return subModuleUsed.id === subModule;
-          }
-
-          return subModuleUsed === subModule;
-        });
-
-        if (!isAlreadySubModuleUsed) {
-          this._entityRoot.subModules.push(subModule);
-        }
-      }
-    }
-  }
 
   public hydrate(schema: IActionSchema): void {
     this._entityRoot.id = new Id(schema.id);
@@ -250,6 +184,10 @@ export class Action {
     this._entityRoot.isEnabled = new IsEnabled(schema.isEnabled);
     this._entityRoot.createdAt = new CreatedAt(schema.createdAt);
     this._entityRoot.updatedAt = new UpdatedAt(schema.updatedAt);
+
+    this._entityRoot.module = schema.module;
+    if (schema.submodule) this._entityRoot.submodule = schema.submodule;
+    if (schema.resource) this._entityRoot.resource = schema.resource;
     
 
     if (!this._entityRoot.actionCatalog) {
@@ -259,11 +197,6 @@ export class Action {
     if (schema.deletedAt && !this._entityRoot.deletedAt) {
       this._entityRoot.deletedAt = new DeletedAt(schema.deletedAt);
     }
-
-    if (schema.resource) this._entityRoot.resource = schema.resource;
-
-    this.hydrateModules(schema.modules);
-    this.hydrateSubModules(schema.subModules);
   }
 
   public toPrimitives(): IActionSchema {
@@ -275,8 +208,8 @@ export class Action {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
-      modules: this.modules,
-      subModules: this.subModules,
+      module: this.module,
+      submodule: this.submodule,
       resource: this.resource,
       actionCatalog: this.actionCatalog,
     };
@@ -309,99 +242,107 @@ export class Action {
     return partialSchema;
   }
 
-  public useModules(modules: Module[]): void {
-    this._entityRoot.modules = [];
-
-    for (const module of modules) {
-      this._entityRoot.modules.push(module);
-    }
+  public useModule(modules: Module): void {
+    this._entityRoot.module = modules;
   }
 
-  public useSubModules(subModules: SubModule[]): void {
-    this._entityRoot.subModules = [];
-
-    for (const subModule of subModules) {
-      this._entityRoot.subModules.push(subModule);
-    }
+  public useSubmodule(submodule: SubModule): void {
+    this._entityRoot.submodule = submodule;
   }
 
-  public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): string[] {
-    if (this._entityRoot.modules === undefined) {
-      this._entityRoot.modules = [];
-
-      for (const module of modules) {
-        this._entityRoot.modules.push(new Module(module));
-      }
-
-      return [];
+  public replaceModule(module: Module): void {
+    if (this.moduleId === module.id) {
+      throw new ActionPropertyWithSameValueException('module', module.id);
     }
 
-    const currentModules = this._entityRoot.modules;
-
-    const modulesToAdd = modules.filter((module) => {
-      for (const currentModule of currentModules) {
-        return currentModule !== module.id;
-      }
-    });
-
-    const modulesToRemove = this._entityRoot.modules.filter((module) => {
-      if (typeof module === 'object') {
-        return !modules.map((module) => module.id).includes(module.id);
-      } else {
-        return !modules.map((module) => module.id).includes(module);
-      }
-    });
-
-    if (modulesToAdd.length === 0 && modulesToRemove.length === 0) {
-      throw new ActionPropertyWithSameValueException(
-        'modules',
-        this._entityRoot.modules.map((module) => (typeof module === 'object' ? module.id : module)),
-      );
-    }
-
-    for (const module of modulesToAdd) {
-      this._entityRoot.modules.push(new Module(module));
-    }
-
-    return modulesToRemove.map((module) => (typeof module === 'object' ? module.id : module));
+    this._entityRoot.module = module;
   }
 
-  public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): string[] {
-    if (this._entityRoot.subModules === undefined) {
-      this._entityRoot.subModules = [];
-
-      for (const subModule of subModules) {
-        this._entityRoot.subModules.push(new SubModule(subModule));
-      }
-
-      return [];
+  public replaceSubmodule(submodule: SubModule): void {
+    if (this.submoduleId === submodule.id) {
+      throw new ActionPropertyWithSameValueException('submodule', submodule.id);
     }
 
-    const currentSubModules = this._entityRoot.subModules;
-
-    const subModulesToAdd = subModules.filter((subModule) => {
-      for (const currentSubModule of currentSubModules) {
-        return currentSubModule !== subModule.id;
-      }
-    });
-
-    const subModulesToRemove = this._entityRoot.subModules.filter(
-      (subModule) => !subModules.map((subModule) => subModule.id).includes(subModule),
-    );
-
-    if (subModulesToAdd.length === 0 && subModulesToRemove.length === 0) {
-      throw new ActionPropertyWithSameValueException(
-        'subModules',
-        this._entityRoot.subModules.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule)),
-      );
-    }
-
-    for (const subModule of subModulesToAdd) {
-      this._entityRoot.subModules.push(new SubModule(subModule));
-    }
-
-    return subModulesToRemove.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule));
+    this._entityRoot.submodule = submodule;
   }
+
+  // public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): string[] {
+  //   if (this._entityRoot.modules === undefined) {
+  //     this._entityRoot.modules = [];
+
+  //     for (const module of modules) {
+  //       this._entityRoot.modules.push(new Module(module));
+  //     }
+
+  //     return [];
+  //   }
+
+  //   const currentModules = this._entityRoot.modules;
+
+  //   const modulesToAdd = modules.filter((module) => {
+  //     for (const currentModule of currentModules) {
+  //       return currentModule !== module.id;
+  //     }
+  //   });
+
+  //   const modulesToRemove = this._entityRoot.modules.filter((module) => {
+  //     if (typeof module === 'object') {
+  //       return !modules.map((module) => module.id).includes(module.id);
+  //     } else {
+  //       return !modules.map((module) => module.id).includes(module);
+  //     }
+  //   });
+
+  //   if (modulesToAdd.length === 0 && modulesToRemove.length === 0) {
+  //     throw new ActionPropertyWithSameValueException(
+  //       'modules',
+  //       this._entityRoot.modules.map((module) => (typeof module === 'object' ? module.id : module)),
+  //     );
+  //   }
+
+  //   for (const module of modulesToAdd) {
+  //     this._entityRoot.modules.push(new Module(module));
+  //   }
+
+  //   return modulesToRemove.map((module) => (typeof module === 'object' ? module.id : module));
+  // }
+
+  // public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): string[] {
+  //   if (this._entityRoot.subModules === undefined) {
+  //     this._entityRoot.subModules = [];
+
+  //     for (const subModule of subModules) {
+  //       this._entityRoot.subModules.push(new SubModule(subModule));
+  //     }
+
+  //     return [];
+  //   }
+
+  //   const currentSubModules = this._entityRoot.subModules;
+
+  //   const subModulesToAdd = subModules.filter((subModule) => {
+  //     for (const currentSubModule of currentSubModules) {
+  //       return currentSubModule !== subModule.id;
+  //     }
+  //   });
+
+  //   const subModulesToRemove = this._entityRoot.subModules.filter(
+  //     (subModule) => !subModules.map((subModule) => subModule.id).includes(subModule),
+  //   );
+
+  //   if (subModulesToAdd.length === 0 && subModulesToRemove.length === 0) {
+  //     throw new ActionPropertyWithSameValueException(
+  //       'subModules',
+  //       this._entityRoot.subModules.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule)),
+  //     );
+  //   }
+
+  //   for (const subModule of subModulesToAdd) {
+  //     this._entityRoot.subModules.push(new SubModule(subModule));
+  //   }
+
+  //   return subModulesToRemove.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule));
+  // }
 
   public addResource(resourceId: string): void {
     this._entityRoot.resource = resourceId;
@@ -415,13 +356,13 @@ export class Action {
     this._entityRoot.resource = null;
   }
 
-  public removeModules(): void {
-    this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'modules'>(this._entityRoot, 'modules');
-  }
+  // public removeModules(): void {
+  //   this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'modules'>(this._entityRoot, 'modules');
+  // }
 
-  public removeSubModules(): void {
-    this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'subModules'>(this._entityRoot, 'subModules');
-  }
+  // public removeSubModules(): void {
+  //   this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'subModules'>(this._entityRoot, 'subModules');
+  // }
 
   public categorize(actionCatalog: ActionCatalog): void {
     this._entityRoot.actionCatalog = actionCatalog;

@@ -11,7 +11,7 @@ export class CreateModuleController {
   private readonly logger = new Logger(CreateModuleController.name);
   constructor(private readonly createModuleService: CreateModuleService) {}
 
-  @MessagePattern({ cmd: 'muses.module.create' })
+  @MessagePattern({ cmd: 'MUSES.MODULE.CREATE' })
   async create(@Payload() dto: CreateModuleInputDto): Promise<CreateModuleOutputDto> {
     try {
       const command = new CreateModuleCommand(dto);

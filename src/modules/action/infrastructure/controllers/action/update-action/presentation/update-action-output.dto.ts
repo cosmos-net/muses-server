@@ -6,8 +6,8 @@ export interface IGetActionOutputDto {
   name: string;
   description: string;
   isEnabled: boolean;
-  modules: IModuleSchema[] | string[] | any;
-  subModules: ISubModuleSchema[] | string[] | any;
+  module: IModuleSchema | string | any;
+  submodule: ISubModuleSchema | string | any;
   actionCatalog: any;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -19,8 +19,8 @@ export class UpdateActionOutputDto implements IGetActionOutputDto {
   name: string;
   description: string;
   isEnabled: boolean;
-  modules: IModuleSchema[] | string[] | any;
-  subModules: ISubModuleSchema[] | string[] | any;
+  module: IModuleSchema | string | any;
+  submodule: ISubModuleSchema | string | any;
   actionCatalog: any;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -31,8 +31,8 @@ export class UpdateActionOutputDto implements IGetActionOutputDto {
     this.name = root.name;
     this.description = root.description;
     this.isEnabled = root.isEnabled;
-    this.modules = root.modules;
-    this.subModules = root.subModules;
+    this.module = root.module;
+    this.submodule = root.submodule;
     this.actionCatalog = root.actionCatalog;
     this.createdAt = root.createdAt instanceof Date ? root.createdAt.toISOString() : root.createdAt;
     this.updatedAt = root.updatedAt instanceof Date ? root.updatedAt.toISOString() : root.updatedAt;

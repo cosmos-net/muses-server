@@ -41,18 +41,18 @@ export class ActionEntity extends BaseEntity implements IActionSchema {
   resource: ObjectId;
 
   @Column({
-    name: 'modules',
-    nullable: true,
-    type: 'array',
+    name: 'module',
+    nullable: false,
+    type: 'varchar',
   })
-  modules: ObjectId[];
+  module: ObjectId;
 
   @Column({
-    name: 'subModules',
+    name: 'submodule',
     nullable: true,
-    type: 'array',
+    type: 'varchar',
   })
-  subModules: ObjectId[];
+  submodule?: ObjectId;
 
   @Column({
     name: 'actionCatalog',

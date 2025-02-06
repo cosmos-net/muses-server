@@ -5,13 +5,13 @@ export class CreateActionCommand implements ICommand {
 
   readonly description: string;
 
-  readonly modules?: string[];
+  readonly moduleId: string;
 
-  readonly subModules?: string[];
+  readonly submoduleId?: string;
 
   readonly actionCatalog: string;
 
-  constructor(props: Partial<CreateActionCommand>) {
+  constructor(props: CreateActionCommand) {
     if (props) {
       Object.assign(this, props);
     }
