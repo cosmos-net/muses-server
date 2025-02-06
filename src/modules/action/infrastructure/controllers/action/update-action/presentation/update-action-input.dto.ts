@@ -23,16 +23,14 @@ export class UpdateActionInputDto {
   readonly isEnabled?: boolean;
 
   @IsObjectIdHex()
-  @IsArray()
   @IsNotEmpty()
   @IsOptional()
-  readonly subModules?: string[];
+  readonly submodule?: string;
 
   @IsObjectIdHex()
-  @IsArray()
   @IsNotEmpty()
   @IsOptional()
-  readonly modules?: string[];
+  readonly module?: string;
 
   @IsObjectIdHex()
   @IsString()

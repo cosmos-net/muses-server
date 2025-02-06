@@ -25,18 +25,18 @@ import { IActionCatalogRepository } from '@module-action/domain/contracts/action
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
   constructor(
     @Inject(ACTION_REPOSITORY)
-    private actionRepository: IActionRepository,
+    private readonly actionRepository: IActionRepository,
     @Inject(MODULE_FACADE)
-    private moduleFacade: IModuleFacade,
+    private readonly moduleFacade: IModuleFacade,
     @Inject(SUB_MODULE_FACADE)
-    private subModuleFacade: ISubModuleFacade,
+    private readonly subModuleFacade: ISubModuleFacade,
     private readonly eventStoreService: EventStoreService,
     @Inject(ACTION_CATALOG_REPOSITORY)
-    private actionCatalogRepository: IActionCatalogRepository,
+    private readonly actionCatalogRepository: IActionCatalogRepository,
   ) {}
 
   async process<T extends UpdateActionCommand>(command: T): Promise<Action> {
-    const { id, name, description, isEnabled, modules, subModules, actionCatalog } = command;
+    const { id, name, description, isEnabled, module, submodule, actionCatalog } = command;
 
     const action = await this.actionRepository.searchOneBy(id, { withDeleted: true });
 
@@ -50,45 +50,43 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
       isEnabled ? action.enable() : action.disable();
     }
 
-    if (modules) {
-      if (modules.length === 0) {
-        action.removeModules();
-      } else if (modules.length > 0) {
-        const modulesFound = await this.moduleFacade.getModuleByIds(modules);
+   if (module) {
+        const modulesFound = await this.moduleFacade.getModuleByIds([module]);
 
         if (modulesFound.totalItems === 0) {
           throw new ModuleNotFoundException();
         }
 
-        const modulesLegacy = action.useModulesAndReturnModulesLegacy(modulesFound.entities());
+        const currentModule = action.moduleId;
+        const newModule = modulesFound.entities()[0].id;
+
+        action.replaceModule(modulesFound.entities()[0]);
 
         await this.tryToEmitEventToUpdateRelationWithModules({
           actionId: action.id,
-          legacyModules: modulesLegacy,
-          newModules: action.modulesIds,
+          legacyModules: [currentModule],
+          newModules: [newModule],
         });
       }
-    }
 
-    if (subModules) {
-      if (subModules.length === 0) {
-        action.removeSubModules();
-      } else if (subModules.length > 0) {
-        const subModulesFound = await this.subModuleFacade.getSubModuleByIds(subModules);
+      if (submodule) {
+        const subModulesFound = await this.subModuleFacade.getSubModuleByIds([submodule]);
 
         if (subModulesFound.totalItems === 0) {
           throw new SubModuleNotFoundException();
         }
 
-        const subModulesLegacy = action.useSubModulesAndReturnSubModulesLegacy(subModulesFound.entities());
+        const currentSubModule = action.submoduleId;
+        const newSubModule = subModulesFound.entities()[0].id;
+
+        action.replaceSubmodule(subModulesFound.entities()[0]);
 
         await this.tryToEmitEventToUpdateRelationWithSubModules({
           actionId: action.id,
-          legacySubModules: subModulesLegacy,
-          newSubModules: action.subModulesIds,
+          legacySubModules: currentSubModule ? [currentSubModule] : [],
+          newSubModules: [newSubModule],
         });
       }
-    }
 
     if (actionCatalog) {
       const actionCatalogFound = await this.actionCatalogRepository.oneBy(actionCatalog);
