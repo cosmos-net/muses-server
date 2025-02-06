@@ -14,7 +14,7 @@ export class CreateActionController {
   private readonly logger = new Logger(CreateActionController.name);
   constructor(private readonly createSubModuleService: CreateActionService) {}
 
-  @MessagePattern({ cmd: 'muses.action.create' })
+  @MessagePattern({ cmd: 'MUSES.ACTION.CREATE' })
   async create(@Payload() dto: CreateActionInputDto): Promise<ICreateActionOutputDto> {
     try {
       const command = new CreateActionCommand(dto);
