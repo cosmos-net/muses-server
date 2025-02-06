@@ -22,9 +22,9 @@ export class GetActionService implements IApplicationServiceQuery<GetActionQuery
     @Inject(SUB_MODULE_FACADE)
     private readonly subModuleFacade: ISubModuleFacade,
     @Inject(ACTION_REPOSITORY)
-    private actionRepository: IActionRepository,
+    private readonly actionRepository: IActionRepository,
     @Inject(ACTION_CATALOG_REPOSITORY)
-    private actionCatalogRepository: IActionCatalogRepository,
+    private readonly actionCatalogRepository: IActionCatalogRepository,
   ) {}
 
   async process<T extends GetActionQuery>(query: T): Promise<Action> {
@@ -38,14 +38,12 @@ export class GetActionService implements IApplicationServiceQuery<GetActionQuery
       throw new ActionNotFoundException();
     }
 
-    if (action.modules && action.modules.length > 0) {
-      const modules = await this.moduleFacade.getModuleByIds(action.modulesIds);
-      action.useModules(modules.entities());
-    }
+      const modules = await this.moduleFacade.getModuleByIds([action.moduleId]);
+      action.useModule(modules.entities()[0]);
 
-    if (action.subModules && action.subModules.length > 0) {
-      const subModules = await this.subModuleFacade.getSubModuleByIds(action.subModulesIds);
-      action.useSubModules(subModules.entities());
+    if (action.submoduleId) {
+      const subModules = await this.subModuleFacade.getSubModuleByIds([action.submoduleId]);
+      action.useSubmodule(subModules.entities()[0]);
     }
 
     const actionCatalogId = typeof action.actionCatalog === 'object' ? action.actionCatalog.id : action.actionCatalog;
