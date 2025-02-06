@@ -14,8 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(MainModule, {
     transport: Transport.NATS,
     options: {
-      url: 'nats://localhost:4222',
-      queue: 'cats_queue',
+      servers: ['nats://localhost:4223'],
     },
   });
 
