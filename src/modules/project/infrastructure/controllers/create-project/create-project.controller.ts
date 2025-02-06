@@ -11,7 +11,7 @@ export class CreateProjectController {
   private readonly logger = new Logger(CreateProjectController.name);
   constructor(private readonly createProjectService: CreateProjectService) {}
 
-  @MessagePattern({ cmd: 'muses.project.create' })
+  @MessagePattern({ cmd: 'MUSES.PROJECT.CREATE' })
   async create(@Payload() dto: CreateProjectInputDto): Promise<CreateProjectOutputDto> {
     try {
       const command = new CreateProjectCommand({
