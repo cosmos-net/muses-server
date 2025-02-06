@@ -11,7 +11,7 @@ export class CreateSubModuleController {
   private readonly logger = new Logger(CreateSubModuleController.name);
   constructor(private readonly createSubModuleService: CreateSubModuleService) {}
 
-  @MessagePattern({ cmd: 'muses.sub-module.create' })
+  @MessagePattern({ cmd: 'MUSES.SUB.MODULE.CREATE' })
   async create(@Payload() dto: CreateSubModuleInputDto): Promise<CreateSubModuleOutputDto> {
     try {
       const command = new CreateSubModuleCommand(dto);
