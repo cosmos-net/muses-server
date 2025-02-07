@@ -11,7 +11,7 @@ export class UpdateActionCommand implements ICommand {
 
   readonly module?: string;
 
-  readonly submodule?: string;
+  readonly submodule?: string | null = null;
 
   readonly actionCatalog?: string;
 
