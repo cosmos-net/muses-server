@@ -82,15 +82,19 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
 
     await this.actionRepository.persist(action);
 
-    await this.tryToEmitModuleEvent(
-      new RelateActionWithModuleEventBody({
-        actionId: action.id,
-        modules: [moduleId],
-      }),
-    );
-    
+    //TODO: if the action is for a specific sub module, the module not should be related with the action, only the sub module, but if the sub module is not defined, the module should be related with the action
 
-    if (submoduleId) {
+    const isOnlyForModule = !submoduleId;
+    const isOnlyForSubModule = submoduleId && moduleId;
+
+    if (isOnlyForModule) {
+      await this.tryToEmitModuleEvent(
+        new RelateActionWithModuleEventBody({
+          actionId: action.id,
+          modules: [moduleId],
+        }),
+      );
+    } else if (isOnlyForSubModule) {
       await this.tryToEmitSubModuleEvent(
         new RelateActionWithSubModuleEventBody({
           actionId: action.id,
