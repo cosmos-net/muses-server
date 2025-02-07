@@ -17,7 +17,7 @@ import { IProjectSchema } from '@module-project/domain/aggregate/project.schema'
 import { ModuleIsAlreadyEnabledUsedException } from '../exceptions/module-is-already-enabled.exception';
 
 export class Module {
-  private _entityRoot = {} as IModuleSchemaAggregate;
+  private readonly _entityRoot = {} as IModuleSchemaAggregate;
 
   constructor(schema?: IModuleSchema | null) {
     if (schema) {
