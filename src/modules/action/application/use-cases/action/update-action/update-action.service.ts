@@ -4,6 +4,7 @@ import { UpdateActionCommand } from '@module-action/application/use-cases/action
 import {
   ACTION_CATALOG_REPOSITORY,
   ACTION_REPOSITORY,
+  HADES_SERVER_CONNECTION_PROXY_NAME,
   MODULE_FACADE,
   SUB_MODULE_FACADE,
 } from '@module-action/application/constants/injection-token';
@@ -20,6 +21,10 @@ import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { ActionNotFoundException } from '@module-action/domain/exceptions/action-not-found.exception';
 import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
+import { lastValueFrom } from 'rxjs';
+import { ClientProxy } from '@nestjs/microservices';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
+import { Module } from '@module-module/domain/aggregate/module';
 
 @Injectable()
 export class UpdateActionService implements IApplicationServiceCommand<UpdateActionCommand> {
@@ -33,6 +38,8 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
     private readonly eventStoreService: EventStoreService,
     @Inject(ACTION_CATALOG_REPOSITORY)
     private readonly actionCatalogRepository: IActionCatalogRepository,
+    @Inject(HADES_SERVER_CONNECTION_PROXY_NAME)
+    private readonly clientProxy: ClientProxy,
   ) {}
 
   async process<T extends UpdateActionCommand>(command: T): Promise<Action> {
@@ -50,26 +57,34 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
       isEnabled ? action.enable() : action.disable();
     }
 
-   if (module) {
-        const modulesFound = await this.moduleFacade.getModuleByIds([module]);
+    let isModuleWasChanged = false;
+    if (module) {
+      const modulesFound = await this.moduleFacade.getModuleByIds([module]);
 
-        if (modulesFound.totalItems === 0) {
-          throw new ModuleNotFoundException();
-        }
-
-        const currentModule = action.moduleId;
-        const newModule = modulesFound.entities()[0].id;
-
-        action.replaceModule(modulesFound.entities()[0]);
-
-        await this.tryToEmitEventToUpdateRelationWithModules({
-          actionId: action.id,
-          legacyModules: [currentModule],
-          newModules: [newModule],
-        });
+      if (modulesFound.totalItems === 0) {
+        throw new ModuleNotFoundException();
       }
 
-      if (submodule) {
+      const currentModule = action.moduleId;
+      const newModule = modulesFound.entities()[0].id;
+
+      action.replaceModule(modulesFound.entities()[0]);
+
+      await this.tryToEmitEventToUpdateRelationWithModules({
+        actionId: action.id,
+        legacyModules: [currentModule],
+        newModules: [newModule],
+      });
+
+      isModuleWasChanged = true;
+    }
+
+    let isSubModuleWasChanged = false;
+    let newSubModule: SubModule | null = null;
+    if (submodule !== undefined) {
+      if (submodule === null) {
+        action.removeSubModule();
+      } else {
         const subModulesFound = await this.subModuleFacade.getSubModuleByIds([submodule]);
 
         if (subModulesFound.totalItems === 0) {
@@ -77,16 +92,19 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
         }
 
         const currentSubModule = action.submoduleId;
-        const newSubModule = subModulesFound.entities()[0].id;
+        newSubModule = subModulesFound.entities()[0];
 
         action.replaceSubmodule(subModulesFound.entities()[0]);
 
         await this.tryToEmitEventToUpdateRelationWithSubModules({
           actionId: action.id,
           legacySubModules: currentSubModule ? [currentSubModule] : [],
-          newSubModules: [newSubModule],
+          newSubModules: [newSubModule.id],
         });
       }
+
+      isSubModuleWasChanged = true;
+    }
 
     if (actionCatalog) {
       const actionCatalogFound = await this.actionCatalogRepository.oneBy(actionCatalog);
@@ -98,7 +116,37 @@ export class UpdateActionService implements IApplicationServiceCommand<UpdateAct
       action.categorize(actionCatalogFound);
     }
 
-    return this.actionRepository.persist(action);
+    this.actionRepository.persist(action);
+
+    if (isModuleWasChanged || isSubModuleWasChanged) {
+      if (action.module instanceof Module ) {
+        await lastValueFrom(
+          this.clientProxy.send(
+            {
+              cmd: 'MUSES.ACTION.CREATE'
+            },
+            {
+              action: {
+                id: action.id,
+                name: action.name,
+              },
+              module: {
+                id: action.module.id,
+                name: action.module.name,
+              },
+              ...(action.submodule instanceof SubModule ? {
+                subModule: {
+                  id: action.submodule.id,
+                  name: action.submodule.name,
+                },
+              } : null),
+            },
+          )
+        );
+      }
+    }
+
+    return action;
   }
 
   private async tryToEmitEventToUpdateRelationWithModules(
