@@ -1,5 +1,5 @@
 import { IsObjectIdHex } from '@core/infrastructure/helpers/custom-validators/object-id-hex';
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateActionInputDto {
   @IsObjectIdHex()
@@ -25,7 +25,7 @@ export class UpdateActionInputDto {
   @IsObjectIdHex()
   @IsNotEmpty()
   @IsOptional()
-  readonly submodule?: string;
+  readonly submodule?: string | null = null;
 
   @IsObjectIdHex()
   @IsNotEmpty()
