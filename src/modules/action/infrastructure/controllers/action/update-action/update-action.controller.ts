@@ -12,7 +12,7 @@ export class UpdateActionController {
 
   constructor(private readonly updateActionService: UpdateActionService) {}
 
-  @MessagePattern({ cmd: 'muses.action.update' })
+  @MessagePattern({ cmd: 'MUSES.ACTION.UPDATE' })
   async update(@Payload() dto: UpdateActionInputDto): Promise<UpdateActionOutputDto> {
     try {
       const command = new UpdateActionCommand(dto);
