@@ -15,7 +15,7 @@ export interface IActionSchemaAggregate {
   description: Description;
   isEnabled: IsEnabled;
   module: Module | string;
-  submodule?: SubModule | string;
+  submodule?: SubModule | string | null;
   resource: string | null;
   actionCatalog: ActionCatalog;
   createdAt: CreatedAt;

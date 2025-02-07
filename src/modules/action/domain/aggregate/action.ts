@@ -13,7 +13,6 @@ import { Module } from '@module-module/domain/aggregate/module';
 import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 import { ActionPropertyWithSameValueException } from '@module-action/domain/exceptions/action-property-with-same-value.exception';
 import { ActionAlreadyEnabledException } from '@module-action/domain/exceptions/action-already-enabled.exception';
-import { removePropertyFromObject } from '@core/domain/helpers/utils';
 import { ActionCatalog, IActionCatalogSchema } from '@module-action/domain/aggregate/action-catalog';
 
 export class Action {
@@ -88,7 +87,7 @@ export class Action {
 
   get submodule(): ISubModuleSchema | string | undefined {
     if (typeof this._entityRoot.submodule === 'object') {
-      return this._entityRoot.submodule.toPrimitives();
+      return this._entityRoot.submodule?.toPrimitives();
     }
 
     return this._entityRoot.submodule;
@@ -96,7 +95,7 @@ export class Action {
 
   get submoduleId(): string | undefined {
     if (typeof this._entityRoot.submodule === 'object') {
-      return this._entityRoot.submodule.id;
+      return this._entityRoot.submodule?.id;
     }
 
     return this._entityRoot.submodule;
@@ -247,7 +246,31 @@ export class Action {
   }
 
   public useSubmodule(submodule: SubModule): void {
+    const currentModule = this._entityRoot.module;
+
+    if (currentModule instanceof Module) {
+      const currentSubmodules = currentModule.subModules;
+
+      const isSubmoduleOfModule: boolean = currentSubmodules.some((currentSubmodule: SubModule | string): boolean => {
+        if (typeof currentSubmodule === 'object') {
+          return currentSubmodule.id === submodule.id;
+        }
+
+        if (typeof currentSubmodule === 'string') {
+          return currentSubmodule === submodule.id;
+        }
+
+        return false;
+      });
+    
+      if (!isSubmoduleOfModule) {
+        throw new Error(`The submodule ${submodule.id} is not related to the module ${currentModule.id}`);
+      }
+    }
+
+    this._entityRoot.updatedAt = new UpdatedAt(new Date());
     this._entityRoot.submodule = submodule;
+  
   }
 
   public replaceModule(module: Module): void {
@@ -266,84 +289,6 @@ export class Action {
     this._entityRoot.submodule = submodule;
   }
 
-  // public useModulesAndReturnModulesLegacy(modules: IModuleSchema[]): string[] {
-  //   if (this._entityRoot.modules === undefined) {
-  //     this._entityRoot.modules = [];
-
-  //     for (const module of modules) {
-  //       this._entityRoot.modules.push(new Module(module));
-  //     }
-
-  //     return [];
-  //   }
-
-  //   const currentModules = this._entityRoot.modules;
-
-  //   const modulesToAdd = modules.filter((module) => {
-  //     for (const currentModule of currentModules) {
-  //       return currentModule !== module.id;
-  //     }
-  //   });
-
-  //   const modulesToRemove = this._entityRoot.modules.filter((module) => {
-  //     if (typeof module === 'object') {
-  //       return !modules.map((module) => module.id).includes(module.id);
-  //     } else {
-  //       return !modules.map((module) => module.id).includes(module);
-  //     }
-  //   });
-
-  //   if (modulesToAdd.length === 0 && modulesToRemove.length === 0) {
-  //     throw new ActionPropertyWithSameValueException(
-  //       'modules',
-  //       this._entityRoot.modules.map((module) => (typeof module === 'object' ? module.id : module)),
-  //     );
-  //   }
-
-  //   for (const module of modulesToAdd) {
-  //     this._entityRoot.modules.push(new Module(module));
-  //   }
-
-  //   return modulesToRemove.map((module) => (typeof module === 'object' ? module.id : module));
-  // }
-
-  // public useSubModulesAndReturnSubModulesLegacy(subModules: ISubModuleSchema[]): string[] {
-  //   if (this._entityRoot.subModules === undefined) {
-  //     this._entityRoot.subModules = [];
-
-  //     for (const subModule of subModules) {
-  //       this._entityRoot.subModules.push(new SubModule(subModule));
-  //     }
-
-  //     return [];
-  //   }
-
-  //   const currentSubModules = this._entityRoot.subModules;
-
-  //   const subModulesToAdd = subModules.filter((subModule) => {
-  //     for (const currentSubModule of currentSubModules) {
-  //       return currentSubModule !== subModule.id;
-  //     }
-  //   });
-
-  //   const subModulesToRemove = this._entityRoot.subModules.filter(
-  //     (subModule) => !subModules.map((subModule) => subModule.id).includes(subModule),
-  //   );
-
-  //   if (subModulesToAdd.length === 0 && subModulesToRemove.length === 0) {
-  //     throw new ActionPropertyWithSameValueException(
-  //       'subModules',
-  //       this._entityRoot.subModules.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule)),
-  //     );
-  //   }
-
-  //   for (const subModule of subModulesToAdd) {
-  //     this._entityRoot.subModules.push(new SubModule(subModule));
-  //   }
-
-  //   return subModulesToRemove.map((subModule) => (typeof subModule === 'object' ? subModule.id : subModule));
-  // }
-
   public addResource(resourceId: string): void {
     this._entityRoot.resource = resourceId;
   }
@@ -356,13 +301,9 @@ export class Action {
     this._entityRoot.resource = null;
   }
 
-  // public removeModules(): void {
-  //   this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'modules'>(this._entityRoot, 'modules');
-  // }
-
-  // public removeSubModules(): void {
-  //   this._entityRoot = removePropertyFromObject<IActionSchemaAggregate, 'subModules'>(this._entityRoot, 'subModules');
-  // }
+  public removeSubModule(): void {
+    this._entityRoot.submodule = null;
+  }
 
   public categorize(actionCatalog: ActionCatalog): void {
     this._entityRoot.actionCatalog = actionCatalog;

@@ -23,6 +23,7 @@ import { SubModuleNotFoundException } from '@module-common/domain/exceptions/sub
 import { IActionCatalogRepository } from '@module-action/domain/contracts/action-catalog-repository';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
+import { SubModule } from '@module-sub-module/domain/aggregate/sub-module';
 
 @Injectable()
 export class CreateActionService implements IApplicationServiceCommand<CreateActionCommand> {
@@ -69,6 +70,7 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
     const module = modulesFound.entities()[0];
     action.useModule(module);
 
+    let subModule: SubModule | null = null;
     if (submoduleId) {
       const subModulesFound = await this.subModuleFacade.getSubModuleByIds([submoduleId]);
 
@@ -76,21 +78,25 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
         throw new SubModuleNotFoundException();
       }
 
-      const subModule = subModulesFound.entities()[0];
+      subModule = subModulesFound.entities()[0];
       action.useSubmodule(subModule);
     }
 
     await this.actionRepository.persist(action);
 
-    await this.tryToEmitModuleEvent(
-      new RelateActionWithModuleEventBody({
-        actionId: action.id,
-        modules: [moduleId],
-      }),
-    );
-    
+    //TODO: if the action is for a specific sub module, the module not should be related with the action, only the sub module, but if the sub module is not defined, the module should be related with the action
 
-    if (submoduleId) {
+    const isOnlyForModule = !submoduleId;
+    const isOnlyForSubModule = submoduleId && moduleId;
+
+    if (isOnlyForModule) {
+      await this.tryToEmitModuleEvent(
+        new RelateActionWithModuleEventBody({
+          actionId: action.id,
+          modules: [moduleId],
+        }),
+      );
+    } else if (isOnlyForSubModule) {
       await this.tryToEmitSubModuleEvent(
         new RelateActionWithSubModuleEventBody({
           actionId: action.id,
@@ -105,11 +111,21 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
           cmd: 'HADES.PERMISSION.CREATE'
         },
         {
-          actionUUID: action.id,
-          actionName: action.name,
-          modules: action.moduleId,
-          subModule: action.submoduleId ?? null,
-        }
+          action: {
+            id: action.id,
+            name: action.name,
+          },
+          module: {
+            id: module.id,
+            name: module.name,
+          },
+          ...(subModule && { 
+            subModule: {
+              id: subModule.id,
+              name: subModule.name
+            }
+          }),
+        },
       ),
     );
 
