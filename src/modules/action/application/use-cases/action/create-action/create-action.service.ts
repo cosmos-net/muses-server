@@ -105,29 +105,38 @@ export class CreateActionService implements IApplicationServiceCommand<CreateAct
       );
     }
 
-    await lastValueFrom(
-      this.clientProxy.send(
-        { 
-          cmd: 'HADES.PERMISSION.CREATE'
-        },
-        {
-          action: {
-            id: action.id,
-            name: action.name,
+    try {
+      await lastValueFrom(
+        this.clientProxy.send(
+          { 
+            cmd: 'HADES.PERMISSION.CREATE'
           },
-          module: {
-            id: module.id,
-            name: module.name,
+          {
+            action: {
+              id: action.id,
+              name: action.name,
+            },
+            module: {
+              id: module.id,
+              name: module.name,
+            },
+            ...(subModule && { 
+              subModule: {
+                id: subModule.id,
+                name: subModule.name
+              }
+            }),
           },
-          ...(subModule && { 
-            subModule: {
-              id: subModule.id,
-              name: subModule.name
-            }
-          }),
-        },
-      ),
-    );
+        )
+      ).then((response) => {
+        console.log('Response from Hades Permission Service', response);
+      })
+      .catch((error) => {
+        console.error('Error from Hades Permission Service', error);
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     return action;
   }
