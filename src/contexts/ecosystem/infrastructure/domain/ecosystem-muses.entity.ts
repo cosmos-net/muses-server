@@ -1,7 +1,7 @@
 import { Column, Entity, ObjectIdColumn } from 'typeorm';
 import { BaseEntity } from '@core/infrastructure/domain/base-commons.entity';
 import { ObjectId } from 'mongodb';
-import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { IEcosystemSchema } from '@context-ecosystem/domain/aggregate/ecosystem.schema';
 
 @Entity({ name: 'ecosystem' })
 export class EcosystemEntity extends BaseEntity implements IEcosystemSchema {

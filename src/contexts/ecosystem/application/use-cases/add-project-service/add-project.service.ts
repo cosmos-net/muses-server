@@ -1,9 +1,9 @@
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
 import { Inject, Injectable } from '@nestjs/common';
-import { AddProjectCommand } from '@module-eco/application/use-cases/add-project-service/add-project.command';
-import { ECOSYSTEM_REPOSITORY, PROJECT_FACADE } from '@module-eco/application/constants/injection-token';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
-import { IProjectFacade } from '@module-eco/domain/contracts/project-facade';
+import { AddProjectCommand } from '@context-ecosystem/application/use-cases/add-project-service/add-project.command';
+import { ECOSYSTEM_REPOSITORY, PROJECT_FACADE } from '@context-ecosystem/application/constants/injection-token';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
+import { IProjectFacade } from '@context-ecosystem/domain/contracts/project-facade';
 
 @Injectable()
 export class AddProjectService implements IApplicationServiceCommand<AddProjectCommand> {

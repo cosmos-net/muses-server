@@ -10,7 +10,7 @@ import {
 } from '@module-project/application/constants/injection-token';
 import { TypeOrmProjectRepository } from '@module-project/infrastructure/repositories/typeorm-project.repository';
 import { EcosystemModuleFacadeService } from '@module-project/infrastructure/domain/services/ecosystem-module-facade.service';
-import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { EcosystemContext } from '@context-ecosystem/infrastructure/framework/ecosystem.context';
 import { DeleteProjectController } from '@module-project/infrastructure/controllers/delete-project/delete-project.controller';
 import { GetProjectController } from '@module-project/infrastructure/controllers/get-project/get-project.controller';
 import { ListProjectController } from '@module-project/infrastructure/controllers/list-project/list-project.controller';
@@ -31,7 +31,7 @@ import { EventStoreService } from '@core/application/event-store.service';
 
 @Module({
   imports: [
-    forwardRef(() => MainEcosystemModule),
+    forwardRef(() => EcosystemContext),
     forwardRef(() => MainModuleModule),
     TypeOrmModule.forFeature([ProjectEntity]),
   ],

@@ -5,7 +5,7 @@ import { ProjectEntity } from '@module-project/infrastructure/domain/project-mus
 import { MongoRepository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as request from 'supertest';
-import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
+import { EcosystemEntity } from '@context-ecosystem/infrastructure/domain/ecosystem-muses.entity';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
 import { ModuleFactory } from '@test/utils/config/module-factory';

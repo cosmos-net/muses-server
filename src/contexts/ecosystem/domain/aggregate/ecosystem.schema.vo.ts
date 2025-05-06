@@ -1,10 +1,10 @@
-import Id from '@module-eco/domain/aggregate/value-objects/id.vo';
-import Name from '@module-eco/domain/aggregate/value-objects/name.vo';
-import Description from '@module-eco/domain/aggregate/value-objects/description.vo';
-import IsEnabled from '@module-eco/domain/aggregate/value-objects/is-enabled.vo';
-import CreatedAt from '@module-eco/domain/aggregate/value-objects/created-at.vo';
-import UpdatedAt from '@module-eco/domain/aggregate/value-objects/updated-at.vo';
-import DeletedAt from '@module-eco/domain/aggregate/value-objects/deleted-at.vo';
+import Id from '@context-ecosystem/domain/aggregate/value-objects/id.vo';
+import Name from '@context-ecosystem/domain/aggregate/value-objects/name.vo';
+import Description from '@context-ecosystem/domain/aggregate/value-objects/description.vo';
+import IsEnabled from '@context-ecosystem/domain/aggregate/value-objects/is-enabled.vo';
+import CreatedAt from '@context-ecosystem/domain/aggregate/value-objects/created-at.vo';
+import UpdatedAt from '@context-ecosystem/domain/aggregate/value-objects/updated-at.vo';
+import DeletedAt from '@context-ecosystem/domain/aggregate/value-objects/deleted-at.vo';
 
 export interface IEcosystemSchemaValueObject {
   id: Id;

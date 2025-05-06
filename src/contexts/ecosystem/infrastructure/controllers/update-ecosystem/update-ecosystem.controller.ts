@@ -1,8 +1,8 @@
 import { Controller, Logger } from '@nestjs/common';
-import { UpdateEcosystemCommand } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.command';
-import { UpdateEcosystemService } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.service';
-import { UpdateEcosystemInputDto } from '@module-eco/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
-import { UpdateEcosystemOutputDto } from '@module-eco/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';
+import { UpdateEcosystemCommand } from '@context-ecosystem/application/use-cases/update-ecosystem/update-ecosystem.command';
+import { UpdateEcosystemService } from '@context-ecosystem/application/use-cases/update-ecosystem/update-ecosystem.service';
+import { UpdateEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
+import { UpdateEcosystemOutputDto } from '@context-ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
 @Controller()

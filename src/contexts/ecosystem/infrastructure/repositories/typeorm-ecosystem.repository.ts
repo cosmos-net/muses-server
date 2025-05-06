@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, MongoRepository } from 'typeorm';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
-import { ListEcosystem } from '@module-eco/domain/list-ecosystem';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
+import { ListEcosystem } from '@context-ecosystem/domain/list-ecosystem';
 import { ObjectId } from 'mongodb';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
-import { EcosystemEntity } from '@module-eco/infrastructure/domain/ecosystem-muses.entity';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
+import { EcosystemEntity } from '@context-ecosystem/infrastructure/domain/ecosystem-muses.entity';
 import { Criteria } from '@core/domain/criteria/criteria';
 import { TypeormRepository } from '@core/infrastructure/domain/typeorm/typeorm-repository';
-import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { IEcosystemSchema } from '@context-ecosystem/domain/aggregate/ecosystem.schema';
 import { IPaginationOrder } from '@core/domain/list/pagination-order-filter';
 
 @Injectable()

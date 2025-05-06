@@ -1,11 +1,11 @@
-import { DisableEcosystemCommand } from '@module-eco/application/use-cases/disable-ecosystem/disable-ecosystem.command';
-import { DisableEcosystemService } from '@module-eco/application/use-cases/disable-ecosystem/disable-ecosystem.service';
+import { DisableEcosystemCommand } from '@context-ecosystem/application/use-cases/disable-ecosystem/disable-ecosystem.command';
+import { DisableEcosystemService } from '@context-ecosystem/application/use-cases/disable-ecosystem/disable-ecosystem.service';
 import { Controller, Logger } from '@nestjs/common';
 import {
   DisableEcosystemOutputDto,
   IDisableEcosystemOutputDto,
-} from '@module-eco/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-output.dto';
-import { DisableEcosystemInputDto } from '@module-eco/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-input.dto';
+} from '@context-ecosystem/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-output.dto';
+import { DisableEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-input.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
 @Controller()

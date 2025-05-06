@@ -1,8 +1,8 @@
 import { Controller, Logger } from '@nestjs/common';
-import { ListEcosystemQuery } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.query';
-import { ListEcosystemService } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.service';
-import { ListEcosystemInputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-input.dto';
-import { ListEcosystemOutputDto } from '@module-eco/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-output.dto';
+import { ListEcosystemQuery } from '@context-ecosystem/application/use-cases/list-ecosystem/list-ecosystem.query';
+import { ListEcosystemService } from '@context-ecosystem/application/use-cases/list-ecosystem/list-ecosystem.service';
+import { ListEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-input.dto';
+import { ListEcosystemOutputDto } from '@context-ecosystem/infrastructure/controllers/list-ecosystem/presentation/list-ecosystem-output.dto';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { IdentifierEnum } from '@module-common/domain/enums';

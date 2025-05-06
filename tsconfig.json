@@ -25,10 +25,10 @@
       "@core/*": [
         "src/contexts/core/*"
       ],
-      "@module-eco": [
+      "@context-ecosystem": [
         "src/contexts/ecosystem"
       ],
-      "@module-eco/*": [
+      "@context-ecosystem/*": [
         "src/contexts/ecosystem/*"
       ],
       "@module-project": [

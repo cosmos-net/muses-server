@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
-import { ListEcosystemQuery } from '@module-eco/application/use-cases/list-ecosystem/list-ecosystem.query';
+import { ECOSYSTEM_REPOSITORY } from '@context-ecosystem/application/constants/injection-token';
+import { ListEcosystemQuery } from '@context-ecosystem/application/use-cases/list-ecosystem/list-ecosystem.query';
 import { IApplicationServiceQuery } from '@core/application/application-service-query';
-import { ListEcosystem } from '@module-eco/domain/list-ecosystem';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
+import { ListEcosystem } from '@context-ecosystem/domain/list-ecosystem';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
 import { Filters } from '@core/domain/criteria/filters';
 import { Order } from '@core/domain/criteria/order';
 import { Criteria } from '@core/domain/criteria/criteria';

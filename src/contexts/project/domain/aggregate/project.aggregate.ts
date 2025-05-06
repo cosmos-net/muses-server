@@ -5,7 +5,7 @@ import IsEnabled from '@module-project/domain/aggregate/value-objects/is-enabled
 import CreatedAt from '@module-project/domain/aggregate/value-objects/created-at.vo';
 import UpdatedAt from '@module-project/domain/aggregate/value-objects/updated-at.vo';
 import DeletedAt from '@module-project/domain/aggregate/value-objects/deleted-at.vo';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
 import { Module } from '@module-module/domain/aggregate/module';
 
 export interface IProjectAggregate {

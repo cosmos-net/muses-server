@@ -88,7 +88,7 @@
     ],
     "moduleNameMapper": {
       "^@core(|/.*)$": "<rootDir>/src/contexts/core/$1",
-      "^@module-eco(|/.*)$": "<rootDir>/src/contexts/ecosystem/$1",
+      "^@context-ecosystem(|/.*)$": "<rootDir>/src/contexts/ecosystem/$1",
       "^@module-project(|/.*)$": "<rootDir>/src/contexts/project/$1",
       "^@module-module(|/.*)$": "<rootDir>/src/contexts/module/$1",
       "^@module-sub-module(|/.*)$": "<rootDir>/src/contexts/sub-module/$1",

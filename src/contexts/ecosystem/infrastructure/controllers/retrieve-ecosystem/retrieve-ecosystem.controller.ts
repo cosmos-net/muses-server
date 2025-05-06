@@ -1,9 +1,9 @@
 import { Controller, Logger } from '@nestjs/common';
-import { RetrieveEcosystemOutputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
+import { RetrieveEcosystemOutputDto } from '@context-ecosystem/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-output.dto';
 import { ExceptionManager } from '@core/domain/exception-manager';
-import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
-import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
-import { RetrieveEcosystemInputDto } from '@module-eco/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';
+import { RetrieveEcosystemService } from '@context-ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
+import { RetrieveEcosystemQuery } from '@context-ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
+import { RetrieveEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/retrieve-ecosystem/presentation/retrieve-ecosystem-input.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()

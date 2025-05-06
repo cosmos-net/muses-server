@@ -1,11 +1,11 @@
 import { Controller, Logger } from '@nestjs/common';
-import { CreateEcosystemService } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.service';
-import { CreateEcosystemCommand } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.command';
-import { CreateEcosystemInputDto } from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
+import { CreateEcosystemService } from '@context-ecosystem/application/use-cases/create-ecosystem/create-ecosystem.service';
+import { CreateEcosystemCommand } from '@context-ecosystem/application/use-cases/create-ecosystem/create-ecosystem.command';
+import { CreateEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-input.dto';
 import {
   CreateEcosystemOutputDto,
   ICreateEcosystemOutputDto,
-} from '@module-eco/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
+} from '@context-ecosystem/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 
 @Controller()

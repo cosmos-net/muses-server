@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
-import { ECOSYSTEM_REPOSITORY, PROJECT_FACADE } from '@module-eco/application/constants/injection-token';
-import { IProjectFacade } from '@module-eco/domain/contracts/project-facade';
-import { RemoveProjectCommand } from '@module-eco/application/use-cases/remove-project-service/remove-project.command';
+import { ECOSYSTEM_REPOSITORY, PROJECT_FACADE } from '@context-ecosystem/application/constants/injection-token';
+import { IProjectFacade } from '@context-ecosystem/domain/contracts/project-facade';
+import { RemoveProjectCommand } from '@context-ecosystem/application/use-cases/remove-project-service/remove-project.command';
 
 @Injectable()
 export class RemoveProjectService implements IApplicationServiceCommand<RemoveProjectCommand> {

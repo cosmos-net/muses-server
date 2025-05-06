@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { EcosystemContext } from '@context-ecosystem/infrastructure/framework/ecosystem.context';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { MongoType } from '@core/domain/contracts/types/var-environment-map/db/mongo.type';
@@ -17,7 +17,7 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    MainEcosystemModule,
+    EcosystemContext,
     MainProjectModule,
     MainModuleModule,
     MainSubModuleModule,

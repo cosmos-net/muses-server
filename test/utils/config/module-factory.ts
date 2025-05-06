@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { DefaultNamingStrategy } from 'typeorm';
 import { entities } from '@test/utils/entities';
 import { MainProjectModule } from '@module-project/infrastructure/framework/project.module';
-import { MainEcosystemModule } from '@module-eco/infrastructure/framework/ecosystem.module';
+import { EcosystemContext } from '@context-ecosystem/infrastructure/framework/ecosystem.context';
 import { MongoTestConfigOptions } from './mongo-test-config-options';
 import { MongoTestType } from './mongo-test.type';
 import { mongo_test_loader } from './mongo-test.loader';
@@ -20,7 +20,7 @@ export class ModuleFactory {
   public static async createModule(): Promise<TestingModule> {
     return Test.createTestingModule({
       imports: [
-        MainEcosystemModule,
+        EcosystemContext,
         MainProjectModule,
         MainModuleModule,
         MainSubModuleModule,

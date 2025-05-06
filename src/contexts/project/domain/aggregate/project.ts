@@ -14,8 +14,8 @@ import { ModuleAlreadyRelatedWithProjectException } from '@module-project/domain
 import { ModuleNotFoundException } from '@module-common/domain/exceptions/module-not-found.exception';
 import { ProjectIsAlreadyEnabledException } from '@module-project/domain/exceptions/project-is-already-enabled.exception';
 import { removePropertyFromObject } from '@core/domain/helpers/utils';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
-import { IEcosystemSchema } from '@module-eco/domain/aggregate/ecosystem.schema';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
+import { IEcosystemSchema } from '@context-ecosystem/domain/aggregate/ecosystem.schema';
 
 export class Project {
   private _entityRoot = {} as IProjectAggregate;

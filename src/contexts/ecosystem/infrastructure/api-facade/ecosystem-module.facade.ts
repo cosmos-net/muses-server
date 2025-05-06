@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RetrieveEcosystemService } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
-import { RetrieveEcosystemQuery } from '@module-eco/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { RetrieveEcosystemService } from '@context-ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.service';
+import { RetrieveEcosystemQuery } from '@context-ecosystem/application/use-cases/retrieve-ecosystem/retrieve-ecosystem.query';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
 
 @Injectable()
 export class EcosystemModuleFacade {

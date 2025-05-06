@@ -1,6 +1,6 @@
 import { Criteria } from '@core/domain/criteria/criteria';
-import { ListEcosystem } from '@module-eco/domain/list-ecosystem';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
+import { ListEcosystem } from '@context-ecosystem/domain/list-ecosystem';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
 import { IPaginationOrder } from '@core/domain/list/pagination-order-filter';
 
 export interface IEcosystemRepository {

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
-import { UpdateEcosystemCommand } from '@module-eco/application/use-cases/update-ecosystem/update-ecosystem.command';
+import { ECOSYSTEM_REPOSITORY } from '@context-ecosystem/application/constants/injection-token';
+import { UpdateEcosystemCommand } from '@context-ecosystem/application/use-cases/update-ecosystem/update-ecosystem.command';
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
 
 @Injectable()
 export class UpdateEcosystemService implements IApplicationServiceCommand<UpdateEcosystemCommand> {

@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ECOSYSTEM_REPOSITORY } from '@module-eco/application/constants/injection-token';
+import { ECOSYSTEM_REPOSITORY } from '@context-ecosystem/application/constants/injection-token';
 import { IApplicationServiceCommand } from '@core/application/application-service-command';
-import { Ecosystem } from '@module-eco/domain/aggregate/ecosystem';
-import { IEcosystemRepository } from '@module-eco/domain/contracts/ecosystem-repository';
-import { EcosystemNameAlreadyUsedException } from '@module-eco/domain/exceptions/ecosystem-name-already-used.exception';
-import { CreateEcosystemCommand } from '@module-eco/application/use-cases/create-ecosystem/create-ecosystem.command';
+import { Ecosystem } from '@context-ecosystem/domain/aggregate/ecosystem';
+import { IEcosystemRepository } from '@context-ecosystem/domain/contracts/ecosystem-repository';
+import { EcosystemNameAlreadyUsedException } from '@context-ecosystem/domain/exceptions/ecosystem-name-already-used.exception';
+import { CreateEcosystemCommand } from '@context-ecosystem/application/use-cases/create-ecosystem/create-ecosystem.command';
 
 @Injectable()
 export class CreateEcosystemService implements IApplicationServiceCommand<CreateEcosystemCommand> {
