@@ -87,14 +87,14 @@
       "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
-      "^@core(|/.*)$": "<rootDir>/src/modules/core/$1",
-      "^@module-eco(|/.*)$": "<rootDir>/src/modules/ecosystem/$1",
-      "^@module-project(|/.*)$": "<rootDir>/src/modules/project/$1",
-      "^@module-module(|/.*)$": "<rootDir>/src/modules/module/$1",
-      "^@module-sub-module(|/.*)$": "<rootDir>/src/modules/sub-module/$1",
-      "^@module-action(|/.*)$": "<rootDir>/src/modules/action/$1",
-      "^@module-resource(|/.*)$": "<rootDir>/src/modules/resource/$1",
-      "^@module-common(|/.*)$": "<rootDir>/src/modules/common/$1",
+      "^@core(|/.*)$": "<rootDir>/src/contexts/core/$1",
+      "^@module-eco(|/.*)$": "<rootDir>/src/contexts/ecosystem/$1",
+      "^@module-project(|/.*)$": "<rootDir>/src/contexts/project/$1",
+      "^@module-module(|/.*)$": "<rootDir>/src/contexts/module/$1",
+      "^@module-sub-module(|/.*)$": "<rootDir>/src/contexts/sub-module/$1",
+      "^@module-action(|/.*)$": "<rootDir>/src/contexts/action/$1",
+      "^@module-resource(|/.*)$": "<rootDir>/src/contexts/resource/$1",
+      "^@module-common(|/.*)$": "<rootDir>/src/contexts/common/$1",
       "^@test(|/.*)$": "<rootDir>/test/$1"
     }
   }

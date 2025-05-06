@@ -20,52 +20,52 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@core": [
-        "src/modules/core/"
+        "src/contexts/core/"
       ],
       "@core/*": [
-        "src/modules/core/*"
+        "src/contexts/core/*"
       ],
       "@module-eco": [
-        "src/modules/ecosystem"
+        "src/contexts/ecosystem"
       ],
       "@module-eco/*": [
-        "src/modules/ecosystem/*"
+        "src/contexts/ecosystem/*"
       ],
       "@module-project": [
-        "src/modules/project"
+        "src/contexts/project"
       ],
       "@module-project/*": [
-        "src/modules/project/*"
+        "src/contexts/project/*"
       ],
       "@module-module": [
-        "src/modules/module"
+        "src/contexts/module"
       ],
       "@module-module/*": [
-        "src/modules/module/*"
+        "src/contexts/module/*"
       ],
       "@module-sub-module": [
-        "src/modules/sub-module"
+        "src/contexts/sub-module"
       ],
       "@module-sub-module/*": [
-        "src/modules/sub-module/*"
+        "src/contexts/sub-module/*"
       ],
       "@module-action": [
-        "src/modules/action"
+        "src/contexts/action"
       ],
       "@module-action/*": [
-        "src/modules/action/*"
+        "src/contexts/action/*"
       ],
       "@module-resource": [
-        "src/modules/resource"
+        "src/contexts/resource"
       ],
       "@module-resource/*": [
-        "src/modules/resource/*"
+        "src/contexts/resource/*"
       ],
       "@module-common": [
-        "src/modules/common"
+        "src/contexts/common"
       ],
       "@module-common/*": [
-        "src/modules/common/*"
+        "src/contexts/common/*"
       ],
       "@test-muses": [
         "test"

@@ -1,4 +1,4 @@
-// filepath: /Users/robertomedinaaustin/Sites/smi/cosmos/gea-core/muses/muses-server/src/modules/action/infrastructure/framework/hades-connection.module.ts
+// filepath: /Users/robertomedinaaustin/Sites/smi/cosmos/gea-core/muses/muses-server/src/contexts/action/infrastructure/framework/hades-connection.module.ts
 import { HADES_SERVER_CONNECTION_PROXY_NAME } from '@module-action/application/constants/injection-token';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
