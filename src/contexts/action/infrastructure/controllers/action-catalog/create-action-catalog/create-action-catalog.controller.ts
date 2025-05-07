@@ -13,16 +13,12 @@ export class CreateActionCatalogController {
 
   @MessagePattern({ cmd: 'MUSES.ACTION.CATALOG.CREATE' })
   async create(@Payload() dto: CreateActionCatalogInputDto): Promise<ICreateActionCatalogOutputDto> {
-    try {
       const createActionCatalogCommand = new CreateActionCatalogCommand(dto);
       const actionCatalog = await this.createActionCatalogService.process(createActionCatalogCommand);
 
       const createActionCatalogOutputDto = new CreateActionCatalogOutputDto(actionCatalog);
 
       return createActionCatalogOutputDto;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+    
   }
 }

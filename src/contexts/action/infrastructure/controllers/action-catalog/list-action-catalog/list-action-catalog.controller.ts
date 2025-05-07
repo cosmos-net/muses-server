@@ -11,15 +11,11 @@ export class ListActionCatalogController {
 
   @MessagePattern({ cmd: 'muses.action.catalog.list' })
   async list(): Promise<IListActionCatalogOutputDto> {
-    try {
       const actionCatalog = await this.listActionCatalogService.process();
 
       const listActionCatalogOutputDto = new ListActionCatalogOutputDto(actionCatalog.items);
 
       return listActionCatalogOutputDto;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+    
   }
 }

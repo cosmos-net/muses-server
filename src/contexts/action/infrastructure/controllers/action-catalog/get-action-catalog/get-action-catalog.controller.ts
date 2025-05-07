@@ -13,16 +13,12 @@ export class GetActionCatalogController {
 
   @MessagePattern({ cmd: 'muses.action.catalog.get' })
   async get(@Payload() dto: GetActionCatalogInputDto): Promise<IGetActionCatalogOutputDto> {
-    try {
       const getActionCatalogQuery = new GetActionCatalogQuery(dto);
       const actionCatalog = await this.getActionCatalogService.process(getActionCatalogQuery);
 
       const getActionCatalogOutputDto = new GetActionCatalogOutputDto(actionCatalog);
 
       return getActionCatalogOutputDto;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+    
   }
 }
