@@ -13,7 +13,6 @@ export class UpdateEcosystemController {
 
   @MessagePattern({ cmd: ECOSYSTEM.UPDATE })
   async UpdateEcosystem(@Payload() updateInputDto: UpdateEcosystemInputDto): Promise<UpdateEcosystemOutputDto> {
-    try {
       const { id, name, description, isEnabled } = updateInputDto;
 
       const command = new UpdateEcosystemCommand({ id, name, description, isEnabled });
@@ -21,9 +20,6 @@ export class UpdateEcosystemController {
       const ecosystem = await this.updateEcosystemService.process(command);
 
       return new UpdateEcosystemOutputDto(ecosystem);
-    } catch (error) {
-      this.logger.error(error);
-      throw new RpcException(error);
-    }
+    
   }
 }

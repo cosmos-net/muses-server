@@ -17,7 +17,6 @@ export class ListEcosystemController {
 
   @MessagePattern({ cmd: ECOSYSTEM.LIST })
     async list(@Payload() dto: ListEcosystemInputDto): Promise<ListEcosystemOutputDto> {
-    try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
@@ -47,9 +46,7 @@ export class ListEcosystemController {
       );
 
       return mapper;
-    } catch (error) {
-      throw new RpcException(error);
-    }
+    
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {

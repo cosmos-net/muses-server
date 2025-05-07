@@ -6,7 +6,7 @@ import {
   CreateEcosystemOutputDto,
   ICreateEcosystemOutputDto,
 } from '@context-ecosystem/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ECOSYSTEM } from '@module-common/infrastructure/constants/message-patterns';
 
 @Controller()
@@ -19,21 +19,14 @@ export class CreateEcosystemController {
 
   @MessagePattern({ cmd: ECOSYSTEM.CREATE })
   async create(@Payload() dto: CreateEcosystemInputDto): Promise<ICreateEcosystemOutputDto> {
-    try {
-      const command = new CreateEcosystemCommand({
-        name: dto.name,
-        description: dto.description,
-        isEnabled: dto.isEnabled,
-      });
+    const command = new CreateEcosystemCommand({
+      name: dto.name,
+      description: dto.description,
+      isEnabled: dto.isEnabled,
+    });
 
-      const domain = await this.createEcosystemService.process(command);
+    const domain = await this.createEcosystemService.process(command);
 
-      const mapper = new CreateEcosystemOutputDto(domain);
-
-      return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw new RpcException(error);
-    }
+    return new CreateEcosystemOutputDto(domain);
   }
 }

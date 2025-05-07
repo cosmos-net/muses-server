@@ -16,7 +16,6 @@ export class DisableEcosystemController {
 
   @MessagePattern({ cmd: ECOSYSTEM.DISABLE })
   async disable(@Payload() dto: DisableEcosystemInputDto): Promise<IDisableEcosystemOutputDto> {
-    try {
       const { id } = dto;
 
       const command = new DisableEcosystemCommand({ id });
@@ -29,9 +28,6 @@ export class DisableEcosystemController {
       });
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw new RpcException(error);
-    }
+    
   }
 }
