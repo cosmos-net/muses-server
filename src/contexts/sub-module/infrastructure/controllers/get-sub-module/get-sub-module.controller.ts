@@ -1,6 +1,5 @@
 import { GetSubModuleService } from '@module-sub-module/application/use-cases/get-sub-module/get-sub-module.service';
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import {
   GetSubModuleOutputDto,
   IGetSubModuleOutputDto,
@@ -15,7 +14,6 @@ export class GetSubModuleController {
 
   @MessagePattern({ cmd: 'muses.sub-module.get' })
   async Get(@Payload() dto: any): Promise<IGetSubModuleOutputDto> {
-    try {
       const query = new GetSubModuleQuery(dto);
 
       const module = await this.getSubModuleService.process(query);
@@ -23,9 +21,6 @@ export class GetSubModuleController {
       const mapper = new GetSubModuleOutputDto(module);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }
