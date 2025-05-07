@@ -15,7 +15,6 @@ export class DisableActionController {
 
   @MessagePattern({ cmd: 'muses.action.disable' })
   async Get(@Payload() dto: DisableActionInputDto): Promise<IDisableActionOutputDto> {
-    try {
       const command = new DisableActionCommand({
         id: dto.id,
       });
@@ -30,9 +29,6 @@ export class DisableActionController {
       });
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+    
   }
 }

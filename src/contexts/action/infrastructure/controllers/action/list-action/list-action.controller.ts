@@ -3,7 +3,6 @@ import { Controller, Logger } from '@nestjs/common';
 import { ListActionInputDto } from '@module-action/infrastructure/controllers/action/list-action/presentation/list-action-input.dto';
 import { ListActionOutputDto } from '@module-action/infrastructure/controllers/action/list-action/presentation/list-action-output.dto';
 import { ListActionQuery } from '@module-action/application/use-cases/action/list-actions/list-action.query';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { IdentifierEnum } from '@module-common/domain/enums';
@@ -16,7 +15,6 @@ export class ListActionController {
 
   @MessagePattern({ cmd: 'muses.action.list' })
   async list(@Payload() dto: ListActionInputDto): Promise<ListActionOutputDto> {
-    try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
@@ -46,10 +44,7 @@ export class ListActionController {
       );
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {

@@ -5,7 +5,6 @@ import {
   IGetActionOutputDto,
 } from '@module-action/infrastructure/controllers/action/get-action/presentation/get-action-output.dto';
 import { GetActionQuery } from '@module-action/application/use-cases/action/get-action/get-action.query';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
@@ -15,17 +14,12 @@ export class GetActionController {
 
   @MessagePattern({ cmd: 'muses.action.get' })
   async Get(@Payload() dto: any): Promise<IGetActionOutputDto> {
-    try {
-      const query = new GetActionQuery(dto);
+    const query = new GetActionQuery(dto);
 
-      const action = await this.getActionService.process(query);
+    const action = await this.getActionService.process(query);
 
-      const mapper = new GetActionOutputDto(action);
+    const mapper = new GetActionOutputDto(action);
 
-      return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    return mapper;
   }
 }

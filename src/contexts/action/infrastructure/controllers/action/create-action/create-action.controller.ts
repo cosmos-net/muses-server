@@ -1,7 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { CreateActionInputDto } from './presentation/create-action-input.dto';
 import { CreateActionCommand } from '@module-action/application/use-cases/action/create-action/create-action.command';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { CreateActionService } from '@module-action/application/use-cases/action/create-action/create-action.service';
 import {
   CreateActionOutputDto,
@@ -16,7 +15,6 @@ export class CreateActionController {
 
   @MessagePattern({ cmd: 'MUSES.ACTION.CREATE' })
   async create(@Payload() dto: CreateActionInputDto): Promise<ICreateActionOutputDto> {
-    try {
       const command = new CreateActionCommand(dto);
 
       const action = await this.createSubModuleService.process(command);
@@ -24,9 +22,6 @@ export class CreateActionController {
       const mapper = new CreateActionOutputDto(action);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }
