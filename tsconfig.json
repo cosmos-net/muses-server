@@ -67,12 +67,6 @@
       "@module-common/*": [
         "src/contexts/common/*"
       ],
-      "@test-muses": [
-        "test"
-      ],
-      "@test/*": [
-        "test/*"
-      ],
     }
   }
 }
