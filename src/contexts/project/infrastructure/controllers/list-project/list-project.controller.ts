@@ -1,5 +1,4 @@
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { ListProjectService } from '@module-project/application/use-cases/list-project/list-project.service';
 import { ListProjectInputDto } from './presentation/list-project-input.dto';
 import { ListProjectOutputDto } from './presentation/list-project-output.dto';
@@ -16,7 +15,6 @@ export class ListProjectController {
 
   @MessagePattern({ cmd: 'muses.project.list' })
   async list(@Payload() dto: ListProjectInputDto): Promise<ListProjectOutputDto> {
-    try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
@@ -46,10 +44,7 @@ export class ListProjectController {
       );
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {

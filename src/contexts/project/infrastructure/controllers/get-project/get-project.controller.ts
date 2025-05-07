@@ -1,6 +1,5 @@
 import { GetProjectService } from '@module-project/application/use-cases/get-project/get-project.service';
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { GetProjectInputDto } from './presentation/get-project-input.dto';
 import { GetProjectQuery } from '@module-project/application/use-cases/get-project/get-project.query';
 import {
@@ -16,7 +15,6 @@ export class GetProjectController {
 
   @MessagePattern({ cmd: 'muses.project.get' })
   async Get(@Payload() dto: GetProjectInputDto): Promise<IGetProjectOutputDto> {
-    try {
       const { id, withDisabled } = dto;
 
       const query = new GetProjectQuery({
@@ -29,9 +27,6 @@ export class GetProjectController {
       const mapper = new GetProjectOutputDto(project);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }

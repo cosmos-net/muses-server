@@ -1,5 +1,4 @@
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { DeleteProjectService } from '@module-project/application/use-cases/delete-project/delete-project.service';
 import { DeleteProjectInputDto } from './presentation/delete-project-input.dto';
 import { DeleteProjectOutputDto, IDeleteProjectOutputDto } from './presentation/delete-project-output.dto';
@@ -13,7 +12,6 @@ export class DeleteProjectController {
 
   @MessagePattern({ cmd: 'muses.project.disable' })
   async Get(@Payload() dto: DeleteProjectInputDto): Promise<IDeleteProjectOutputDto> {
-    try {
       const command = new DeleteProjectCommand({
         id: dto.id,
       });
@@ -28,9 +26,6 @@ export class DeleteProjectController {
       });
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }
