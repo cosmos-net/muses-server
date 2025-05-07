@@ -1,5 +1,4 @@
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { DeleteModuleService } from '@module-module/application/use-cases/delete-module/delete-module.service';
 import { DisableModuleInputDto } from '@module-module/infrastructure/controllers/disable-module/presentation/disable-module-input.dto';
 import {
@@ -16,7 +15,6 @@ export class DeleteModuleController {
 
   @MessagePattern({ cmd: 'muses.module.disable' })
   async delete(@Payload() dto: DisableModuleInputDto): Promise<IDisableModuleOutputDto> {
-    try {
       const command = new DeleteModuleCommand(dto);
 
       const result = await this.deleteModuleService.process(command);
@@ -29,9 +27,6 @@ export class DeleteModuleController {
       });
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }

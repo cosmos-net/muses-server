@@ -13,7 +13,6 @@ export class CreateModuleController {
 
   @MessagePattern({ cmd: 'MUSES.MODULE.CREATE' })
   async create(@Payload() dto: CreateModuleInputDto): Promise<CreateModuleOutputDto> {
-    try {
       const command = new CreateModuleCommand(dto);
 
       const module = await this.createModuleService.process(command);
@@ -21,9 +20,6 @@ export class CreateModuleController {
       const mapper = new CreateModuleOutputDto(module);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw new RpcException(error);
-    }
+    
   }
 }

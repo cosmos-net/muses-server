@@ -4,7 +4,6 @@ import {
   GetModuleOutputDto,
   IGetModuleOutputDto,
 } from '@module-module/infrastructure/controllers/get-module/presentation/get-module-output.dto';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { GetModuleQuery } from '@module-module/application/use-cases/get-module/get-module.query';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { GetModuleInputDto } from '@module-module/infrastructure/controllers/get-module/presentation/get-module-input.dto';
@@ -16,7 +15,6 @@ export class GetModuleController {
 
   @MessagePattern({ cmd: 'muses.module.get' })
   async Get(@Payload() dto: GetModuleInputDto): Promise<IGetModuleOutputDto> {
-    try {
       const query = new GetModuleQuery({
         id: dto.id,
         withDisabled: dto.withDisabled,
@@ -28,9 +26,6 @@ export class GetModuleController {
       const mapper = new GetModuleOutputDto(module);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }

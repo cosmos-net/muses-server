@@ -1,5 +1,4 @@
 import { Controller, Logger } from '@nestjs/common';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { UpdateModuleInputDto } from '@module-module/infrastructure/controllers/update-module/presentation/update-module-input.dto';
 import {
   IUpdateModuleOutputDto,
@@ -16,7 +15,6 @@ export class UpdateModuleController {
 
   @MessagePattern({ cmd: 'muses.module.update' })
   async update(@Payload() dto: UpdateModuleInputDto): Promise<IUpdateModuleOutputDto> {
-    try {
       const command = new UpdateModuleCommand(dto);
 
       const module = await this.updateModuleService.process(command);
@@ -24,9 +22,6 @@ export class UpdateModuleController {
       const mapper = new UpdateModuleOutputDto(module);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }

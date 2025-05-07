@@ -3,7 +3,6 @@ import { Controller, Logger } from '@nestjs/common';
 import { ListModuleInputDto } from '@module-module/infrastructure/controllers/list-module/presentation/list-module-input.dto';
 import { ListModuleOutputDto } from '@module-module/infrastructure/controllers/list-module/presentation/list-module-output.dto';
 import { ListModuleQuery } from '@module-module/application/use-cases/list-module/list-module.query';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { Operator } from '@core/domain/criteria/filter-operator';
 import { IdentifierEnum } from '@module-common/domain/enums';
@@ -16,7 +15,6 @@ export class ListModuleController {
 
   @MessagePattern({ cmd: 'muses.module.list' })
   async list(@Payload() dto: ListModuleInputDto): Promise<ListModuleOutputDto> {
-    try {
       const { page, limit, offset, sort: orderType, orderBy, ...filterParams } = dto;
 
       const filters = this.mapFilters(filterParams);
@@ -46,10 +44,7 @@ export class ListModuleController {
       );
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 
   private mapFilters(filterParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {
