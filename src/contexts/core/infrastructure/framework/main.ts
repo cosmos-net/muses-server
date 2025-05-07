@@ -3,9 +3,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { MainModule } from '@core/infrastructure/framework/main.module';
 import { TransformInterceptor } from '@core/infrastructure/framework/transform.interceptor';
 import { ValidationPipeWithExceptionFactory } from '@core/infrastructure/framework/global-validation.pipe';
-import { MicroserviceExceptionFilter } from '@core/infrastructure/framework/microservice-exception.filter';
+import { GlobalExceptionFilter } from '@core/infrastructure/framework/global-exception.filter';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { HttpExceptionFilter } from '@core/infrastructure/framework/http-exception.filter';
 
 async function bootstrap() {
   const natsURL = process.env.NATS_URL;
@@ -23,7 +22,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipeWithExceptionFactory(), new ValidationPipe({ forbidUnknownValues: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
-  app.useGlobalFilters(new MicroserviceExceptionFilter(), new HttpExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   await app.listen();
 }
