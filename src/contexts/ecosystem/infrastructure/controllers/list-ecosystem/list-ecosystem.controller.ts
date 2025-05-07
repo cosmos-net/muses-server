@@ -7,6 +7,7 @@ import { Operator } from '@core/domain/criteria/filter-operator';
 import { Primitives } from '@core/domain/value-object/value-object';
 import { IdentifierEnum } from '@module-common/domain/enums';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { ECOSYSTEM } from '@module-common/infrastructure/constants/message-patterns';
 
 @Controller()
 export class ListEcosystemController {
@@ -14,7 +15,7 @@ export class ListEcosystemController {
 
   constructor(private readonly listEcosystemService: ListEcosystemService) {}
 
-  @MessagePattern({ cmd: 'muses.ecosystem.list' })
+  @MessagePattern({ cmd: ECOSYSTEM.LIST })
     async list(@Payload() dto: ListEcosystemInputDto): Promise<ListEcosystemOutputDto> {
     try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;

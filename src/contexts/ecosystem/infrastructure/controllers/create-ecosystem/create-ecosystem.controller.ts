@@ -7,6 +7,7 @@ import {
   ICreateEcosystemOutputDto,
 } from '@context-ecosystem/infrastructure/controllers/create-ecosystem/presentation/create-ecosystem-output.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { ECOSYSTEM } from '@module-common/infrastructure/constants/message-patterns';
 
 @Controller()
 export class CreateEcosystemController {
@@ -16,7 +17,7 @@ export class CreateEcosystemController {
     private readonly createEcosystemService: CreateEcosystemService,
   ) {}
 
-  @MessagePattern({ cmd: 'MUSES.ECOSYSTEM.CREATE' })
+  @MessagePattern({ cmd: ECOSYSTEM.CREATE })
   async create(@Payload() dto: CreateEcosystemInputDto): Promise<ICreateEcosystemOutputDto> {
     try {
       const command = new CreateEcosystemCommand({

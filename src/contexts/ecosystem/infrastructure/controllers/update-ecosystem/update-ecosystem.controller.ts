@@ -4,13 +4,14 @@ import { UpdateEcosystemService } from '@context-ecosystem/application/use-cases
 import { UpdateEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-input.dto';
 import { UpdateEcosystemOutputDto } from '@context-ecosystem/infrastructure/controllers/update-ecosystem/presentation/update-ecosystem-output.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { ECOSYSTEM } from '@module-common/infrastructure/constants/message-patterns';
 
 @Controller()
 export class UpdateEcosystemController {
   private readonly logger = new Logger(UpdateEcosystemController.name);
   constructor(private readonly updateEcosystemService: UpdateEcosystemService) {}
 
-  @MessagePattern({ cmd: 'muses.ecosystem.update' })
+  @MessagePattern({ cmd: ECOSYSTEM.UPDATE })
   async UpdateEcosystem(@Payload() updateInputDto: UpdateEcosystemInputDto): Promise<UpdateEcosystemOutputDto> {
     try {
       const { id, name, description, isEnabled } = updateInputDto;

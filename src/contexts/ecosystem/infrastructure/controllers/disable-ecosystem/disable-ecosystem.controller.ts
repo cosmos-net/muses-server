@@ -7,13 +7,14 @@ import {
 } from '@context-ecosystem/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-output.dto';
 import { DisableEcosystemInputDto } from '@context-ecosystem/infrastructure/controllers/disable-ecosystem/presentation/disable-ecosystem-input.dto';
 import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { ECOSYSTEM } from '@module-common/infrastructure/constants/message-patterns';
 
 @Controller()
 export class DisableEcosystemController {
   private readonly logger = new Logger(DisableEcosystemController.name);
   constructor(private readonly disableEcosystemService: DisableEcosystemService) {}
 
-  @MessagePattern({ cmd: 'muses.ecosystem.disable' })
+  @MessagePattern({ cmd: ECOSYSTEM.DISABLE })
   async disable(@Payload() dto: DisableEcosystemInputDto): Promise<IDisableEcosystemOutputDto> {
     try {
       const { id } = dto;
