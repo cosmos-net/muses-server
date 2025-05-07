@@ -96,7 +96,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // Convert all exceptions to RpcException for consistency in microservice responses
     if (!(exception instanceof RpcException)) {
-      exception = new RpcException(bodyResponse.error);
+      exception = new RpcException(bodyResponse.error ?? 'Internal Server Error');
     }
 
     return throwError(() => bodyResponse);
