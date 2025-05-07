@@ -15,7 +15,6 @@ export class DisableResourceController {
 
   @MessagePattern({ cmd: 'muses.resource.disable' })
   async Get(@Payload() dto: DisableResourceInputDto): Promise<IDisableResourceOutputDto> {
-    try {
       const command = new DisableResourceCommand({
         id: dto.id,
       });
@@ -30,9 +29,6 @@ export class DisableResourceController {
       });
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
-    }
+    
   }
 }

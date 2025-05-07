@@ -1,4 +1,3 @@
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { Controller, Logger } from '@nestjs/common';
 import { ListResourceInputDto } from '@module-resource/infrastructure/controllers/list-resource/presentation/list-resource-input.dto';
 import { ListResourceOutputDto } from '@module-resource/infrastructure/controllers/list-resource/presentation/list-resource-output.dto';
@@ -16,7 +15,6 @@ export class ListResourceController {
 
   @MessagePattern({ cmd: 'muses.resource.list' })
   async list(@Payload() dto: ListResourceInputDto): Promise<ListResourceOutputDto> {
-    try {
       const { page, limit, offset, sort: orderType, orderBy, ...filtersParams } = dto;
 
       const filters = this.mapFilters(filtersParams);
@@ -46,10 +44,7 @@ export class ListResourceController {
       );
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 
   private mapFilters(filtersParams: Record<string, any> | undefined): Array<Map<string, Primitives>> {

@@ -6,7 +6,6 @@ import {
 } from '@module-resource/infrastructure/controllers/update-resource/presentation/update-resource-output.dto';
 import { UpdateResourceService } from '@module-resource/application/use-cases/update-resource/update-resource.service';
 import { UpdateResourceCommand } from '@module-resource/application/use-cases/update-resource/update-resource.command';
-import { ExceptionManager } from '@core/domain/exception-manager';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
@@ -17,7 +16,6 @@ export class UpdateResourceController {
 
   @MessagePattern({ cmd: 'muses.resource.update' })
   async update(@Payload() dto: UpdateResourceInputDto): Promise<IUpdateResourceOutputDto> {
-    try {
       const command = new UpdateResourceCommand(dto);
 
       const action = await this.updateResourceService.process(command);
@@ -25,9 +23,6 @@ export class UpdateResourceController {
       const mapper = new UpdateResourceOutputDto(action);
 
       return mapper;
-    } catch (error) {
-      this.logger.error(error);
-      throw ExceptionManager.createSignatureError(error);
-    }
+    
   }
 }
